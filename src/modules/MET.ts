@@ -1,4 +1,11 @@
+interface ITimePoint {
+  data: object;
+  time: string | Date;
+}
+
 export class MET {
+  static timeseries: ITimePoint[];
+
   static async get() {
     try {
       const url =
@@ -19,12 +26,28 @@ export class MET {
       console.log(response);
 
       const expireDate = response.headers.get("expires");
-      console.log(expireDate);
+      console.log("Request expires on: " + expireDate);
 
       const responseData = await response.json();
       console.log(responseData);
+
+      const updatedDate = responseData.properties.meta.updated_at;
+      console.log("Last model update: " + updatedDate);
+
+      // store all the time points in array
+      MET.storeTimeseries(responseData.properties.timeseries);
+      console.log(MET.timeseries);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  // converts string times to Date objects and stores it
+  static storeTimeseries(timePointsArray: ITimePoint[]) {
+    timePointsArray.forEach((timePoint: ITimePoint) => {
+      timePoint.time = new Date(timePoint.time);
+    });
+
+    MET.timeseries = timePointsArray;
   }
 }
