@@ -9,13 +9,19 @@ export class MET {
         "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
       });
 
-      const response = await fetch(url, {
+      const request = new Request(url, {
         method: "GET",
-        headers: customHeaders
+        headers: customHeaders,
+        cache: "default" // look into cache first if the data hasn't expired yet
       });
 
-      const responseData = await response.json();
+      const response = await fetch(request);
+      console.log(response);
 
+      const expireDate = response.headers.get("expires");
+      console.log(expireDate);
+
+      const responseData = await response.json();
       console.log(responseData);
     } catch (error) {
       console.log(error);
