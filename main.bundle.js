@@ -184,7 +184,7 @@ function () {
 
   MET.get = function () {
     return __awaiter(this, void 0, void 0, function () {
-      var url, customHeaders, response, responseData, error_1;
+      var url, customHeaders, request, response, expireDate, responseData, error_1;
       return __generator(this, function (_a) {
         switch (_a.label) {
           case 0:
@@ -194,15 +194,21 @@ function () {
             customHeaders = new Headers({
               "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
             });
+            request = new Request(url, {
+              method: "GET",
+              headers: customHeaders,
+              cache: "default" // look into cache first if the data hasn't expired yet
+
+            });
             return [4
             /*yield*/
-            , fetch(url, {
-              method: "GET",
-              headers: customHeaders
-            })];
+            , fetch(request)];
 
           case 1:
             response = _a.sent();
+            console.log(response);
+            expireDate = response.headers.get("expires");
+            console.log(expireDate);
             return [4
             /*yield*/
             , response.json()];
