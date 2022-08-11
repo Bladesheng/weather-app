@@ -1,13 +1,28 @@
 interface ITimePoint {
   data: {
     instant: {
-      details: any;
+      details: {
+        air_pressure_at_sea_level: number;
+        air_temperature: number;
+        cloud_area_fraction: number;
+        cloud_area_fraction_high: number;
+        cloud_area_fraction_low: number;
+        cloud_area_fraction_medium: number;
+        dew_point_temperature: number;
+        fog_area_fraction?: number;
+        relative_humidity: number;
+        ultraviolet_index_clear_sky?: number;
+        wind_from_direction: number;
+        wind_speed: number;
+      };
     };
   };
   time: string | Date;
 }
 
 export class MET {
+  // class for interacting with MET API (https://api.met.no/)
+
   static timeseries: ITimePoint[];
 
   static async get() {

@@ -51,7 +51,8 @@ var MET = /*#__PURE__*/function () {
 
   _createClass(MET, null, [{
     key: "get",
-    value: function () {
+    value: // class for interacting with MET API (https://api.met.no/)
+    function () {
       var _get = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var url, customHeaders, request, response, expireDate, responseData, updatedDate;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
