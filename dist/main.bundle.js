@@ -14,6 +14,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 await _modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.get();
+_modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.logCurrentTemp();
 __webpack_async_result__();
 } catch(e) { __webpack_async_result__(e); } }, 1);
 
@@ -94,7 +95,7 @@ var MET = /*#__PURE__*/function () {
               case 20:
                 _context.prev = 20;
                 _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
+                console.log("Error: " + _context.t0);
 
               case 23:
               case "end":
@@ -118,6 +119,14 @@ var MET = /*#__PURE__*/function () {
         timePoint.time = new Date(timePoint.time);
       });
       MET.timeseries = timePointsArray;
+    }
+  }, {
+    key: "logCurrentTemp",
+    value: function logCurrentTemp() {
+      var currentTimePoint = MET.timeseries[0];
+      var details = currentTimePoint.data.instant.details;
+      var airTemp = details.air_temperature;
+      console.log("Current temperature is ".concat(airTemp, " \xB0C"));
     }
   }]);
 

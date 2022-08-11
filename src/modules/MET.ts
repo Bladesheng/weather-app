@@ -1,5 +1,9 @@
 interface ITimePoint {
-  data: object;
+  data: {
+    instant: {
+      details: any;
+    };
+  };
   time: string | Date;
 }
 
@@ -38,7 +42,7 @@ export class MET {
       MET.storeTimeseries(responseData.properties.timeseries);
       console.log(MET.timeseries);
     } catch (error) {
-      console.log(error);
+      console.log("Error: " + error);
     }
   }
 
@@ -49,5 +53,13 @@ export class MET {
     });
 
     MET.timeseries = timePointsArray;
+  }
+
+  static logCurrentTemp() {
+    const currentTimePoint = MET.timeseries[0];
+    const details = currentTimePoint.data.instant.details;
+    const airTemp = details.air_temperature;
+
+    console.log(`Current temperature is ${airTemp} °C`);
   }
 }
