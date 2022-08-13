@@ -39,13 +39,14 @@ export const MET = (() => {
       const url = `https://api.met.no/weatherapi/locationforecast/2.0/complete?&lon=${coords[0]}&lat=${coords[1]}`;
 
       // user agent to comply with MET terms of service
-      const customHeaders = new Headers({
-        "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
-      });
+      // doesn't actually work in browsers
+      // const customHeaders = new Headers({
+      //   "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
+      // });
 
       const request = new Request(url, {
         method: "GET",
-        headers: customHeaders,
+        // headers: customHeaders,
         cache: "default" // return response from cache (if it's not expired)
       });
 

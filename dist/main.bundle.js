@@ -97,7 +97,7 @@ var Geocode = function () {
 
   function _getResponse2() {
     _getResponse2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(city) {
-      var checkCacheExpired, createRequest, cityFixed, format, limit, email, url, customHeaders, cacheName, cache, requests, urls, isExpired, response, request, currentDate, expireTime, expire, newHeaders, _request, expireDate;
+      var checkCacheExpired, createRequest, cityFixed, format, limit, email, url, cacheName, cache, requests, urls, isExpired, response, request, currentDate, expireTime, expire, newHeaders, _request, expireDate;
 
       return _regeneratorRuntime().wrap(function _callee3$(_context3) {
         while (1) {
@@ -175,7 +175,7 @@ var Geocode = function () {
               createRequest = function createRequest(cacheType) {
                 return new Request(url, {
                   method: "GET",
-                  headers: customHeaders,
+                  //headers: customHeaders,
                   cache: cacheType
                 });
               };
@@ -189,43 +189,44 @@ var Geocode = function () {
               email = "keadr23@gmail.com"; // identification
 
               url = "https://nominatim.openstreetmap.org/search?city=".concat(cityFixed, "&format=").concat(format, "&limit=").concat(limit, "&email=").concat(email); // user agent to identify this app
+              // doesn't actually work in browsers
+              // const customHeaders = new Headers({
+              //   "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
+              // });
 
-              customHeaders = new Headers({
-                "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
-              });
               cacheName = "responsesExpiry";
-              _context3.next = 12;
+              _context3.next = 11;
               return caches.open(cacheName);
 
-            case 12:
+            case 11:
               cache = _context3.sent;
-              _context3.next = 15;
+              _context3.next = 14;
               return cache.keys();
 
-            case 15:
+            case 14:
               requests = _context3.sent;
               urls = requests.map(function (request) {
                 return request.url;
               });
               console.log("Cached urls:", urls);
-              _context3.next = 20;
+              _context3.next = 19;
               return checkCacheExpired(url);
 
-            case 20:
+            case 19:
               isExpired = _context3.sent;
               console.log("Is response expired?:", isExpired);
 
               if (!isExpired) {
-                _context3.next = 37;
+                _context3.next = 36;
                 break;
               }
 
               request = createRequest("reload"); // request new response and cache it
 
-              _context3.next = 26;
+              _context3.next = 25;
               return fetch(request);
 
-            case 26:
+            case 25:
               response = _context3.sent;
               // copy the initial response and give it custom expire date
               // because sadly, the API doesn't do that by default,
@@ -240,45 +241,45 @@ var Geocode = function () {
               response = new Response(response.body, {
                 headers: newHeaders
               });
-              _context3.next = 35;
+              _context3.next = 34;
               return cache.put(url, response.clone());
 
-            case 35:
-              _context3.next = 42;
+            case 34:
+              _context3.next = 41;
               break;
 
-            case 37:
+            case 36:
               if (isExpired) {
-                _context3.next = 42;
+                _context3.next = 41;
                 break;
               }
 
               _request = createRequest("force-cache"); // return response from cache
 
-              _context3.next = 41;
+              _context3.next = 40;
               return fetch(_request);
 
-            case 41:
+            case 40:
               response = _context3.sent;
 
-            case 42:
+            case 41:
               console.log(response);
               console.log(url);
               expireDate = response.headers.get("expires");
               console.log("Response expires on: " + expireDate);
               return _context3.abrupt("return", response);
 
-            case 49:
-              _context3.prev = 49;
+            case 48:
+              _context3.prev = 48;
               _context3.t0 = _context3["catch"](0);
               console.log(_context3.t0);
 
-            case 52:
+            case 51:
             case "end":
               return _context3.stop();
           }
         }
-      }, _callee3, null, [[0, 49]]);
+      }, _callee3, null, [[0, 48]]);
     }));
     return _getResponse2.apply(this, arguments);
   }
@@ -322,7 +323,7 @@ var MET = function () {
 
   function _get() {
     _get = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(city) {
-      var coords, url, customHeaders, request, response, expireDate, responseData, updatedDate;
+      var coords, url, request, response, expireDate, responseData, updatedDate;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -335,28 +336,29 @@ var MET = function () {
               coords = _context.sent;
               console.log(coords);
               url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?&lon=".concat(coords[0], "&lat=").concat(coords[1]); // user agent to comply with MET terms of service
+              // doesn't actually work in browsers
+              // const customHeaders = new Headers({
+              //   "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
+              // });
 
-              customHeaders = new Headers({
-                "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
-              });
               request = new Request(url, {
                 method: "GET",
-                headers: customHeaders,
+                // headers: customHeaders,
                 cache: "default" // return response from cache (if it's not expired)
 
               });
-              _context.next = 10;
+              _context.next = 9;
               return fetch(request);
 
-            case 10:
+            case 9:
               response = _context.sent;
               console.log(response);
               expireDate = response.headers.get("expires");
               console.log("Response expires on: " + expireDate);
-              _context.next = 16;
+              _context.next = 15;
               return response.json();
 
-            case 16:
+            case 15:
               responseData = _context.sent;
               console.log(responseData);
               updatedDate = responseData.properties.meta.updated_at;
@@ -365,20 +367,20 @@ var MET = function () {
               _storeTimeseries(responseData.properties.timeseries);
 
               console.log(_timeseries);
-              _context.next = 27;
+              _context.next = 26;
               break;
 
-            case 24:
-              _context.prev = 24;
+            case 23:
+              _context.prev = 23;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 27:
+            case 26:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 24]]);
+      }, _callee, null, [[0, 23]]);
     }));
     return _get.apply(this, arguments);
   }

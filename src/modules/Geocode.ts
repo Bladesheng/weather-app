@@ -31,9 +31,10 @@ export const Geocode = (() => {
       const url = `https://nominatim.openstreetmap.org/search?city=${cityFixed}&format=${format}&limit=${limit}&email=${email}`;
 
       // user agent to identify this app
-      const customHeaders = new Headers({
-        "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
-      });
+      // doesn't actually work in browsers
+      // const customHeaders = new Headers({
+      //   "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
+      // });
 
       const cacheName = "responsesExpiry";
       const cache = await caches.open(cacheName);
@@ -85,7 +86,7 @@ export const Geocode = (() => {
       function createRequest(cacheType: "reload" | "force-cache") {
         return new Request(url, {
           method: "GET",
-          headers: customHeaders,
+          //headers: customHeaders,
           cache: cacheType
         });
       }
