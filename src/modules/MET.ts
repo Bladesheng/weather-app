@@ -42,14 +42,14 @@ export class MET {
       const request = new Request(url, {
         method: "GET",
         headers: customHeaders,
-        cache: "default" // look into cache first if the data hasn't expired yet
+        cache: "default" // return response from cache (if it's not expired)
       });
 
       const response = await fetch(request);
       console.log(response);
 
       const expireDate = response.headers.get("expires");
-      console.log("Request expires on: " + expireDate);
+      console.log("Response expires on: " + expireDate);
 
       const responseData = await response.json();
       console.log(responseData);
