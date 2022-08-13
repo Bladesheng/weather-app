@@ -114,7 +114,7 @@ var Geocode = /*#__PURE__*/function () {
                 // and if it is expired
                 checkCacheExpired = /*#__PURE__*/function () {
                   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(url) {
-                    var cachedResponse, _iterator, _step, pair, _isExpired, hasExpire, expireDate, expireDateObj, expiresTimer, isExpired;
+                    var cachedResponse, _isExpired, _iterator, _step, pair, hasExpire, expireDate, expireDateObj, expiresTimer, isExpired;
 
                     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
                       while (1) {
@@ -125,24 +125,10 @@ var Geocode = /*#__PURE__*/function () {
 
                           case 2:
                             cachedResponse = _context2.sent;
-                            console.log("Cached response: ", cachedResponse); // logs all info from header
-
-                            _iterator = _createForOfIteratorHelper(cachedResponse.headers.entries());
-
-                            try {
-                              for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                                pair = _step.value;
-                                console.log(pair[0], ":", pair[1]);
-                              } // if no response for given url is cached
-
-                            } catch (err) {
-                              _iterator.e(err);
-                            } finally {
-                              _iterator.f();
-                            }
+                            console.log("Cached response: ", cachedResponse); // if no response for given url is cached
 
                             if (!(cachedResponse === undefined)) {
-                              _context2.next = 10;
+                              _context2.next = 8;
                               break;
                             }
 
@@ -152,7 +138,21 @@ var Geocode = /*#__PURE__*/function () {
                             _isExpired = true;
                             return _context2.abrupt("return", _isExpired);
 
-                          case 10:
+                          case 8:
+                            // logs all info from header
+                            _iterator = _createForOfIteratorHelper(cachedResponse.headers.entries());
+
+                            try {
+                              for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                                pair = _step.value;
+                                console.log(pair[0], ":", pair[1]);
+                              }
+                            } catch (err) {
+                              _iterator.e(err);
+                            } finally {
+                              _iterator.f();
+                            }
+
                             hasExpire = cachedResponse.headers.has("expires");
                             console.log("Does cached response have expire time?: ", hasExpire);
                             expireDate = cachedResponse.headers.get("expires");
