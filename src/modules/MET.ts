@@ -1,3 +1,5 @@
+import { Geocode } from "./Geocode";
+
 interface ITimePoint {
   data: {
     instant: {
@@ -25,10 +27,12 @@ export class MET {
 
   static timeseries: ITimePoint[];
 
-  static async get() {
+  static async get(city: string) {
     try {
-      const url =
-        "https://api.met.no/weatherapi/locationforecast/2.0/complete?altitude=325&lat=50.661&lon=14.996";
+      const coords = await Geocode.getCoords(city);
+      console.log(coords);
+
+      const url = `https://api.met.no/weatherapi/locationforecast/2.0/complete?&lon=${coords[0]}&lat=${coords[1]}`;
 
       // user agent to comply with MET terms of service
       const customHeaders = new Headers({
@@ -57,7 +61,7 @@ export class MET {
       MET.storeTimeseries(responseData.properties.timeseries);
       console.log(MET.timeseries);
     } catch (error) {
-      console.log("Error: " + error);
+      console.log(error);
     }
   }
 

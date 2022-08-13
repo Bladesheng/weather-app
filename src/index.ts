@@ -1,6 +1,7 @@
 import "./style.scss";
 import { MET } from "./modules/MET";
 
-await MET.get();
+const city = "český dub";
+await MET.get(city);
 
 MET.logCurrentTemp();
