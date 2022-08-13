@@ -45,256 +45,243 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var Geocode = function () {
+  // module for interacting with Nominatim API (https://nominatim.org/)
+  return {
+    getCoords: getCoords
+  };
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-
-var Geocode = /*#__PURE__*/function () {
-  function Geocode() {
-    _classCallCheck(this, Geocode);
+  function getCoords(_x) {
+    return _getCoords.apply(this, arguments);
   }
 
-  _createClass(Geocode, null, [{
-    key: "getCoords",
-    value: function () {
-      var _getCoords = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(city) {
-        var response, responseData, point, coords, coordsRounded;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.next = 2;
-                return Geocode.getResponse(city);
+  function _getCoords() {
+    _getCoords = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(city) {
+      var response, responseData, point, coords, coordsRounded;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _getResponse(city);
 
-              case 2:
-                response = _context.sent;
-                _context.next = 5;
-                return response.json();
+            case 2:
+              response = _context.sent;
+              _context.next = 5;
+              return response.json();
 
-              case 5:
-                responseData = _context.sent;
-                console.log(responseData);
-                point = responseData.features[0];
-                coords = point.geometry.coordinates;
-                coordsRounded = [];
-                coords.forEach(function (coord, index) {
-                  coordsRounded[index] = parseFloat(coord.toFixed(4));
-                });
-                return _context.abrupt("return", coordsRounded);
+            case 5:
+              responseData = _context.sent;
+              console.log(responseData);
+              point = responseData.features[0];
+              coords = point.geometry.coordinates;
+              coordsRounded = [];
+              coords.forEach(function (coord, index) {
+                coordsRounded[index] = parseFloat(coord.toFixed(4));
+              });
+              return _context.abrupt("return", coordsRounded);
 
-              case 12:
-              case "end":
-                return _context.stop();
-            }
+            case 12:
+            case "end":
+              return _context.stop();
           }
-        }, _callee);
-      }));
+        }
+      }, _callee);
+    }));
+    return _getCoords.apply(this, arguments);
+  }
 
-      function getCoords(_x) {
-        return _getCoords.apply(this, arguments);
-      }
+  function _getResponse(_x2) {
+    return _getResponse2.apply(this, arguments);
+  }
 
-      return getCoords;
-    }()
-  }, {
-    key: "getResponse",
-    value: function () {
-      var _getResponse = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(city) {
-        var checkCacheExpired, createRequest, cityFixed, format, limit, email, url, customHeaders, cacheName, cache, requests, urls, isExpired, response, request, currentDate, expireTime, expire, newHeaders, _request, expireDate;
+  function _getResponse2() {
+    _getResponse2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(city) {
+      var checkCacheExpired, createRequest, cityFixed, format, limit, email, url, customHeaders, cacheName, cache, requests, urls, isExpired, response, request, currentDate, expireTime, expire, newHeaders, _request, expireDate;
 
-        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.prev = 0;
+      return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.prev = 0;
 
-                // manually check if there is cached response for given url
-                // and if it is expired
-                checkCacheExpired = /*#__PURE__*/function () {
-                  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(url) {
-                    var cachedResponse, _isExpired, _iterator, _step, pair, hasExpire, expireDate, expireDateObj, expiresTimer, isExpired;
+              // manually check if there is cached response for given url
+              // and if it is expired
+              checkCacheExpired = /*#__PURE__*/function () {
+                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(url) {
+                  var cachedResponse, _isExpired, _iterator, _step, pair, hasExpire, expireDate, expireDateObj, expiresTimer, isExpired;
 
-                    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                      while (1) {
-                        switch (_context2.prev = _context2.next) {
-                          case 0:
-                            _context2.next = 2;
-                            return cache.match(url);
+                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                    while (1) {
+                      switch (_context2.prev = _context2.next) {
+                        case 0:
+                          _context2.next = 2;
+                          return cache.match(url);
 
-                          case 2:
-                            cachedResponse = _context2.sent;
-                            console.log("Cached response: ", cachedResponse); // if no response for given url is cached
+                        case 2:
+                          cachedResponse = _context2.sent;
+                          console.log("Cached response: ", cachedResponse); // if no response for given url is cached
 
-                            if (!(cachedResponse === undefined)) {
-                              _context2.next = 8;
-                              break;
+                          if (!(cachedResponse === undefined)) {
+                            _context2.next = 8;
+                            break;
+                          }
+
+                          console.log("There is no cached response"); // the procedure is the same whether the cached response is expired
+                          // or if it is missing
+
+                          _isExpired = true;
+                          return _context2.abrupt("return", _isExpired);
+
+                        case 8:
+                          // logs all info from header
+                          _iterator = _createForOfIteratorHelper(cachedResponse.headers.entries());
+
+                          try {
+                            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+                              pair = _step.value;
+                              console.log(pair[0], ":", pair[1]);
                             }
+                          } catch (err) {
+                            _iterator.e(err);
+                          } finally {
+                            _iterator.f();
+                          }
 
-                            console.log("There is no cached response"); // the procedure is the same whether the cached response is expired
-                            // or if it is missing
+                          hasExpire = cachedResponse.headers.has("expires");
+                          console.log("Does cached response have expire time?: ", hasExpire);
+                          expireDate = cachedResponse.headers.get("expires");
+                          expireDateObj = new Date(expireDate);
+                          console.log("Response expires on: " + expireDateObj); // time until the response expires
 
-                            _isExpired = true;
-                            return _context2.abrupt("return", _isExpired);
+                          expiresTimer = expireDateObj.getTime() - new Date().getTime(); // if the timer has already hit zero (or lower), response is expired
 
-                          case 8:
-                            // logs all info from header
-                            _iterator = _createForOfIteratorHelper(cachedResponse.headers.entries());
+                          isExpired = expiresTimer < 0;
+                          return _context2.abrupt("return", isExpired);
 
-                            try {
-                              for (_iterator.s(); !(_step = _iterator.n()).done;) {
-                                pair = _step.value;
-                                console.log(pair[0], ":", pair[1]);
-                              }
-                            } catch (err) {
-                              _iterator.e(err);
-                            } finally {
-                              _iterator.f();
-                            }
-
-                            hasExpire = cachedResponse.headers.has("expires");
-                            console.log("Does cached response have expire time?: ", hasExpire);
-                            expireDate = cachedResponse.headers.get("expires");
-                            expireDateObj = new Date(expireDate);
-                            console.log("Response expires on: " + expireDateObj); // time until the response expires
-
-                            expiresTimer = expireDateObj.getTime() - new Date().getTime(); // if the timer has already hit zero (or lower), response is expired
-
-                            isExpired = expiresTimer < 0;
-                            return _context2.abrupt("return", isExpired);
-
-                          case 18:
-                          case "end":
-                            return _context2.stop();
-                        }
+                        case 18:
+                        case "end":
+                          return _context2.stop();
                       }
-                    }, _callee2);
-                  }));
+                    }
+                  }, _callee2);
+                }));
 
-                  return function checkCacheExpired(_x3) {
-                    return _ref.apply(this, arguments);
-                  };
-                }();
-
-                createRequest = function createRequest(cacheType) {
-                  return new Request(url, {
-                    method: "GET",
-                    headers: customHeaders,
-                    cache: cacheType
-                  });
+                return function checkCacheExpired(_x3) {
+                  return _ref.apply(this, arguments);
                 };
+              }();
 
-                cityFixed = city.replace(/ /g, "+"); // replace spaces with +
-
-                format = "geocodejson"; // output format
-
-                limit = "1"; // maximum number of returned results
-
-                email = "keadr23@gmail.com"; // identification
-
-                url = "https://nominatim.openstreetmap.org/search?city=".concat(cityFixed, "&format=").concat(format, "&limit=").concat(limit, "&email=").concat(email); // user agent to identify this app
-
-                customHeaders = new Headers({
-                  "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
+              createRequest = function createRequest(cacheType) {
+                return new Request(url, {
+                  method: "GET",
+                  headers: customHeaders,
+                  cache: cacheType
                 });
-                cacheName = "responsesExpiry";
-                _context3.next = 12;
-                return caches.open(cacheName);
+              };
 
-              case 12:
-                cache = _context3.sent;
-                _context3.next = 15;
-                return cache.keys();
+              cityFixed = city.replace(/ /g, "+"); // replace spaces with +
 
-              case 15:
-                requests = _context3.sent;
-                urls = requests.map(function (request) {
-                  return request.url;
-                });
-                console.log("Cached urls:", urls);
-                _context3.next = 20;
-                return checkCacheExpired(url);
+              format = "geocodejson"; // output format
 
-              case 20:
-                isExpired = _context3.sent;
-                console.log("Is response expired?:", isExpired);
+              limit = "1"; // maximum number of returned results
 
-                if (!isExpired) {
-                  _context3.next = 37;
-                  break;
-                }
+              email = "keadr23@gmail.com"; // identification
 
-                request = createRequest("reload"); // request new response and cache it
+              url = "https://nominatim.openstreetmap.org/search?city=".concat(cityFixed, "&format=").concat(format, "&limit=").concat(limit, "&email=").concat(email); // user agent to identify this app
 
-                _context3.next = 26;
-                return fetch(request);
+              customHeaders = new Headers({
+                "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
+              });
+              cacheName = "responsesExpiry";
+              _context3.next = 12;
+              return caches.open(cacheName);
 
-              case 26:
-                response = _context3.sent;
-                // copy the initial response and give it custom expire date
-                // because sadly, the API doesn't do that by default,
-                // as if the coordinates of cities are gonna change lol
-                currentDate = new Date();
-                expireTime = 30; // expire time in minutes
+            case 12:
+              cache = _context3.sent;
+              _context3.next = 15;
+              return cache.keys();
 
-                expire = new Date(currentDate.getTime() + expireTime * 60000);
-                newHeaders = new Headers(response.headers);
-                newHeaders.set("expires", expire.toUTCString()); // use HTTP date format
+            case 15:
+              requests = _context3.sent;
+              urls = requests.map(function (request) {
+                return request.url;
+              });
+              console.log("Cached urls:", urls);
+              _context3.next = 20;
+              return checkCacheExpired(url);
 
-                response = new Response(response.body, {
-                  headers: newHeaders
-                });
-                _context3.next = 35;
-                return cache.put(url, response.clone());
+            case 20:
+              isExpired = _context3.sent;
+              console.log("Is response expired?:", isExpired);
 
-              case 35:
+              if (!isExpired) {
+                _context3.next = 37;
+                break;
+              }
+
+              request = createRequest("reload"); // request new response and cache it
+
+              _context3.next = 26;
+              return fetch(request);
+
+            case 26:
+              response = _context3.sent;
+              // copy the initial response and give it custom expire date
+              // because sadly, the API doesn't do that by default,
+              // as if the coordinates of cities are gonna change lol
+              currentDate = new Date();
+              expireTime = 30; // expire time in minutes
+
+              expire = new Date(currentDate.getTime() + expireTime * 60000);
+              newHeaders = new Headers(response.headers);
+              newHeaders.set("expires", expire.toUTCString()); // use HTTP date format
+
+              response = new Response(response.body, {
+                headers: newHeaders
+              });
+              _context3.next = 35;
+              return cache.put(url, response.clone());
+
+            case 35:
+              _context3.next = 42;
+              break;
+
+            case 37:
+              if (isExpired) {
                 _context3.next = 42;
                 break;
+              }
 
-              case 37:
-                if (isExpired) {
-                  _context3.next = 42;
-                  break;
-                }
+              _request = createRequest("force-cache"); // return response from cache
 
-                _request = createRequest("force-cache"); // return response from cache
+              _context3.next = 41;
+              return fetch(_request);
 
-                _context3.next = 41;
-                return fetch(_request);
+            case 41:
+              response = _context3.sent;
 
-              case 41:
-                response = _context3.sent;
+            case 42:
+              console.log(response);
+              console.log(url);
+              expireDate = response.headers.get("expires");
+              console.log("Response expires on: " + expireDate);
+              return _context3.abrupt("return", response);
 
-              case 42:
-                console.log(response);
-                console.log(url);
-                expireDate = response.headers.get("expires");
-                console.log("Response expires on: " + expireDate);
-                return _context3.abrupt("return", response);
+            case 49:
+              _context3.prev = 49;
+              _context3.t0 = _context3["catch"](0);
+              console.log(_context3.t0);
 
-              case 49:
-                _context3.prev = 49;
-                _context3.t0 = _context3["catch"](0);
-                console.log(_context3.t0);
-
-              case 52:
-              case "end":
-                return _context3.stop();
-            }
+            case 52:
+            case "end":
+              return _context3.stop();
           }
-        }, _callee3, null, [[0, 49]]);
-      }));
-
-      function getResponse(_x2) {
-        return _getResponse.apply(this, arguments);
-      }
-
-      return getResponse;
-    }()
-  }]);
-
-  return Geocode;
+        }
+      }, _callee3, null, [[0, 49]]);
+    }));
+    return _getResponse2.apply(this, arguments);
+  }
 }();
 
 /***/ }),
@@ -318,106 +305,97 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+var MET = function () {
+  // module for interacting with MET API (https://api.met.no/)
+  return {
+    get: get,
+    logCurrentTemp: logCurrentTemp
+  };
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+  var _timeseries;
+
+  function get(_x) {
+    return _get.apply(this, arguments);
+  } // converts string times to Date objects and stores it
 
 
-var MET = /*#__PURE__*/function () {
-  function MET() {
-    _classCallCheck(this, MET);
+  function _get() {
+    _get = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(city) {
+      var coords, url, customHeaders, request, response, expireDate, responseData, updatedDate;
+      return _regeneratorRuntime().wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.prev = 0;
+              _context.next = 3;
+              return _Geocode__WEBPACK_IMPORTED_MODULE_0__.Geocode.getCoords(city);
+
+            case 3:
+              coords = _context.sent;
+              console.log(coords);
+              url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?&lon=".concat(coords[0], "&lat=").concat(coords[1]); // user agent to comply with MET terms of service
+
+              customHeaders = new Headers({
+                "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
+              });
+              request = new Request(url, {
+                method: "GET",
+                headers: customHeaders,
+                cache: "default" // return response from cache (if it's not expired)
+
+              });
+              _context.next = 10;
+              return fetch(request);
+
+            case 10:
+              response = _context.sent;
+              console.log(response);
+              expireDate = response.headers.get("expires");
+              console.log("Response expires on: " + expireDate);
+              _context.next = 16;
+              return response.json();
+
+            case 16:
+              responseData = _context.sent;
+              console.log(responseData);
+              updatedDate = responseData.properties.meta.updated_at;
+              console.log("Last model update: " + updatedDate); // store all the time points in array
+
+              _storeTimeseries(responseData.properties.timeseries);
+
+              console.log(_timeseries);
+              _context.next = 27;
+              break;
+
+            case 24:
+              _context.prev = 24;
+              _context.t0 = _context["catch"](0);
+              console.log(_context.t0);
+
+            case 27:
+            case "end":
+              return _context.stop();
+          }
+        }
+      }, _callee, null, [[0, 24]]);
+    }));
+    return _get.apply(this, arguments);
   }
 
-  _createClass(MET, null, [{
-    key: "get",
-    value: function () {
-      var _get = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(city) {
-        var coords, url, customHeaders, request, response, expireDate, responseData, updatedDate;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                _context.prev = 0;
-                _context.next = 3;
-                return _Geocode__WEBPACK_IMPORTED_MODULE_0__.Geocode.getCoords(city);
+  function _storeTimeseries(timePointsArray) {
+    timePointsArray.forEach(function (timePoint) {
+      timePoint.time = new Date(timePoint.time);
+    });
+    _timeseries = timePointsArray;
+  }
 
-              case 3:
-                coords = _context.sent;
-                console.log(coords);
-                url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?&lon=".concat(coords[0], "&lat=").concat(coords[1]); // user agent to comply with MET terms of service
-
-                customHeaders = new Headers({
-                  "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
-                });
-                request = new Request(url, {
-                  method: "GET",
-                  headers: customHeaders,
-                  cache: "default" // return response from cache (if it's not expired)
-
-                });
-                _context.next = 10;
-                return fetch(request);
-
-              case 10:
-                response = _context.sent;
-                console.log(response);
-                expireDate = response.headers.get("expires");
-                console.log("Response expires on: " + expireDate);
-                _context.next = 16;
-                return response.json();
-
-              case 16:
-                responseData = _context.sent;
-                console.log(responseData);
-                updatedDate = responseData.properties.meta.updated_at;
-                console.log("Last model update: " + updatedDate); // store all the time points in array
-
-                MET.storeTimeseries(responseData.properties.timeseries);
-                console.log(MET.timeseries);
-                _context.next = 27;
-                break;
-
-              case 24:
-                _context.prev = 24;
-                _context.t0 = _context["catch"](0);
-                console.log(_context.t0);
-
-              case 27:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, null, [[0, 24]]);
-      }));
-
-      function get(_x) {
-        return _get.apply(this, arguments);
-      }
-
-      return get;
-    }() // converts string times to Date objects and stores it
-
-  }, {
-    key: "storeTimeseries",
-    value: function storeTimeseries(timePointsArray) {
-      timePointsArray.forEach(function (timePoint) {
-        timePoint.time = new Date(timePoint.time);
-      });
-      MET.timeseries = timePointsArray;
-    }
-  }, {
-    key: "logCurrentTemp",
-    value: function logCurrentTemp() {
-      var currentTimePoint = MET.timeseries[0];
-      var details = currentTimePoint.data.instant.details;
-      var airTemp = details.air_temperature;
-      console.log("Current temperature is ".concat(airTemp, " \xB0C"));
-    }
-  }]);
-
-  return MET;
+  function logCurrentTemp() {
+    var currentTimePoint = _timeseries[0];
+    var details = currentTimePoint.data.instant.details;
+    var airTemp = details.air_temperature;
+    console.log("Current temperature is ".concat(airTemp, " \xB0C"));
+  }
 }();
 
 /***/ }),
