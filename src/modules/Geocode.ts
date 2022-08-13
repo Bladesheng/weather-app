@@ -44,11 +44,6 @@ export class Geocode {
         const cachedResponse = await cache.match(url);
         console.log("Cached response: ", cachedResponse);
 
-        // logs all info from header
-        for (const pair of cachedResponse.headers.entries()) {
-          console.log(pair[0], ":", pair[1]);
-        }
-
         // if no response for given url is cached
         if (cachedResponse === undefined) {
           console.log("There is no cached response");
@@ -57,6 +52,11 @@ export class Geocode {
           // or if it is missing
           const isExpired = true;
           return isExpired;
+        }
+
+        // logs all info from header
+        for (const pair of cachedResponse.headers.entries()) {
+          console.log(pair[0], ":", pair[1]);
         }
 
         const hasExpire = cachedResponse.headers.has("expires");
