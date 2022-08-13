@@ -1,6 +1,11 @@
-export class Geocode {
-  static async getCoords(city: string) {
-    const response = await Geocode.getResponse(city);
+export const Geocode = (() => {
+  // module for interacting with Nominatim API (https://nominatim.org/)
+  return {
+    getCoords
+  };
+
+  async function getCoords(city: string) {
+    const response = await _getResponse(city);
 
     const responseData = await response.json();
     console.log(responseData);
@@ -16,7 +21,7 @@ export class Geocode {
     return coordsRounded;
   }
 
-  static async getResponse(city: string) {
+  async function _getResponse(city: string) {
     try {
       const cityFixed = city.replace(/ /g, "+"); // replace spaces with +
       const format = "geocodejson"; // output format
@@ -121,4 +126,4 @@ export class Geocode {
       console.log(error);
     }
   }
-}
+})();

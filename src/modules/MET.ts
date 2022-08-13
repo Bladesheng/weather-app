@@ -22,12 +22,16 @@ interface ITimePoint {
   time: string | Date;
 }
 
-export class MET {
-  // class for interacting with MET API (https://api.met.no/)
+export const MET = (() => {
+  // module for interacting with MET API (https://api.met.no/)
+  return {
+    get,
+    logCurrentTemp
+  };
 
-  static timeseries: ITimePoint[];
+  let _timeseries: ITimePoint[];
 
-  static async get(city: string) {
+  async function get(city: string) {
     try {
       const coords = await Geocode.getCoords(city);
       console.log(coords);
@@ -58,27 +62,27 @@ export class MET {
       console.log("Last model update: " + updatedDate);
 
       // store all the time points in array
-      MET.storeTimeseries(responseData.properties.timeseries);
-      console.log(MET.timeseries);
+      _storeTimeseries(responseData.properties.timeseries);
+      console.log(_timeseries);
     } catch (error) {
       console.log(error);
     }
   }
 
   // converts string times to Date objects and stores it
-  static storeTimeseries(timePointsArray: ITimePoint[]) {
+  function _storeTimeseries(timePointsArray: ITimePoint[]) {
     timePointsArray.forEach((timePoint: ITimePoint) => {
       timePoint.time = new Date(timePoint.time);
     });
 
-    MET.timeseries = timePointsArray;
+    _timeseries = timePointsArray;
   }
 
-  static logCurrentTemp() {
-    const currentTimePoint = MET.timeseries[0];
+  function logCurrentTemp() {
+    const currentTimePoint = _timeseries[0];
     const details = currentTimePoint.data.instant.details;
     const airTemp = details.air_temperature;
 
     console.log(`Current temperature is ${airTemp} °C`);
   }
-}
+})();
