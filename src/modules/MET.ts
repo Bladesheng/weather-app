@@ -1,6 +1,6 @@
 import { Geocode } from "./Geocode";
 
-interface ITimePoint {
+export interface ITimePoint {
   data: {
     instant: {
       details: {
@@ -26,7 +26,7 @@ export const MET = (() => {
   // module for interacting with MET API (https://api.met.no/)
   return {
     get,
-    logCurrentTemp
+    returnTimeseries
   };
 
   let _timeseries: ITimePoint[];
@@ -79,11 +79,7 @@ export const MET = (() => {
     _timeseries = timePointsArray;
   }
 
-  function logCurrentTemp() {
-    const currentTimePoint = _timeseries[0];
-    const details = currentTimePoint.data.instant.details;
-    const airTemp = details.air_temperature;
-
-    console.log(`Current temperature is ${airTemp} °C`);
+  function returnTimeseries() {
+    return _timeseries;
   }
 })();
