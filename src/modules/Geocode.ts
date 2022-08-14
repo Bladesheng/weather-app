@@ -11,11 +11,11 @@ export const Geocode = (() => {
     console.log(responseData);
 
     const point = responseData.features[0];
-    const coords: number[] = point.geometry.coordinates;
+    const coordsLong: number[] = point.geometry.coordinates;
 
     const coordsRounded: number[] = [];
-    coords.forEach((coord, index) => {
-      coordsRounded[index] = parseFloat(coord.toFixed(4));
+    coordsLong.forEach((coord, index) => {
+      coordsRounded[index] = parseFloat(coord.toFixed(4)); // MET api allows only 4 decimal numbers
     });
 
     return coordsRounded;

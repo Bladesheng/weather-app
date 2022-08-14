@@ -26,16 +26,16 @@ export interface ITimePoint {
 export const MET = (() => {
   // module for interacting with MET API (https://api.met.no/)
   return {
-    get,
+    getLocationforecast,
     returnTimeseries
   };
 
   let _timeseries: ITimePoint[];
 
-  async function get(city: string) {
+  async function getLocationforecast(coords: number[]) {
     try {
-      const coords = await Geocode.getCoords(city);
-      console.log(coords);
+      //const coords = await Geocode.getCoords(city);
+      console.log("Coords:", coords);
 
       const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=${coords[0]}&lat=${coords[1]}`;
 
@@ -83,4 +83,6 @@ export const MET = (() => {
   function returnTimeseries() {
     return _timeseries;
   }
+
+  async function getSunrise() {}
 })();
