@@ -39,7 +39,7 @@ searchBtn.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*
         case 3:
           coords = _context.sent;
           _context.next = 6;
-          return _modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getLocationforecast(coords);
+          return Promise.all([_modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getLocationforecast(coords), _modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getSunrise(coords)]);
 
         case 6:
           _modules_Weather__WEBPACK_IMPORTED_MODULE_2__.Weather.init();
@@ -83,7 +83,7 @@ var Geocode = function () {
   // module for interacting with Nominatim API (https://nominatim.org/)
   return {
     getCoords: getCoords
-  };
+  }; // returns [Longitude, Latitude]
 
   function getCoords(_x) {
     return _getCoords.apply(this, arguments);
@@ -113,9 +113,10 @@ var Geocode = function () {
               coordsLong.forEach(function (coord, index) {
                 coordsRounded[index] = parseFloat(coord.toFixed(4)); // MET api allows only 4 decimal numbers
               });
+              console.log("Coords:", coordsRounded);
               return _context.abrupt("return", coordsRounded);
 
-            case 12:
+            case 13:
             case "end":
               return _context.stop();
           }
@@ -343,6 +344,7 @@ var MET = function () {
   // module for interacting with MET API (https://api.met.no/)
   return {
     getLocationforecast: getLocationforecast,
+    getSunrise: getSunrise,
     returnTimeseries: returnTimeseries
   };
 
@@ -361,8 +363,6 @@ var MET = function () {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              //const coords = await Geocode.getCoords(city);
-              console.log("Coords:", coords);
               url = "https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=".concat(coords[0], "&lat=").concat(coords[1]); // user agent to comply with MET terms of service
               // doesn't actually work in browsers
               // const customHeaders = new Headers({
@@ -375,18 +375,18 @@ var MET = function () {
                 cache: "default" // return response from cache (if it's not expired)
 
               });
-              _context.next = 6;
+              _context.next = 5;
               return fetch(request);
 
-            case 6:
+            case 5:
               response = _context.sent;
               console.log(response);
               expireDate = response.headers.get("expires");
               console.log("Response expires on: " + expireDate);
-              _context.next = 12;
+              _context.next = 11;
               return response.json();
 
-            case 12:
+            case 11:
               responseData = _context.sent;
               console.log(responseData);
               updatedDate = responseData.properties.meta.updated_at;
@@ -395,20 +395,20 @@ var MET = function () {
               _storeTimeseries(responseData.properties.timeseries);
 
               console.log(_timeseries);
-              _context.next = 23;
+              _context.next = 22;
               break;
 
-            case 20:
-              _context.prev = 20;
+            case 19:
+              _context.prev = 19;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 23:
+            case 22:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 20]]);
+      }, _callee, null, [[0, 19]]);
     }));
     return _getLocationforecast.apply(this, arguments);
   }
@@ -424,23 +424,85 @@ var MET = function () {
     return _timeseries;
   }
 
-  function getSunrise() {
+  function getSunrise(_x2) {
     return _getSunrise.apply(this, arguments);
-  }
+  } // converts Date object to offset formated as: "+02:00" or "-02:00"
+
 
   function _getSunrise() {
-    _getSunrise = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+    _getSunrise = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(coords) {
+      var dateObj, year, month, day, offset, url, request, response, expireDate, responseData;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              _context2.prev = 0;
+              dateObj = new Date();
+              year = dateObj.getUTCFullYear();
+              month = dateObj.getUTCMonth() + 1;
+              day = dateObj.getUTCDate();
+              offset = dateToOffset(dateObj);
+              url = "https://api.met.no/weatherapi/sunrise/2.0/.json?lat=".concat(coords[1], "&lon=").concat(coords[0], "&date=").concat(year, "-").concat(month, "-").concat(day, "&offset=").concat(offset);
+              console.log(url);
+              request = new Request(url, {
+                method: "GET",
+                cache: "default" // return response from cache (if it's not expired)
+
+              });
+              _context2.next = 11;
+              return fetch(request);
+
+            case 11:
+              response = _context2.sent;
+              console.log(response);
+              expireDate = response.headers.get("expires");
+              console.log("Response expires on: " + expireDate);
+              _context2.next = 17;
+              return response.json();
+
+            case 17:
+              responseData = _context2.sent;
+              console.log(responseData); // // store all the time points in array
+              // _storeTimeseries(responseData.properties.timeseries);
+              // console.log(_timeseries);
+
+              _context2.next = 24;
+              break;
+
+            case 21:
+              _context2.prev = 21;
+              _context2.t0 = _context2["catch"](0);
+              console.log(_context2.t0);
+
+            case 24:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2);
+      }, _callee2, null, [[0, 21]]);
     }));
     return _getSunrise.apply(this, arguments);
+  }
+
+  function dateToOffset(dateObj) {
+    var offsetMinutes = dateObj.getTimezoneOffset();
+    var offsetHours = offsetMinutes / -60;
+    var isNegative = offsetHours < 0; // if the timezone offset is something like: -02:00
+
+    if (isNegative) {
+      offsetHours = -offsetHours; // remove the minus sign
+    }
+
+    var paddedOffsetHours = String(offsetHours).padStart(2, "0");
+
+    if (isNegative) {
+      paddedOffsetHours = "-".concat(paddedOffsetHours); // add back the minus sign
+    } else {
+      paddedOffsetHours = "+".concat(paddedOffsetHours); // add plus sign
+    }
+
+    var paddedOffsetHoursFull = "".concat(paddedOffsetHours, ":00");
+    return paddedOffsetHoursFull;
   }
 }();
 
@@ -459,7 +521,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _MET__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MET */ "./src/modules/MET.ts");
 
 var Weather = function () {
-  // module for crunching the weather numbers
+  // module for crunching weather numbers
   return {
     init: init,
     logCurrentTemp: logCurrentTemp
