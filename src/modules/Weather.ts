@@ -1,13 +1,13 @@
-import { MET, ITimePoint } from "./MET";
+import { MET, ITimePointLocationforecast } from "./MET";
 
 export const Weather = (() => {
-  // module for crunching weather numbers
+  // module for extracting weather numbers from timeseries array
   return {
     init,
     logCurrentTemp
   };
 
-  let _timeseries: ITimePoint[];
+  let _timeseries: ITimePointLocationforecast[];
 
   function init() {
     _timeseries = MET.returnTimeseries();

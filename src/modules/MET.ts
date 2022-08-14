@@ -1,6 +1,6 @@
 import { Geocode } from "./Geocode";
 
-export interface ITimePoint {
+export interface ITimePointLocationforecast {
   data: {
     instant: {
       details: {
@@ -23,6 +23,27 @@ export interface ITimePoint {
   time: string | Date;
 }
 
+export interface ITimePointSunrise {
+  date: string | Date;
+  sunrise: {
+    desc?: string;
+    time: string | Date;
+  };
+  sunset: {
+    desc?: string;
+    time: string | Date;
+  };
+  high_moon?: object;
+  low_moon?: object;
+  moonphase?: object;
+  moonposition?: object;
+  moonrise?: object;
+  moonset?: object;
+  moonshadow?: object;
+  solarmidnight?: object;
+  solarnoon?: object;
+}
+
 export const MET = (() => {
   // module for interacting with MET API (https://api.met.no/)
   return {
@@ -31,7 +52,8 @@ export const MET = (() => {
     returnTimeseries
   };
 
-  let _timeseries: ITimePoint[];
+  let _LocationforecastData: ITimePointLocationforecast[];
+  let _SunriseData: ITimePointSunrise[];
 
   async function getLocationforecast(coords: number[]) {
     try {
@@ -62,24 +84,26 @@ export const MET = (() => {
       console.log("Last model update: " + updatedDate);
 
       // store all the time points in array
-      _storeTimeseries(responseData.properties.timeseries);
-      console.log(_timeseries);
+      _StoreLocationforecast(responseData.properties.timeseries);
+      console.log(_LocationforecastData);
     } catch (error) {
       console.log(error);
     }
   }
 
   // converts string times to Date objects and stores it
-  function _storeTimeseries(timePointsArray: ITimePoint[]) {
-    timePointsArray.forEach((timePoint: ITimePoint) => {
+  function _StoreLocationforecast(
+    timePointsArray: ITimePointLocationforecast[]
+  ) {
+    for (const timePoint of timePointsArray) {
       timePoint.time = new Date(timePoint.time);
-    });
+    }
 
-    _timeseries = timePointsArray;
+    _LocationforecastData = timePointsArray;
   }
 
   function returnTimeseries() {
-    return _timeseries;
+    return _LocationforecastData;
   }
 
   async function getSunrise(coords: number[]) {
@@ -87,15 +111,16 @@ export const MET = (() => {
       const dateObj = new Date();
 
       const year = dateObj.getUTCFullYear();
-
       const month = dateObj.getUTCMonth() + 1;
       const monthPadded = String(month).padStart(2, "0");
-
       const day = dateObj.getUTCDate();
 
-      const offset = dateToOffset(dateObj);
+      const offset = _dateToOffset(dateObj);
 
-      const url = `https://api.met.no/weatherapi/sunrise/2.0/.json?lat=${coords[1]}&lon=${coords[0]}&date=${year}-${monthPadded}-${day}&offset=${offset}`;
+      const days = 10; // number of days forward to include in response
+      // Locationforecast returns data for next ~10 days, so same number is used here
+
+      const url = `https://api.met.no/weatherapi/sunrise/2.0/.json?lat=${coords[1]}&lon=${coords[0]}&date=${year}-${monthPadded}-${day}&offset=${offset}&days=${days}`;
       console.log(url);
 
       const request = new Request(url, {
@@ -112,16 +137,17 @@ export const MET = (() => {
       const responseData = await response.json();
       console.log(responseData);
 
-      // // store all the time points in array
-      // _storeTimeseries(responseData.properties.timeseries);
-      // console.log(_timeseries);
+      const timePointsArray = responseData.location.time;
+      // store all the time points in array
+      _StoreSunrise(timePointsArray.slice(0, days)); // exclude any extra days that are returned
+      console.log(_SunriseData);
     } catch (error) {
       console.log(error);
     }
   }
 
   // converts Date object to offset formated as: "+02:00" or "-02:00"
-  function dateToOffset(dateObj: Date) {
+  function _dateToOffset(dateObj: Date) {
     const offsetMinutes = dateObj.getTimezoneOffset();
     let offsetHours = offsetMinutes / -60;
 
@@ -142,5 +168,18 @@ export const MET = (() => {
     const paddedOffsetHoursFull = `${paddedOffsetHours}:00`;
 
     return paddedOffsetHoursFull;
+  }
+
+  // converts string times to Date objects and stores it
+  function _StoreSunrise(timePointsArray: ITimePointSunrise[]) {
+    for (const timePoint of timePointsArray) {
+      timePoint.date = new Date(timePoint.date);
+
+      timePoint.sunrise.time = new Date(timePoint.sunrise.time);
+
+      timePoint.sunset.time = new Date(timePoint.sunset.time);
+    }
+
+    _SunriseData = timePointsArray;
   }
 })();
