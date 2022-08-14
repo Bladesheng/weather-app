@@ -87,12 +87,15 @@ export const MET = (() => {
       const dateObj = new Date();
 
       const year = dateObj.getUTCFullYear();
+
       const month = dateObj.getUTCMonth() + 1;
+      const monthPadded = String(month).padStart(2, "0");
+
       const day = dateObj.getUTCDate();
 
       const offset = dateToOffset(dateObj);
 
-      const url = `https://api.met.no/weatherapi/sunrise/2.0/.json?lat=${coords[1]}&lon=${coords[0]}&date=${year}-${month}-${day}&offset=${offset}`;
+      const url = `https://api.met.no/weatherapi/sunrise/2.0/.json?lat=${coords[1]}&lon=${coords[0]}&date=${year}-${monthPadded}-${day}&offset=${offset}`;
       console.log(url);
 
       const request = new Request(url, {
