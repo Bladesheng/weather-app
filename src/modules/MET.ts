@@ -4,13 +4,14 @@ export interface ITimePoint {
   data: {
     instant: {
       details: {
+        // keys with ? are only in complete api
         air_pressure_at_sea_level: number;
         air_temperature: number;
         cloud_area_fraction: number;
-        cloud_area_fraction_high: number;
-        cloud_area_fraction_low: number;
-        cloud_area_fraction_medium: number;
-        dew_point_temperature: number;
+        cloud_area_fraction_high?: number;
+        cloud_area_fraction_low?: number;
+        cloud_area_fraction_medium?: number;
+        dew_point_temperature?: number;
         fog_area_fraction?: number;
         relative_humidity: number;
         ultraviolet_index_clear_sky?: number;
@@ -36,7 +37,7 @@ export const MET = (() => {
       const coords = await Geocode.getCoords(city);
       console.log(coords);
 
-      const url = `https://api.met.no/weatherapi/locationforecast/2.0/complete?&lon=${coords[0]}&lat=${coords[1]}`;
+      const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=${coords[0]}&lat=${coords[1]}`;
 
       // user agent to comply with MET terms of service
       // doesn't actually work in browsers
