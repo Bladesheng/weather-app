@@ -83,7 +83,7 @@ var Geocode = function () {
   // module for interacting with Nominatim API (https://nominatim.org/)
   return {
     getCoords: getCoords
-  }; // returns [Longitude, Latitude]
+  }; // returns [Longitude, Latitude, Altitude]
 
   function getCoords(_x) {
     return _getCoords.apply(this, arguments);
@@ -91,7 +91,7 @@ var Geocode = function () {
 
   function _getCoords() {
     _getCoords = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(city) {
-      var response, responseData, point, coordsLong, coordsRounded;
+      var response, responseData, point, coordsLong, coordsRounded, altitude;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) {
           switch (_context.prev = _context.next) {
@@ -113,10 +113,16 @@ var Geocode = function () {
               coordsLong.forEach(function (coord, index) {
                 coordsRounded[index] = parseFloat(coord.toFixed(4)); // MET api allows only 4 decimal numbers
               });
+              _context.next = 13;
+              return _getAltitude(coordsRounded);
+
+            case 13:
+              altitude = _context.sent;
+              coordsRounded.push(altitude);
               console.log("Coords:", coordsRounded);
               return _context.abrupt("return", coordsRounded);
 
-            case 13:
+            case 17:
             case "end":
               return _context.stop();
           }
@@ -202,7 +208,7 @@ var Geocode = function () {
                   }, _callee2);
                 }));
 
-                return function checkCacheExpired(_x3) {
+                return function checkCacheExpired(_x4) {
                   return _ref.apply(this, arguments);
                 };
               }();
@@ -318,6 +324,56 @@ var Geocode = function () {
     }));
     return _getResponse2.apply(this, arguments);
   }
+
+  function _getAltitude(_x3) {
+    return _getAltitude2.apply(this, arguments);
+  }
+
+  function _getAltitude2() {
+    _getAltitude2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(coords) {
+      var _url, request, response, responseData, elevation;
+
+      return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.prev = 0;
+              // uses Open-Elevation API (https://open-elevation.com/)
+              _url = "https://api.open-elevation.com/api/v1/lookup?locations=".concat(coords[1], ",").concat(coords[0]);
+              request = new Request(_url, {
+                method: "GET",
+                cache: "default" // return response from cache (if it's not expired)
+
+              });
+              _context4.next = 5;
+              return fetch(request);
+
+            case 5:
+              response = _context4.sent;
+              console.log(response);
+              _context4.next = 9;
+              return response.json();
+
+            case 9:
+              responseData = _context4.sent;
+              console.log(responseData);
+              elevation = responseData.results[0].elevation;
+              return _context4.abrupt("return", elevation);
+
+            case 15:
+              _context4.prev = 15;
+              _context4.t0 = _context4["catch"](0);
+              console.log(_context4.t0);
+
+            case 18:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4, null, [[0, 15]]);
+    }));
+    return _getAltitude2.apply(this, arguments);
+  }
 }();
 
 /***/ }),
@@ -371,7 +427,7 @@ var MET = function () {
           switch (_context.prev = _context.next) {
             case 0:
               _context.prev = 0;
-              url = "https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=".concat(coords[0], "&lat=").concat(coords[1]); // user agent to comply with MET terms of service
+              url = "https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=".concat(coords[0], "&lat=").concat(coords[1], "&altitude=").concat(coords[2]); // user agent to comply with MET terms of service
               // doesn't actually work in browsers
               // const customHeaders = new Headers({
               //   "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"

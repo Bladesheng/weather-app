@@ -4,7 +4,7 @@ export const Geocode = (() => {
     getCoords
   };
 
-  // returns [Longitude, Latitude]
+  // returns [Longitude, Latitude, Altitude]
   async function getCoords(city: string) {
     const response = await _getResponse(city);
 
@@ -18,6 +18,9 @@ export const Geocode = (() => {
     coordsLong.forEach((coord, index) => {
       coordsRounded[index] = parseFloat(coord.toFixed(4)); // MET api allows only 4 decimal numbers
     });
+
+    const altitude = await _getAltitude(coordsRounded);
+    coordsRounded.push(altitude);
 
     console.log("Coords:", coordsRounded);
     return coordsRounded;
@@ -125,6 +128,30 @@ export const Geocode = (() => {
       console.log("Response expires on: " + expireDate);
 
       return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function _getAltitude(coords: number[]) {
+    try {
+      // uses Open-Elevation API (https://open-elevation.com/)
+
+      const url = `https://api.open-elevation.com/api/v1/lookup?locations=${coords[1]},${coords[0]}`;
+
+      const request = new Request(url, {
+        method: "GET",
+        cache: "default" // return response from cache (if it's not expired)
+      });
+
+      const response = await fetch(request);
+      console.log(response);
+
+      const responseData = await response.json();
+      console.log(responseData);
+
+      const elevation: number = responseData.results[0].elevation;
+      return elevation;
     } catch (error) {
       console.log(error);
     }

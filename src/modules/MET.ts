@@ -57,7 +57,7 @@ export const MET = (() => {
 
   async function getLocationforecast(coords: number[]) {
     try {
-      const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=${coords[0]}&lat=${coords[1]}`;
+      const url = `https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=${coords[0]}&lat=${coords[1]}&altitude=${coords[2]}`;
 
       // user agent to comply with MET terms of service
       // doesn't actually work in browsers
