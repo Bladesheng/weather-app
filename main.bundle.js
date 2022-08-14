@@ -431,7 +431,7 @@ var MET = function () {
 
   function _getSunrise() {
     _getSunrise = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(coords) {
-      var dateObj, year, month, day, offset, url, request, response, expireDate, responseData;
+      var dateObj, year, month, monthPadded, day, offset, url, request, response, expireDate, responseData;
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
@@ -440,46 +440,47 @@ var MET = function () {
               dateObj = new Date();
               year = dateObj.getUTCFullYear();
               month = dateObj.getUTCMonth() + 1;
+              monthPadded = String(month).padStart(2, "0");
               day = dateObj.getUTCDate();
               offset = dateToOffset(dateObj);
-              url = "https://api.met.no/weatherapi/sunrise/2.0/.json?lat=".concat(coords[1], "&lon=").concat(coords[0], "&date=").concat(year, "-").concat(month, "-").concat(day, "&offset=").concat(offset);
+              url = "https://api.met.no/weatherapi/sunrise/2.0/.json?lat=".concat(coords[1], "&lon=").concat(coords[0], "&date=").concat(year, "-").concat(monthPadded, "-").concat(day, "&offset=").concat(offset);
               console.log(url);
               request = new Request(url, {
                 method: "GET",
                 cache: "default" // return response from cache (if it's not expired)
 
               });
-              _context2.next = 11;
+              _context2.next = 12;
               return fetch(request);
 
-            case 11:
+            case 12:
               response = _context2.sent;
               console.log(response);
               expireDate = response.headers.get("expires");
               console.log("Response expires on: " + expireDate);
-              _context2.next = 17;
+              _context2.next = 18;
               return response.json();
 
-            case 17:
+            case 18:
               responseData = _context2.sent;
               console.log(responseData); // // store all the time points in array
               // _storeTimeseries(responseData.properties.timeseries);
               // console.log(_timeseries);
 
-              _context2.next = 24;
+              _context2.next = 25;
               break;
 
-            case 21:
-              _context2.prev = 21;
+            case 22:
+              _context2.prev = 22;
               _context2.t0 = _context2["catch"](0);
               console.log(_context2.t0);
 
-            case 24:
+            case 25:
             case "end":
               return _context2.stop();
           }
         }
-      }, _callee2, null, [[0, 21]]);
+      }, _callee2, null, [[0, 22]]);
     }));
     return _getSunrise.apply(this, arguments);
   }
