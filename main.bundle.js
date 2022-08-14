@@ -362,7 +362,7 @@ var MET = function () {
             case 3:
               coords = _context.sent;
               console.log(coords);
-              url = "https://api.met.no/weatherapi/locationforecast/2.0/complete?&lon=".concat(coords[0], "&lat=").concat(coords[1]); // user agent to comply with MET terms of service
+              url = "https://api.met.no/weatherapi/locationforecast/2.0/compact?&lon=".concat(coords[0], "&lat=").concat(coords[1]); // user agent to comply with MET terms of service
               // doesn't actually work in browsers
               // const customHeaders = new Headers({
               //   "User-Agent": "bladesheng.github.io/weather-app/ keadr23@gmail.com"
