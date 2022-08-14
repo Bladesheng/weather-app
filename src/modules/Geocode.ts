@@ -4,6 +4,7 @@ export const Geocode = (() => {
     getCoords
   };
 
+  // returns [Longitude, Latitude]
   async function getCoords(city: string) {
     const response = await _getResponse(city);
 
@@ -18,6 +19,7 @@ export const Geocode = (() => {
       coordsRounded[index] = parseFloat(coord.toFixed(4)); // MET api allows only 4 decimal numbers
     });
 
+    console.log("Coords:", coordsRounded);
     return coordsRounded;
   }
 

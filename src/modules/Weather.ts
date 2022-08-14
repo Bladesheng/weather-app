@@ -1,7 +1,7 @@
 import { MET, ITimePoint } from "./MET";
 
 export const Weather = (() => {
-  // module for crunching the weather numbers
+  // module for crunching weather numbers
   return {
     init,
     logCurrentTemp

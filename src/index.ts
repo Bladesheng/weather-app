@@ -11,7 +11,8 @@ searchBtn.addEventListener("click", async () => {
   const inputValue = searchInput.value;
   const coords = await Geocode.getCoords(inputValue);
 
-  await MET.getLocationforecast(coords);
+  await Promise.all([MET.getLocationforecast(coords), MET.getSunrise(coords)]);
+
   Weather.init();
   Weather.logCurrentTemp();
 });
