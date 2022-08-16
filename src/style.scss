@@ -33,6 +33,26 @@ body {
   background-color: $color-secondary;
 }
 
+// stuff for hiding / showing dynamic input field
+.dynamicText,
+.dynamicInput {
+  order: 1;
+}
+
+.dynamicText.active {
+  //display: none;
+  svg {
+    color: transparent;
+  }
+}
+
+.dynamicInput {
+  display: none;
+}
+.dynamicInput.active {
+  display: inline-block;
+}
+
 .sidebar {
   display: none;
 }
@@ -44,7 +64,7 @@ header {
 
   display: grid;
   grid-template-columns: 10vw auto 10vw;
-  grid-template-rows: 2.5rem;
+  grid-template-rows: 3rem;
   justify-items: center;
   align-items: center;
 
@@ -72,7 +92,19 @@ header {
     grid-column: 2 / 3;
     grid-row: 1 / 2;
 
-    display: none;
+    width: 70vw;
+    display: none; // hidden by default
+    height: 2rem;
+    padding: 0 0.6em;
+
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: $font-color-primary;
+    background-color: $color-secondary;
+
+    outline: none;
+    border: 2px solid $font-color-blue;
+    border-radius: 1rem;
   }
 
   button.search {
