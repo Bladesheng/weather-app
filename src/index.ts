@@ -19,5 +19,6 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
   Weather.init();
   Weather.logCurrentTemp();
 
-  Weather.returnForDate(new Date().getDate());
+  const todaysWeather = Weather.returnForDate(new Date().getDate());
+  console.log(todaysWeather.sunrisePoint.sunset);
 });

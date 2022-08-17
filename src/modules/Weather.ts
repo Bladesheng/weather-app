@@ -56,6 +56,6 @@ export const Weather = (() => {
       weatherPoints,
       sunrisePoint
     );
-    return [weatherPoints, sunrisePoint];
+    return { weatherPoints, sunrisePoint };
   }
 })();

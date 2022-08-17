@@ -30,7 +30,7 @@ var searchBtn = document.querySelector("button.search");
 var cityHeading = document.querySelector("h1.city");
 var searchInput = document.querySelector("input.search");
 _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeading, searchInput, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-  var searchValue, coords;
+  var searchValue, coords, todaysWeather;
   return _regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -48,9 +48,10 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
         case 7:
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.logCurrentTemp();
-          _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
+          todaysWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
+          console.log(todaysWeather.sunrisePoint.sunset);
 
-        case 10:
+        case 11:
         case "end":
           return _context.stop();
       }
@@ -774,7 +775,10 @@ var Weather = function () {
     }
 
     console.log("Weather for date \"".concat(wantedDate, "\": "), weatherPoints, sunrisePoint);
-    return [weatherPoints, sunrisePoint];
+    return {
+      weatherPoints: weatherPoints,
+      sunrisePoint: sunrisePoint
+    };
   }
 }();
 
