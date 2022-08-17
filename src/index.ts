@@ -19,5 +19,5 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
   Weather.init();
   Weather.logCurrentTemp();
 
-  Weather.today();
+  Weather.returnForDate(new Date().getDate());
 });

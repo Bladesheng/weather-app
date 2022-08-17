@@ -5,7 +5,7 @@ export const Weather = (() => {
   return {
     init,
     logCurrentTemp,
-    today
+    returnForDate
   };
 
   let _LocationforecastPoints: ITimePointLocationforecast[];
@@ -24,20 +24,18 @@ export const Weather = (() => {
     console.log(`Current temperature is ${airTemp} °C`);
   }
 
-  function today() {
-    const todayWeatherPoints: ITimePointLocationforecast[] = [];
-    let todaySunrise: ITimePointSunrise;
-
-    const dateObj = new Date();
-    const todayDate = dateObj.getDate();
+  // returns weather points and sunrise point for given date
+  function returnForDate(wantedDate: number) {
+    const weatherPoints: ITimePointLocationforecast[] = [];
+    let sunrisePoint: ITimePointSunrise;
 
     for (const timePoint of _LocationforecastPoints) {
       if (typeof timePoint.time === "object") {
         const date = timePoint.time.getDate();
 
-        // add only today's time points
-        if (date === todayDate) {
-          todayWeatherPoints.push(timePoint);
+        // add only wanted date's time points
+        if (date === wantedDate) {
+          weatherPoints.push(timePoint);
         }
       }
     }
@@ -46,14 +44,18 @@ export const Weather = (() => {
       if (typeof timePoint.date === "object") {
         const date = timePoint.date.getDate();
 
-        // add only today's time points
-        if (date === todayDate) {
-          todaySunrise = timePoint;
+        // add only wanted date's time point
+        if (date === wantedDate) {
+          sunrisePoint = timePoint;
         }
       }
     }
 
-    console.log("Todays arrays: ", todayWeatherPoints, todaySunrise);
-    return [todayWeatherPoints, todaySunrise];
+    console.log(
+      `Weather for date "${wantedDate}": `,
+      weatherPoints,
+      sunrisePoint
+    );
+    return [weatherPoints, sunrisePoint];
   }
 })();

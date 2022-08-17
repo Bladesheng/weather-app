@@ -48,7 +48,7 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
         case 7:
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.logCurrentTemp();
-          _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.today();
+          _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
 
         case 10:
         case "end":
@@ -706,7 +706,7 @@ var Weather = function () {
   return {
     init: init,
     logCurrentTemp: logCurrentTemp,
-    today: today
+    returnForDate: returnForDate
   };
 
   var _LocationforecastPoints;
@@ -723,13 +723,12 @@ var Weather = function () {
     var details = currentTimePoint.data.instant.details;
     var airTemp = details.air_temperature;
     console.log("Current temperature is ".concat(airTemp, " \xB0C"));
-  }
+  } // returns weather points and sunrise point for given date
 
-  function today() {
-    var todayWeatherPoints = [];
-    var todaySunrise;
-    var dateObj = new Date();
-    var todayDate = dateObj.getDate();
+
+  function returnForDate(wantedDate) {
+    var weatherPoints = [];
+    var sunrisePoint;
 
     var _iterator = _createForOfIteratorHelper(_LocationforecastPoints),
         _step;
@@ -739,10 +738,10 @@ var Weather = function () {
         var timePoint = _step.value;
 
         if (_typeof(timePoint.time) === "object") {
-          var date = timePoint.time.getDate(); // add only today's time points
+          var date = timePoint.time.getDate(); // add only wanted date's time points
 
-          if (date === todayDate) {
-            todayWeatherPoints.push(timePoint);
+          if (date === wantedDate) {
+            weatherPoints.push(timePoint);
           }
         }
       }
@@ -760,11 +759,11 @@ var Weather = function () {
         var _timePoint = _step2.value;
 
         if (_typeof(_timePoint.date) === "object") {
-          var _date = _timePoint.date.getDate(); // add only today's time points
+          var _date = _timePoint.date.getDate(); // add only wanted date's time point
 
 
-          if (_date === todayDate) {
-            todaySunrise = _timePoint;
+          if (_date === wantedDate) {
+            sunrisePoint = _timePoint;
           }
         }
       }
@@ -774,8 +773,8 @@ var Weather = function () {
       _iterator2.f();
     }
 
-    console.log("Todays arrays: ", todayWeatherPoints, todaySunrise);
-    return [todayWeatherPoints, todaySunrise];
+    console.log("Weather for date \"".concat(wantedDate, "\": "), weatherPoints, sunrisePoint);
+    return [weatherPoints, sunrisePoint];
   }
 }();
 
