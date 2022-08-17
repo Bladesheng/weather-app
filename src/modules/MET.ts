@@ -49,7 +49,8 @@ export const MET = (() => {
   return {
     getLocationforecast,
     getSunrise,
-    returnTimeseries
+    returnLocationforecast,
+    returnSunrise
   };
 
   let _LocationforecastData: ITimePointLocationforecast[];
@@ -102,8 +103,12 @@ export const MET = (() => {
     _LocationforecastData = timePointsArray;
   }
 
-  function returnTimeseries() {
+  function returnLocationforecast() {
     return _LocationforecastData;
+  }
+
+  function returnSunrise() {
+    return _SunriseData;
   }
 
   async function getSunrise(coords: number[]) {

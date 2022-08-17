@@ -48,8 +48,9 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
         case 7:
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.logCurrentTemp();
+          _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.today();
 
-        case 9:
+        case 10:
         case "end":
           return _context.stop();
       }
@@ -471,7 +472,8 @@ var MET = function () {
   return {
     getLocationforecast: getLocationforecast,
     getSunrise: getSunrise,
-    returnTimeseries: returnTimeseries
+    returnLocationforecast: returnLocationforecast,
+    returnSunrise: returnSunrise
   };
 
   var _LocationforecastData;
@@ -559,8 +561,12 @@ var MET = function () {
     _LocationforecastData = timePointsArray;
   }
 
-  function returnTimeseries() {
+  function returnLocationforecast() {
     return _LocationforecastData;
+  }
+
+  function returnSunrise() {
+    return _SunriseData;
   }
 
   function getSunrise(_x2) {
@@ -686,25 +692,90 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Weather": () => (/* binding */ Weather)
 /* harmony export */ });
 /* harmony import */ var _MET__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./MET */ "./src/modules/MET.ts");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 var Weather = function () {
   // module for extracting weather numbers from timeseries array
   return {
     init: init,
-    logCurrentTemp: logCurrentTemp
+    logCurrentTemp: logCurrentTemp,
+    today: today
   };
 
-  var _timeseries;
+  var _LocationforecastPoints;
+
+  var _SunrisePoints;
 
   function init() {
-    _timeseries = _MET__WEBPACK_IMPORTED_MODULE_0__.MET.returnTimeseries();
+    _LocationforecastPoints = _MET__WEBPACK_IMPORTED_MODULE_0__.MET.returnLocationforecast();
+    _SunrisePoints = _MET__WEBPACK_IMPORTED_MODULE_0__.MET.returnSunrise();
   }
 
   function logCurrentTemp() {
-    var currentTimePoint = _timeseries[0];
+    var currentTimePoint = _LocationforecastPoints[0];
     var details = currentTimePoint.data.instant.details;
     var airTemp = details.air_temperature;
     console.log("Current temperature is ".concat(airTemp, " \xB0C"));
+  }
+
+  function today() {
+    var todayWeatherPoints = [];
+    var todaySunrise;
+    var dateObj = new Date();
+    var todayDate = dateObj.getDate();
+
+    var _iterator = _createForOfIteratorHelper(_LocationforecastPoints),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var timePoint = _step.value;
+
+        if (_typeof(timePoint.time) === "object") {
+          var date = timePoint.time.getDate(); // add only today's time points
+
+          if (date === todayDate) {
+            todayWeatherPoints.push(timePoint);
+          }
+        }
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+
+    var _iterator2 = _createForOfIteratorHelper(_SunrisePoints),
+        _step2;
+
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var _timePoint = _step2.value;
+
+        if (_typeof(_timePoint.date) === "object") {
+          var _date = _timePoint.date.getDate(); // add only today's time points
+
+
+          if (_date === todayDate) {
+            todaySunrise = _timePoint;
+          }
+        }
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+
+    console.log("Todays arrays: ", todayWeatherPoints, todaySunrise);
+    return [todayWeatherPoints, todaySunrise];
   }
 }();
 
