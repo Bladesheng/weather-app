@@ -30,7 +30,7 @@ var searchBtn = document.querySelector("button.search");
 var cityHeading = document.querySelector("h1.city");
 var searchInput = document.querySelector("input.search");
 _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeading, searchInput, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-  var searchValue, coords, todaysWeather;
+  var searchValue, coords, todaysWeather, tomorowWeatherCompact;
   return _regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -49,9 +49,11 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.logCurrentTemp();
           todaysWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
-          console.log(todaysWeather.sunrisePoint.sunset);
+          console.log("Today's weather: ", todaysWeather.weatherPoints);
+          tomorowWeatherCompact = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDateCompact(new Date().getDate() + 1);
+          console.log("Tomorow's compact weather: ", tomorowWeatherCompact.weatherPoints, tomorowWeatherCompact.sunrisePoint.sunrise, tomorowWeatherCompact.sunrisePoint.sunset);
 
-        case 11:
+        case 13:
         case "end":
           return _context.stop();
       }
@@ -707,7 +709,8 @@ var Weather = function () {
   return {
     init: init,
     logCurrentTemp: logCurrentTemp,
-    returnForDate: returnForDate
+    returnForDate: returnForDate,
+    returnForDateCompact: returnForDateCompact
   };
 
   var _LocationforecastPoints;
@@ -774,7 +777,73 @@ var Weather = function () {
       _iterator2.f();
     }
 
-    console.log("Weather for date \"".concat(wantedDate, "\": "), weatherPoints, sunrisePoint);
+    return {
+      weatherPoints: weatherPoints,
+      sunrisePoint: sunrisePoint
+    };
+  } // trimmed version (only 0h, 6h, 12h, 18h)
+
+
+  function returnForDateCompact(wantedDate) {
+    var fullData = returnForDate(wantedDate);
+    var sunrisePoint = fullData.sunrisePoint;
+    var weatherPoints = []; // divide the full data into 4 slices
+
+    var slices = [fullData.weatherPoints.slice(0, 6), fullData.weatherPoints.slice(6, 12), fullData.weatherPoints.slice(12, 18), fullData.weatherPoints.slice(18)];
+
+    var _loop = function _loop() {
+      var slice = _slices[_i];
+
+      // returns average from all 6 time points for given key
+      function averageValue(key) {
+        // for storing all values
+        var summationArr = []; // store all values
+
+        var _iterator3 = _createForOfIteratorHelper(slice),
+            _step3;
+
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var timePoint = _step3.value;
+            // @ts-expect-error
+            var value = timePoint.data.instant.details["".concat(key)];
+            summationArr.push(value);
+          } // get sum of the whole array
+
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
+        }
+
+        var sum = summationArr.reduce(function (previousValue, currentValue) {
+          return previousValue + currentValue;
+        });
+        var avgValue = Math.round(sum / 6);
+        return avgValue;
+      } // create new custom time point for each slice
+
+
+      var newTimePoint = {
+        startTime: slice[0].time,
+        endTime: slice[5].time,
+        summary: slice[0].data.next_6_hours.summary.symbol_code,
+        precipitation: slice[0].data.next_6_hours.details.precipitation_amount,
+        // average values of other properties
+        air_pressure_at_sea_level: averageValue("air_pressure_at_sea_level"),
+        air_temperature: averageValue("air_temperature"),
+        cloud_area_fraction: averageValue("cloud_area_fraction"),
+        relative_humidity: averageValue("relative_humidity"),
+        wind_from_direction: averageValue("wind_from_direction"),
+        wind_speed: averageValue("wind_speed")
+      };
+      weatherPoints.push(newTimePoint);
+    };
+
+    for (var _i = 0, _slices = slices; _i < _slices.length; _i++) {
+      _loop();
+    }
+
     return {
       weatherPoints: weatherPoints,
       sunrisePoint: sunrisePoint
