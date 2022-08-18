@@ -19,6 +19,14 @@ export interface ITimePointLocationforecast {
         wind_speed: number;
       };
     };
+    next_6_hours: {
+      details: {
+        precipitation_amount: number;
+      };
+      summary: {
+        symbol_code: string;
+      };
+    };
   };
   time: string | Date;
 }

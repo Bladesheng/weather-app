@@ -20,5 +20,15 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
   Weather.logCurrentTemp();
 
   const todaysWeather = Weather.returnForDate(new Date().getDate());
-  console.log(todaysWeather.sunrisePoint.sunset);
+  console.log("Today's weather: ", todaysWeather.weatherPoints);
+
+  const tomorowWeatherCompact = Weather.returnForDateCompact(
+    new Date().getDate() + 1
+  );
+  console.log(
+    "Tomorow's compact weather: ",
+    tomorowWeatherCompact.weatherPoints,
+    tomorowWeatherCompact.sunrisePoint.sunrise,
+    tomorowWeatherCompact.sunrisePoint.sunset
+  );
 });
