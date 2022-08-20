@@ -30,7 +30,7 @@ var searchBtn = document.querySelector("button.search");
 var cityHeading = document.querySelector("h1.city");
 var searchInput = document.querySelector("input.search");
 _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeading, searchInput, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-  var searchValue, coords, todaysWeather, tomorowWeatherCompact;
+  var searchValue, coords, nowWeather, todaysWeather, tomorowWeatherCompact;
   return _regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
@@ -47,13 +47,14 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
 
         case 7:
           _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
-          _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.logCurrentTemp();
+          nowWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnNow();
+          console.log("Weather now is: ", nowWeather);
           todaysWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
           console.log("Today's weather: ", todaysWeather.weatherPoints);
           tomorowWeatherCompact = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDateCompact(new Date().getDate() + 1);
           console.log("Tomorow's compact weather: ", tomorowWeatherCompact.weatherPoints, tomorowWeatherCompact.sunrisePoint.sunrise, tomorowWeatherCompact.sunrisePoint.sunset);
 
-        case 13:
+        case 14:
         case "end":
           return _context.stop();
       }
@@ -708,7 +709,7 @@ var Weather = function () {
   // module for extracting weather numbers from timeseries array
   return {
     init: init,
-    logCurrentTemp: logCurrentTemp,
+    returnNow: returnNow,
     returnForDate: returnForDate,
     returnForDateCompact: returnForDateCompact
   };
@@ -722,11 +723,17 @@ var Weather = function () {
     _SunrisePoints = _MET__WEBPACK_IMPORTED_MODULE_0__.MET.returnSunrise();
   }
 
-  function logCurrentTemp() {
+  function returnNow() {
     var currentTimePoint = _LocationforecastPoints[0];
     var details = currentTimePoint.data.instant.details;
     var airTemp = details.air_temperature;
-    console.log("Current temperature is ".concat(airTemp, " \xB0C"));
+
+    var minMaxTemp = _minMaxTemp(new Date().getDate());
+
+    return {
+      airTemp: airTemp,
+      minMaxTemp: minMaxTemp
+    };
   } // returns weather points and sunrise point for given date
 
 
@@ -781,7 +788,8 @@ var Weather = function () {
       weatherPoints: weatherPoints,
       sunrisePoint: sunrisePoint
     };
-  } // trimmed version (only 0h, 6h, 12h, 18h)
+  } // trimmed weather points + sunrise point for given date
+  // (only 0h, 6h, 12h, 18h)
 
 
   function returnForDateCompact(wantedDate) {
@@ -847,6 +855,34 @@ var Weather = function () {
     return {
       weatherPoints: weatherPoints,
       sunrisePoint: sunrisePoint
+    };
+  } // returns minimum and maximum temperature for given date
+
+
+  function _minMaxTemp(wantedDate) {
+    var weatherPoints = returnForDate(wantedDate).weatherPoints;
+    var temperatures = [];
+
+    var _iterator4 = _createForOfIteratorHelper(weatherPoints),
+        _step4;
+
+    try {
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        var timePoint = _step4.value;
+        var temperature = timePoint.data.instant.details.air_temperature;
+        temperatures.push(temperature);
+      }
+    } catch (err) {
+      _iterator4.e(err);
+    } finally {
+      _iterator4.f();
+    }
+
+    var minTemp = Math.min.apply(Math, temperatures);
+    var maxTemp = Math.max.apply(Math, temperatures);
+    return {
+      minTemp: minTemp,
+      maxTemp: maxTemp
     };
   }
 }();
