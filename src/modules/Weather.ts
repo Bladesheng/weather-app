@@ -1,7 +1,7 @@
 import { MET, ITimePointLocationforecast, ITimePointSunrise } from "./MET";
 
 export const Weather = (() => {
-  // module for extracting weather numbers from timeseries array
+  // module for returning weather numbers in more readable format
   return {
     init,
     returnNow,
@@ -22,9 +22,13 @@ export const Weather = (() => {
     const details = currentTimePoint.data.instant.details;
     const airTemp = details.air_temperature;
 
-    const minMaxTemp = _minMaxTemp(new Date().getDate());
+    const minMax = _minMaxTemp(new Date().getDate());
+    const minTemp = minMax.minTemp;
+    const maxTemp = minMax.maxTemp;
 
-    return { airTemp, minMaxTemp };
+    const iconCode = currentTimePoint.data.next_1_hours.summary.symbol_code;
+
+    return { airTemp, minTemp, maxTemp, iconCode };
   }
 
   // returns weather points and sunrise point for given date
