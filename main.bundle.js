@@ -497,9 +497,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var Icons = function () {
   var _iconsPaths = {}; // Makes sure webpack loads all icons to "dist/assets/".
-  // Also saves the generated icon's paths to "_icons" object.
+  // Also saves the generated icon's paths to "_icons" object - doesn't actually work in prod
 
-  var initImportAll = function () {
+  var _initImportAll = function () {
     var images = __webpack_require__("./src/weatherIcons sync \\.svg$");
 
     images.keys().forEach(function (filename) {
@@ -511,7 +511,7 @@ var Icons = function () {
 
 
   function get(iconName) {
-    return _iconsPaths[iconName];
+    return "./assets/".concat(iconName, ".svg");
   }
 
   return {
