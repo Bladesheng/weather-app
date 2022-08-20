@@ -53,8 +53,9 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
           console.log("Today's weather: ", todaysWeather.weatherPoints);
           tomorowWeatherCompact = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDateCompact(new Date().getDate() + 1);
           console.log("Tomorow's compact weather: ", tomorowWeatherCompact.weatherPoints, tomorowWeatherCompact.sunrisePoint.sunrise, tomorowWeatherCompact.sunrisePoint.sunset);
+          _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.displayNow();
 
-        case 14:
+        case 15:
         case "end":
           return _context.stop();
       }
@@ -74,10 +75,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "DOM": () => (/* binding */ DOM)
 /* harmony export */ });
+/* harmony import */ var _Weather__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Weather */ "./src/modules/Weather.ts");
+
 var DOM = function () {
   // module for manipulating the DOM
   return {
-    dynamicInput: dynamicInput
+    dynamicInput: dynamicInput,
+    displayNow: displayNow
   }; // Dynamic input listener that switches betwen static text
   // and input
 
@@ -119,6 +123,19 @@ var DOM = function () {
         }
       };
     });
+  }
+
+  function displayNow() {
+    var now = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnNow();
+    var airTemp = String(Math.round(now.airTemp));
+    var minTemp = String(Math.round(now.minTemp));
+    var maxTemp = String(Math.round(now.maxTemp));
+    var currentTempText = document.querySelector(".now h1");
+    currentTempText.textContent = "".concat(airTemp, "\u02DA");
+    var minMaxText = document.querySelector(".now h2");
+    minMaxText.textContent = "".concat(maxTemp, "\u02DA/").concat(minTemp, "\u02DA");
+    var weatherImg = document.querySelector(".now img");
+    weatherImg.setAttribute("src", "../src/weatherIcons/".concat(now.iconCode, ".svg"));
   }
 }();
 
@@ -706,7 +723,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 
 var Weather = function () {
-  // module for extracting weather numbers from timeseries array
+  // module for returning weather numbers in more readable format
   return {
     init: init,
     returnNow: returnNow,
@@ -728,11 +745,16 @@ var Weather = function () {
     var details = currentTimePoint.data.instant.details;
     var airTemp = details.air_temperature;
 
-    var minMaxTemp = _minMaxTemp(new Date().getDate());
+    var minMax = _minMaxTemp(new Date().getDate());
 
+    var minTemp = minMax.minTemp;
+    var maxTemp = minMax.maxTemp;
+    var iconCode = currentTimePoint.data.next_1_hours.summary.symbol_code;
     return {
       airTemp: airTemp,
-      minMaxTemp: minMaxTemp
+      minTemp: minTemp,
+      maxTemp: maxTemp,
+      iconCode: iconCode
     };
   } // returns weather points and sunrise point for given date
 
@@ -908,7 +930,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  width: 100vw;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  font-family: \"Roboto\", sans-serif;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n}\n\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active svg {\n  color: transparent;\n}\n\n.dynamicInput {\n  display: none;\n}\n\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.sidebar {\n  display: none;\n}\n\nheader {\n  flex: 0 0 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n  background-color: rgb(23, 31, 40);\n}\nheader button.burger {\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nheader button.burger svg {\n  color: rgb(250, 250, 250);\n}\nheader .city {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  font-size: 1.4rem;\n  font-weight: 500;\n}\nheader input.search {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  width: 70vw;\n  display: none;\n  height: 2rem;\n  padding: 0 0.6em;\n  font-size: 1.4rem;\n  font-weight: 400;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n  outline: none;\n  border: 2px solid rgb(0, 187, 245);\n  border-radius: 1rem;\n}\nheader button.search {\n  grid-column: 3/4;\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nheader button.search svg {\n  color: rgb(250, 250, 250);\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  padding: 5vw;\n}\nmain .dayTab {\n  width: 100%;\n  padding: 1rem;\n  border-radius: 5px;\n  background-color: rgb(23, 31, 40);\n}\nmain .dayTab .now {\n  display: grid;\n  grid-template-columns: 1fr 2fr 1fr;\n  justify-items: center;\n}\nmain .dayTab .now img {\n  align-self: center;\n  height: 3rem;\n  width: 3rem;\n}\nmain .dayTab .now h1 {\n  font-weight: 700;\n  font-size: 4rem;\n}", "",{"version":3,"sources":["webpack://./src/style.scss"],"names":[],"mappings":"AAAA;EACE,UAAA;EACA,SAAA;EACA,sBAAA;AACF;;AAWA;EACE,8BAAA;AARF;;AAWA;EAKE,YAAA;EAEA,aAAA;EACA,sBAAA;EACA,mBAAA;EAEA,iCAxBW;EAyBX,yBAxBmB;EAyBnB,gCAnBgB;AAKlB;;AAkBA;;EAEE,QAAA;AAfF;;AAoBE;EACE,kBAAA;AAjBJ;;AAqBA;EACE,aAAA;AAlBF;;AAoBA;EACE,qBAAA;AAjBF;;AAoBA;EACE,aAAA;AAjBF;;AAoBA;EACE,cAAA;EAEA,WAAA;EAEA,aAAA;EACA,qCAAA;EACA,wBAAA;EACA,qBAAA;EACA,mBAAA;EAEA,iCA1Dc;AAsChB;AAsBE;EACE,aAAA;EAKA,gBAAA;EACA,YAAA;AAxBJ;AAoBI;EACE,yBArEe;AAmDrB;AAwBE;EACE,gBAAA;EACA,aAAA;EAEA,iBAAA;EACA,gBAAA;AAvBJ;AA0BE;EACE,gBAAA;EACA,aAAA;EAEA,WAAA;EACA,aAAA;EACA,YAAA;EACA,gBAAA;EAEA,iBAAA;EACA,gBAAA;EACA,yBA9FiB;EA+FjB,gCAzFc;EA2Fd,aAAA;EACA,kCAAA;EACA,mBAAA;AA3BJ;AA8BE;EACE,gBAAA;EACA,aAAA;EAKA,gBAAA;EACA,YAAA;AAhCJ;AA4BI;EACE,yBA3Ge;AAiFrB;;AAiCA;EACE,cAAA;EACA,WAAA;EAEA,aAAA;EACA,0BAAA;EACA,qBAAA;EACA,YAAA;AA/BF;AAiCE;EACE,WAAA;EACA,aAAA;EAEA,kBAAA;EAoBA,iCA9IY;AA2FhB;AAiCI;EACE,aAAA;EACA,kCAAA;EACA,qBAAA;AA/BN;AAiCM;EACE,kBAAA;EAEA,YAAA;EACA,WAAA;AAhCR;AAmCM;EACE,gBAAA;EACA,eAAA;AAjCR","sourcesContent":["* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\n$font-stack: \"Roboto\", sans-serif;\n$font-color-primary: rgb(250, 250, 250);\n$font-color-secondary: rgb(211, 219, 221);\n$font-color-red: rgb(255, 45, 64);\n$font-color-blue: rgb(0, 187, 245);\n\n$color-primary: rgb(23, 31, 40);\n$color-secondary: rgb(2, 10, 20);\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  // height: 100vh;\n  // min-height: 100vh;\n  // min-height: -webkit-fill-available;\n\n  width: 100vw;\n\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  font-family: $font-stack;\n  color: $font-color-primary;\n  background-color: $color-secondary;\n}\n\n// stuff for hiding / showing dynamic input field\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active {\n  //display: none;\n  svg {\n    color: transparent;\n  }\n}\n\n.dynamicInput {\n  display: none;\n}\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.sidebar {\n  display: none;\n}\n\nheader {\n  flex: 0 0 auto;\n\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n\n  background-color: $color-primary;\n\n  button.burger {\n    width: 1.8rem;\n\n    svg {\n      color: $font-color-primary;\n    }\n    background: none;\n    border: none;\n  }\n\n  .city {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    font-size: 1.4rem;\n    font-weight: 500;\n  }\n\n  input.search {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    width: 70vw;\n    display: none; // hidden by default\n    height: 2rem;\n    padding: 0 0.6em;\n\n    font-size: 1.4rem;\n    font-weight: 400;\n    color: $font-color-primary;\n    background-color: $color-secondary;\n\n    outline: none;\n    border: 2px solid $font-color-blue;\n    border-radius: 1rem;\n  }\n\n  button.search {\n    grid-column: 3 / 4;\n    width: 1.8rem;\n\n    svg {\n      color: $font-color-primary;\n    }\n    background: none;\n    border: none;\n  }\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  padding: 5vw;\n\n  .dayTab {\n    width: 100%;\n    padding: 1rem;\n\n    border-radius: 5px;\n\n    .now {\n      display: grid;\n      grid-template-columns: 1fr 2fr 1fr;\n      justify-items: center;\n\n      img {\n        align-self: center;\n\n        height: 3rem;\n        width: 3rem;\n      }\n\n      h1 {\n        font-weight: 700;\n        font-size: 4rem;\n      }\n    }\n\n    background-color: $color-primary;\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  width: 100vw;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  font-family: \"Roboto\", sans-serif;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n}\n\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active svg {\n  color: transparent;\n}\n\n.dynamicInput {\n  display: none;\n}\n\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.sidebar {\n  display: none;\n}\n\nheader {\n  flex: 0 0 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n  background-color: rgb(23, 31, 40);\n}\nheader button.burger {\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nheader button.burger svg {\n  color: rgb(250, 250, 250);\n}\nheader .city {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  font-size: 1.4rem;\n  font-weight: 500;\n}\nheader input.search {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  width: 70vw;\n  display: none;\n  height: 2rem;\n  padding: 0 0.6em;\n  font-size: 1.4rem;\n  font-weight: 400;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n  outline: none;\n  border: 2px solid rgb(0, 187, 245);\n  border-radius: 1rem;\n}\nheader button.search {\n  grid-column: 3/4;\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nheader button.search svg {\n  color: rgb(250, 250, 250);\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  padding: 5vw;\n}\nmain .dayTab {\n  width: 100%;\n  padding: 1rem;\n  border-radius: 5px;\n  background-color: rgb(23, 31, 40);\n}\nmain .dayTab .now {\n  display: grid;\n  grid-template-columns: 1fr 2fr 1fr;\n  justify-items: center;\n  align-items: center;\n}\nmain .dayTab .now img {\n  height: 3rem;\n  width: 3rem;\n}\nmain .dayTab .now h1 {\n  font-size: 4rem;\n  font-weight: 700;\n}\nmain .dayTab .now h2 {\n  font-size: 1.3rem;\n  font-weight: 400;\n  color: rgb(211, 219, 221);\n}", "",{"version":3,"sources":["webpack://./src/style.scss"],"names":[],"mappings":"AAAA;EACE,UAAA;EACA,SAAA;EACA,sBAAA;AACF;;AAWA;EACE,8BAAA;AARF;;AAWA;EAKE,YAAA;EAEA,aAAA;EACA,sBAAA;EACA,mBAAA;EAEA,iCAxBW;EAyBX,yBAxBmB;EAyBnB,gCAnBgB;AAKlB;;AAkBA;;EAEE,QAAA;AAfF;;AAoBE;EACE,kBAAA;AAjBJ;;AAqBA;EACE,aAAA;AAlBF;;AAoBA;EACE,qBAAA;AAjBF;;AAoBA;EACE,aAAA;AAjBF;;AAoBA;EACE,cAAA;EAEA,WAAA;EAEA,aAAA;EACA,qCAAA;EACA,wBAAA;EACA,qBAAA;EACA,mBAAA;EAEA,iCA1Dc;AAsChB;AAsBE;EACE,aAAA;EAKA,gBAAA;EACA,YAAA;AAxBJ;AAoBI;EACE,yBArEe;AAmDrB;AAwBE;EACE,gBAAA;EACA,aAAA;EAEA,iBAAA;EACA,gBAAA;AAvBJ;AA0BE;EACE,gBAAA;EACA,aAAA;EAEA,WAAA;EACA,aAAA;EACA,YAAA;EACA,gBAAA;EAEA,iBAAA;EACA,gBAAA;EACA,yBA9FiB;EA+FjB,gCAzFc;EA2Fd,aAAA;EACA,kCAAA;EACA,mBAAA;AA3BJ;AA8BE;EACE,gBAAA;EACA,aAAA;EAKA,gBAAA;EACA,YAAA;AAhCJ;AA4BI;EACE,yBA3Ge;AAiFrB;;AAiCA;EACE,cAAA;EACA,WAAA;EAEA,aAAA;EACA,0BAAA;EACA,qBAAA;EACA,YAAA;AA/BF;AAiCE;EACE,WAAA;EACA,aAAA;EAEA,kBAAA;EAyBA,iCAnJY;AA2FhB;AAiCI;EACE,aAAA;EACA,kCAAA;EACA,qBAAA;EACA,mBAAA;AA/BN;AAiCM;EACE,YAAA;EACA,WAAA;AA/BR;AAkCM;EACE,eAAA;EACA,gBAAA;AAhCR;AAmCM;EACE,iBAAA;EACA,gBAAA;EACA,yBAnJe;AAkHvB","sourcesContent":["* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\n$font-stack: \"Roboto\", sans-serif;\n$font-color-primary: rgb(250, 250, 250);\n$font-color-secondary: rgb(211, 219, 221);\n$font-color-red: rgb(255, 45, 64);\n$font-color-blue: rgb(0, 187, 245);\n\n$color-primary: rgb(23, 31, 40);\n$color-secondary: rgb(2, 10, 20);\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  // height: 100vh;\n  // min-height: 100vh;\n  // min-height: -webkit-fill-available;\n\n  width: 100vw;\n\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  font-family: $font-stack;\n  color: $font-color-primary;\n  background-color: $color-secondary;\n}\n\n// stuff for hiding / showing dynamic input field\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active {\n  //display: none;\n  svg {\n    color: transparent;\n  }\n}\n\n.dynamicInput {\n  display: none;\n}\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.sidebar {\n  display: none;\n}\n\nheader {\n  flex: 0 0 auto;\n\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n\n  background-color: $color-primary;\n\n  button.burger {\n    width: 1.8rem;\n\n    svg {\n      color: $font-color-primary;\n    }\n    background: none;\n    border: none;\n  }\n\n  .city {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    font-size: 1.4rem;\n    font-weight: 500;\n  }\n\n  input.search {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    width: 70vw;\n    display: none; // hidden by default\n    height: 2rem;\n    padding: 0 0.6em;\n\n    font-size: 1.4rem;\n    font-weight: 400;\n    color: $font-color-primary;\n    background-color: $color-secondary;\n\n    outline: none;\n    border: 2px solid $font-color-blue;\n    border-radius: 1rem;\n  }\n\n  button.search {\n    grid-column: 3 / 4;\n    width: 1.8rem;\n\n    svg {\n      color: $font-color-primary;\n    }\n    background: none;\n    border: none;\n  }\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  padding: 5vw;\n\n  .dayTab {\n    width: 100%;\n    padding: 1rem;\n\n    border-radius: 5px;\n\n    .now {\n      display: grid;\n      grid-template-columns: 1fr 2fr 1fr;\n      justify-items: center;\n      align-items: center;\n\n      img {\n        height: 3rem;\n        width: 3rem;\n      }\n\n      h1 {\n        font-size: 4rem;\n        font-weight: 700;\n      }\n\n      h2 {\n        font-size: 1.3rem;\n        font-weight: 400;\n        color: $font-color-secondary;\n      }\n    }\n\n    background-color: $color-primary;\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
