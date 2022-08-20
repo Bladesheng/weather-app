@@ -84,14 +84,8 @@ __webpack_require__.r(__webpack_exports__);
 
 var DOM = function () {
   // module for manipulating the DOM
-  return {
-    dynamicInput: dynamicInput,
-    displayNow: displayNow,
-    showLoader: showLoader,
-    hideLoader: hideLoader
-  }; // Dynamic input listener that switches betwen static text
+  // Dynamic input listener that switches betwen static text
   // and input
-
   function dynamicInput(btnElement, textElement, inputElement, processCallback) {
     btnElement.addEventListener("click", function () {
       function sendInput() {
@@ -156,6 +150,13 @@ var DOM = function () {
     var loader = document.querySelector(".loader");
     loader.style.display = "none";
   }
+
+  return {
+    dynamicInput: dynamicInput,
+    displayNow: displayNow,
+    showLoader: showLoader,
+    hideLoader: hideLoader
+  };
 }();
 
 /***/ }),
@@ -187,10 +188,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var Geocode = function () {
   // module for interacting with Nominatim API (https://nominatim.org/)
-  return {
-    getCoords: getCoords
-  }; // returns [Longitude, Latitude, Altitude]
-
+  // returns [Longitude, Latitude, Altitude]
   function getCoords(_x) {
     return _getCoords.apply(this, arguments);
   }
@@ -480,6 +478,10 @@ var Geocode = function () {
     }));
     return _getAltitude2.apply(this, arguments);
   }
+
+  return {
+    getCoords: getCoords
+  };
 }();
 
 /***/ }),
@@ -496,6 +498,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Icons": () => (/* binding */ Icons)
 /* harmony export */ });
 var Icons = function () {
+  // modules for loading icons with webpack and resolving paths to them
   var _iconsPaths = {}; // Makes sure webpack loads all icons to "dist/assets/".
   // Also saves the generated icon's paths to "_icons" object - doesn't actually work in prod
 
@@ -548,13 +551,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var MET = function () {
   // module for interacting with MET API (https://api.met.no/)
-  return {
-    getLocationforecast: getLocationforecast,
-    getSunrise: getSunrise,
-    returnLocationforecast: returnLocationforecast,
-    returnSunrise: returnSunrise
-  };
-
   var _LocationforecastData;
 
   var _SunriseData;
@@ -756,6 +752,13 @@ var MET = function () {
 
     _SunriseData = timePointsArray;
   }
+
+  return {
+    getLocationforecast: getLocationforecast,
+    getSunrise: getSunrise,
+    returnLocationforecast: returnLocationforecast,
+    returnSunrise: returnSunrise
+  };
 }();
 
 /***/ }),
@@ -783,13 +786,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 var Weather = function () {
   // module for returning weather numbers in more readable format
-  return {
-    init: init,
-    returnNow: returnNow,
-    returnForDate: returnForDate,
-    returnForDateCompact: returnForDateCompact
-  };
-
   var _LocationforecastPoints;
 
   var _SunrisePoints;
@@ -966,6 +962,13 @@ var Weather = function () {
       maxTemp: maxTemp
     };
   }
+
+  return {
+    init: init,
+    returnNow: returnNow,
+    returnForDate: returnForDate,
+    returnForDateCompact: returnForDateCompact
+  };
 }();
 
 /***/ }),
