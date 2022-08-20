@@ -9,6 +9,8 @@ const cityHeading = document.querySelector("h1.city");
 const searchInput: HTMLInputElement = document.querySelector("input.search");
 
 DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
+  DOM.showLoader();
+
   const searchValue = searchInput.value;
   cityHeading.textContent = searchValue;
 
@@ -35,4 +37,6 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
   );
 
   DOM.displayNow();
+
+  DOM.hideLoader();
 });

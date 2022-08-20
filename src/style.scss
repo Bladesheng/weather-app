@@ -53,6 +53,54 @@ body {
   display: inline-block;
 }
 
+.loader {
+  position: fixed;
+  z-index: 10;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(0, 0, 0, 0.7);
+
+  display: flex; // hidden by default, "flex" to show
+  align-items: center;
+  justify-content: center;
+
+  .loaderIcon {
+    width: 15rem;
+    $color-sun: rgb(237, 201, 81);
+
+    .sunny-body path {
+      fill: $color-sun;
+    }
+
+    .sunny-long-ray {
+      transform-origin: 50% 50%;
+      animation: spin 9s linear infinite;
+    }
+
+    .sunny-long-ray path {
+      fill: $color-sun;
+    }
+
+    .sunny-short-ray {
+      transform-origin: 50% 50%;
+      animation: spin 9s linear infinite;
+    }
+
+    .sunny-short-ray path {
+      fill: $color-sun;
+    }
+
+    @keyframes spin {
+      100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+      }
+    }
+  }
+}
+
 .sidebar {
   display: none;
 }

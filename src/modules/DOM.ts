@@ -8,7 +8,9 @@ export const DOM = (() => {
   // module for manipulating the DOM
   return {
     dynamicInput,
-    displayNow
+    displayNow,
+    showLoader,
+    hideLoader
   };
 
   // Dynamic input listener that switches betwen static text
@@ -75,5 +77,15 @@ export const DOM = (() => {
 
     const weatherImg = document.querySelector(".now img");
     weatherImg.setAttribute("src", `../src/weatherIcons/${now.iconCode}.svg`);
+  }
+
+  // shows and hides loader modal with animated icon
+  function showLoader() {
+    const loader: HTMLElement = document.querySelector(".loader");
+    loader.style.display = "flex";
+  }
+  function hideLoader() {
+    const loader: HTMLElement = document.querySelector(".loader");
+    loader.style.display = "none";
   }
 })();
