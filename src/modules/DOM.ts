@@ -7,12 +7,6 @@ interface inputListenerInterface {
 
 export const DOM = (() => {
   // module for manipulating the DOM
-  return {
-    dynamicInput,
-    displayNow,
-    showLoader,
-    hideLoader
-  };
 
   // Dynamic input listener that switches betwen static text
   // and input
@@ -90,4 +84,11 @@ export const DOM = (() => {
     const loader: HTMLElement = document.querySelector(".loader");
     loader.style.display = "none";
   }
+
+  return {
+    dynamicInput,
+    displayNow,
+    showLoader,
+    hideLoader
+  };
 })();

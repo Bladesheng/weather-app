@@ -1,4 +1,5 @@
 export const Icons = (() => {
+  // modules for loading icons with webpack and resolving paths to them
   const _iconsPaths: any = {};
 
   // Makes sure webpack loads all icons to "dist/assets/".

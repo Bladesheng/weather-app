@@ -2,12 +2,6 @@ import { MET, ITimePointLocationforecast, ITimePointSunrise } from "./MET";
 
 export const Weather = (() => {
   // module for returning weather numbers in more readable format
-  return {
-    init,
-    returnNow,
-    returnForDate,
-    returnForDateCompact
-  };
 
   let _LocationforecastPoints: ITimePointLocationforecast[];
   let _SunrisePoints: ITimePointSunrise[];
@@ -153,4 +147,11 @@ export const Weather = (() => {
 
     return { minTemp, maxTemp };
   }
+
+  return {
+    init,
+    returnNow,
+    returnForDate,
+    returnForDateCompact
+  };
 })();

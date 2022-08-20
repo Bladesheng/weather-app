@@ -59,12 +59,6 @@ export interface ITimePointSunrise {
 
 export const MET = (() => {
   // module for interacting with MET API (https://api.met.no/)
-  return {
-    getLocationforecast,
-    getSunrise,
-    returnLocationforecast,
-    returnSunrise
-  };
 
   let _LocationforecastData: ITimePointLocationforecast[];
   let _SunriseData: ITimePointSunrise[];
@@ -200,4 +194,11 @@ export const MET = (() => {
 
     _SunriseData = timePointsArray;
   }
+
+  return {
+    getLocationforecast,
+    getSunrise,
+    returnLocationforecast,
+    returnSunrise
+  };
 })();

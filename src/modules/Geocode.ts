@@ -1,8 +1,5 @@
 export const Geocode = (() => {
   // module for interacting with Nominatim API (https://nominatim.org/)
-  return {
-    getCoords
-  };
 
   // returns [Longitude, Latitude, Altitude]
   async function getCoords(city: string) {
@@ -156,4 +153,8 @@ export const Geocode = (() => {
       console.log(error);
     }
   }
+
+  return {
+    getCoords
+  };
 })();
