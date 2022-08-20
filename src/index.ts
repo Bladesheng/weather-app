@@ -33,4 +33,6 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
     tomorowWeatherCompact.sunrisePoint.sunrise,
     tomorowWeatherCompact.sunrisePoint.sunset
   );
+
+  DOM.displayNow();
 });

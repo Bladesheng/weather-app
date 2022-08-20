@@ -7,7 +7,8 @@ interface inputListenerInterface {
 export const DOM = (() => {
   // module for manipulating the DOM
   return {
-    dynamicInput
+    dynamicInput,
+    displayNow
   };
 
   // Dynamic input listener that switches betwen static text
@@ -57,5 +58,22 @@ export const DOM = (() => {
         }
       };
     });
+  }
+
+  function displayNow() {
+    const now = Weather.returnNow();
+
+    const airTemp = String(Math.round(now.airTemp));
+    const minTemp = String(Math.round(now.minTemp));
+    const maxTemp = String(Math.round(now.maxTemp));
+
+    const currentTempText = document.querySelector(".now h1");
+    currentTempText.textContent = `${airTemp}˚`;
+
+    const minMaxText = document.querySelector(".now h2");
+    minMaxText.textContent = `${maxTemp}˚/${minTemp}˚`;
+
+    const weatherImg = document.querySelector(".now img");
+    weatherImg.setAttribute("src", `../src/weatherIcons/${now.iconCode}.svg`);
   }
 })();
