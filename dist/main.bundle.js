@@ -1,4 +1,3 @@
-"use strict";
 (self["webpackChunkweather_app"] = self["webpackChunkweather_app"] || []).push([["main"],{
 
 /***/ "./src/index.ts":
@@ -7,6 +6,7 @@
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
 /* harmony import */ var _modules_MET__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/MET */ "./src/modules/MET.ts");
@@ -73,11 +73,14 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "DOM": () => (/* binding */ DOM)
 /* harmony export */ });
 /* harmony import */ var _Weather__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Weather */ "./src/modules/Weather.ts");
+/* harmony import */ var _Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icons */ "./src/modules/Icons.ts");
+
 
 var DOM = function () {
   // module for manipulating the DOM
@@ -139,7 +142,8 @@ var DOM = function () {
     var minMaxText = document.querySelector(".now h2");
     minMaxText.textContent = "".concat(maxTemp, "\u02DA/").concat(minTemp, "\u02DA");
     var weatherImg = document.querySelector(".now img");
-    weatherImg.setAttribute("src", "../src/weatherIcons/".concat(now.iconCode, ".svg"));
+    var iconPath = _Icons__WEBPACK_IMPORTED_MODULE_1__.Icons.get(now.iconCode);
+    weatherImg.src = iconPath;
   } // shows and hides loader modal with animated icon
 
 
@@ -162,6 +166,7 @@ var DOM = function () {
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Geocode": () => (/* binding */ Geocode)
@@ -479,12 +484,50 @@ var Geocode = function () {
 
 /***/ }),
 
+/***/ "./src/modules/Icons.ts":
+/*!******************************!*\
+  !*** ./src/modules/Icons.ts ***!
+  \******************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Icons": () => (/* binding */ Icons)
+/* harmony export */ });
+var Icons = function () {
+  var _iconsPaths = {}; // Makes sure webpack loads all icons to "dist/assets/".
+  // Also saves the generated icon's paths to "_icons" object.
+
+  var initImportAll = function () {
+    var images = __webpack_require__("./src/weatherIcons sync \\.svg$");
+
+    images.keys().forEach(function (filename) {
+      // slice off the extension and the "./" part
+      var trimmedFilename = filename.substring(2).slice(0, -4);
+      _iconsPaths[trimmedFilename] = images(filename);
+    });
+  }(); // given name of icon, returns path to it
+
+
+  function get(iconName) {
+    return _iconsPaths[iconName];
+  }
+
+  return {
+    get: get
+  };
+}();
+
+/***/ }),
+
 /***/ "./src/modules/MET.ts":
 /*!****************************!*\
   !*** ./src/modules/MET.ts ***!
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "MET": () => (/* binding */ MET)
@@ -723,6 +766,7 @@ var MET = function () {
   \********************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Weather": () => (/* binding */ Weather)
@@ -932,6 +976,7 @@ var Weather = function () {
   \*****************************************************************************************************/
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -958,6 +1003,7 @@ ___CSS_LOADER_EXPORT___.push([module.id, "* {\n  padding: 0;\n  margin: 0;\n  bo
   \*****************************************************/
 /***/ ((module) => {
 
+"use strict";
 
 
 /*
@@ -1069,6 +1115,7 @@ module.exports = function (cssWithMappingToString) {
   \************************************************************/
 /***/ ((module) => {
 
+"use strict";
 
 
 module.exports = function (item) {
@@ -1100,6 +1147,7 @@ module.exports = function (item) {
   \****************************************************************************/
 /***/ ((module) => {
 
+"use strict";
 
 
 var stylesInDOM = [];
@@ -1213,6 +1261,7 @@ module.exports = function (list, options) {
   \********************************************************************/
 /***/ ((module) => {
 
+"use strict";
 
 
 var memo = {};
@@ -1261,6 +1310,7 @@ module.exports = insertBySelector;
   \**********************************************************************/
 /***/ ((module) => {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -1281,6 +1331,7 @@ module.exports = insertStyleElement;
   \**********************************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -1302,6 +1353,7 @@ module.exports = setAttributesWithoutAttributes;
   \***************************************************************/
 /***/ ((module) => {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -1381,6 +1433,7 @@ module.exports = domAPI;
   \*********************************************************************/
 /***/ ((module) => {
 
+"use strict";
 
 
 /* istanbul ignore next  */
@@ -1406,6 +1459,7 @@ module.exports = styleTagTransform;
   \************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
+"use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
@@ -1451,6 +1505,1033 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
        /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_style_scss__WEBPACK_IMPORTED_MODULE_6__["default"] && _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_style_scss__WEBPACK_IMPORTED_MODULE_6__["default"].locals ? _node_modules_css_loader_dist_cjs_js_node_modules_sass_loader_dist_cjs_js_style_scss__WEBPACK_IMPORTED_MODULE_6__["default"].locals : undefined);
 
+
+/***/ }),
+
+/***/ "./src/weatherIcons sync \\.svg$":
+/*!****************************************************!*\
+  !*** ./src/weatherIcons/ sync nonrecursive \.svg$ ***!
+  \****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var map = {
+	"./clearsky_day.svg": "./src/weatherIcons/clearsky_day.svg",
+	"./clearsky_night.svg": "./src/weatherIcons/clearsky_night.svg",
+	"./clearsky_polartwilight.svg": "./src/weatherIcons/clearsky_polartwilight.svg",
+	"./cloudy.svg": "./src/weatherIcons/cloudy.svg",
+	"./fair_day.svg": "./src/weatherIcons/fair_day.svg",
+	"./fair_night.svg": "./src/weatherIcons/fair_night.svg",
+	"./fair_polartwilight.svg": "./src/weatherIcons/fair_polartwilight.svg",
+	"./fog.svg": "./src/weatherIcons/fog.svg",
+	"./heavyrain.svg": "./src/weatherIcons/heavyrain.svg",
+	"./heavyrainandthunder.svg": "./src/weatherIcons/heavyrainandthunder.svg",
+	"./heavyrainshowers_day.svg": "./src/weatherIcons/heavyrainshowers_day.svg",
+	"./heavyrainshowers_night.svg": "./src/weatherIcons/heavyrainshowers_night.svg",
+	"./heavyrainshowers_polartwilight.svg": "./src/weatherIcons/heavyrainshowers_polartwilight.svg",
+	"./heavyrainshowersandthunder_day.svg": "./src/weatherIcons/heavyrainshowersandthunder_day.svg",
+	"./heavyrainshowersandthunder_night.svg": "./src/weatherIcons/heavyrainshowersandthunder_night.svg",
+	"./heavyrainshowersandthunder_polartwilight.svg": "./src/weatherIcons/heavyrainshowersandthunder_polartwilight.svg",
+	"./heavysleet.svg": "./src/weatherIcons/heavysleet.svg",
+	"./heavysleetandthunder.svg": "./src/weatherIcons/heavysleetandthunder.svg",
+	"./heavysleetshowers_day.svg": "./src/weatherIcons/heavysleetshowers_day.svg",
+	"./heavysleetshowers_night.svg": "./src/weatherIcons/heavysleetshowers_night.svg",
+	"./heavysleetshowers_polartwilight.svg": "./src/weatherIcons/heavysleetshowers_polartwilight.svg",
+	"./heavysleetshowersandthunder_day.svg": "./src/weatherIcons/heavysleetshowersandthunder_day.svg",
+	"./heavysleetshowersandthunder_night.svg": "./src/weatherIcons/heavysleetshowersandthunder_night.svg",
+	"./heavysleetshowersandthunder_polartwilight.svg": "./src/weatherIcons/heavysleetshowersandthunder_polartwilight.svg",
+	"./heavysnow.svg": "./src/weatherIcons/heavysnow.svg",
+	"./heavysnowandthunder.svg": "./src/weatherIcons/heavysnowandthunder.svg",
+	"./heavysnowshowers_day.svg": "./src/weatherIcons/heavysnowshowers_day.svg",
+	"./heavysnowshowers_night.svg": "./src/weatherIcons/heavysnowshowers_night.svg",
+	"./heavysnowshowers_polartwilight.svg": "./src/weatherIcons/heavysnowshowers_polartwilight.svg",
+	"./heavysnowshowersandthunder_day.svg": "./src/weatherIcons/heavysnowshowersandthunder_day.svg",
+	"./heavysnowshowersandthunder_night.svg": "./src/weatherIcons/heavysnowshowersandthunder_night.svg",
+	"./heavysnowshowersandthunder_polartwilight.svg": "./src/weatherIcons/heavysnowshowersandthunder_polartwilight.svg",
+	"./lightrain.svg": "./src/weatherIcons/lightrain.svg",
+	"./lightrainandthunder.svg": "./src/weatherIcons/lightrainandthunder.svg",
+	"./lightrainshowers_day.svg": "./src/weatherIcons/lightrainshowers_day.svg",
+	"./lightrainshowers_night.svg": "./src/weatherIcons/lightrainshowers_night.svg",
+	"./lightrainshowers_polartwilight.svg": "./src/weatherIcons/lightrainshowers_polartwilight.svg",
+	"./lightrainshowersandthunder_day.svg": "./src/weatherIcons/lightrainshowersandthunder_day.svg",
+	"./lightrainshowersandthunder_night.svg": "./src/weatherIcons/lightrainshowersandthunder_night.svg",
+	"./lightrainshowersandthunder_polartwilight.svg": "./src/weatherIcons/lightrainshowersandthunder_polartwilight.svg",
+	"./lightsleet.svg": "./src/weatherIcons/lightsleet.svg",
+	"./lightsleetandthunder.svg": "./src/weatherIcons/lightsleetandthunder.svg",
+	"./lightsleetshowers_day.svg": "./src/weatherIcons/lightsleetshowers_day.svg",
+	"./lightsleetshowers_night.svg": "./src/weatherIcons/lightsleetshowers_night.svg",
+	"./lightsleetshowers_polartwilight.svg": "./src/weatherIcons/lightsleetshowers_polartwilight.svg",
+	"./lightsnow.svg": "./src/weatherIcons/lightsnow.svg",
+	"./lightsnowandthunder.svg": "./src/weatherIcons/lightsnowandthunder.svg",
+	"./lightsnowshowers_day.svg": "./src/weatherIcons/lightsnowshowers_day.svg",
+	"./lightsnowshowers_night.svg": "./src/weatherIcons/lightsnowshowers_night.svg",
+	"./lightsnowshowers_polartwilight.svg": "./src/weatherIcons/lightsnowshowers_polartwilight.svg",
+	"./lightssleetshowersandthunder_day.svg": "./src/weatherIcons/lightssleetshowersandthunder_day.svg",
+	"./lightssleetshowersandthunder_night.svg": "./src/weatherIcons/lightssleetshowersandthunder_night.svg",
+	"./lightssleetshowersandthunder_polartwilight.svg": "./src/weatherIcons/lightssleetshowersandthunder_polartwilight.svg",
+	"./lightssnowshowersandthunder_day.svg": "./src/weatherIcons/lightssnowshowersandthunder_day.svg",
+	"./lightssnowshowersandthunder_night.svg": "./src/weatherIcons/lightssnowshowersandthunder_night.svg",
+	"./lightssnowshowersandthunder_polartwilight.svg": "./src/weatherIcons/lightssnowshowersandthunder_polartwilight.svg",
+	"./partlycloudy_day.svg": "./src/weatherIcons/partlycloudy_day.svg",
+	"./partlycloudy_night.svg": "./src/weatherIcons/partlycloudy_night.svg",
+	"./partlycloudy_polartwilight.svg": "./src/weatherIcons/partlycloudy_polartwilight.svg",
+	"./rain.svg": "./src/weatherIcons/rain.svg",
+	"./rainandthunder.svg": "./src/weatherIcons/rainandthunder.svg",
+	"./rainshowers_day.svg": "./src/weatherIcons/rainshowers_day.svg",
+	"./rainshowers_night.svg": "./src/weatherIcons/rainshowers_night.svg",
+	"./rainshowers_polartwilight.svg": "./src/weatherIcons/rainshowers_polartwilight.svg",
+	"./rainshowersandthunder_day.svg": "./src/weatherIcons/rainshowersandthunder_day.svg",
+	"./rainshowersandthunder_night.svg": "./src/weatherIcons/rainshowersandthunder_night.svg",
+	"./rainshowersandthunder_polartwilight.svg": "./src/weatherIcons/rainshowersandthunder_polartwilight.svg",
+	"./sleet.svg": "./src/weatherIcons/sleet.svg",
+	"./sleetandthunder.svg": "./src/weatherIcons/sleetandthunder.svg",
+	"./sleetshowers_day.svg": "./src/weatherIcons/sleetshowers_day.svg",
+	"./sleetshowers_night.svg": "./src/weatherIcons/sleetshowers_night.svg",
+	"./sleetshowers_polartwilight.svg": "./src/weatherIcons/sleetshowers_polartwilight.svg",
+	"./sleetshowersandthunder_day.svg": "./src/weatherIcons/sleetshowersandthunder_day.svg",
+	"./sleetshowersandthunder_night.svg": "./src/weatherIcons/sleetshowersandthunder_night.svg",
+	"./sleetshowersandthunder_polartwilight.svg": "./src/weatherIcons/sleetshowersandthunder_polartwilight.svg",
+	"./snow.svg": "./src/weatherIcons/snow.svg",
+	"./snowandthunder.svg": "./src/weatherIcons/snowandthunder.svg",
+	"./snowshowers_day.svg": "./src/weatherIcons/snowshowers_day.svg",
+	"./snowshowers_night.svg": "./src/weatherIcons/snowshowers_night.svg",
+	"./snowshowers_polartwilight.svg": "./src/weatherIcons/snowshowers_polartwilight.svg",
+	"./snowshowersandthunder_day.svg": "./src/weatherIcons/snowshowersandthunder_day.svg",
+	"./snowshowersandthunder_night.svg": "./src/weatherIcons/snowshowersandthunder_night.svg",
+	"./snowshowersandthunder_polartwilight.svg": "./src/weatherIcons/snowshowersandthunder_polartwilight.svg"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./src/weatherIcons sync \\.svg$";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/clearsky_day.svg":
+/*!*******************************************!*\
+  !*** ./src/weatherIcons/clearsky_day.svg ***!
+  \*******************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/clearsky_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/clearsky_night.svg":
+/*!*********************************************!*\
+  !*** ./src/weatherIcons/clearsky_night.svg ***!
+  \*********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/clearsky_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/clearsky_polartwilight.svg":
+/*!*****************************************************!*\
+  !*** ./src/weatherIcons/clearsky_polartwilight.svg ***!
+  \*****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/clearsky_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/cloudy.svg":
+/*!*************************************!*\
+  !*** ./src/weatherIcons/cloudy.svg ***!
+  \*************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/cloudy.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/fair_day.svg":
+/*!***************************************!*\
+  !*** ./src/weatherIcons/fair_day.svg ***!
+  \***************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/fair_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/fair_night.svg":
+/*!*****************************************!*\
+  !*** ./src/weatherIcons/fair_night.svg ***!
+  \*****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/fair_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/fair_polartwilight.svg":
+/*!*************************************************!*\
+  !*** ./src/weatherIcons/fair_polartwilight.svg ***!
+  \*************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/fair_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/fog.svg":
+/*!**********************************!*\
+  !*** ./src/weatherIcons/fog.svg ***!
+  \**********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/fog.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrain.svg":
+/*!****************************************!*\
+  !*** ./src/weatherIcons/heavyrain.svg ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrain.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrainandthunder.svg":
+/*!**************************************************!*\
+  !*** ./src/weatherIcons/heavyrainandthunder.svg ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrainandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrainshowers_day.svg":
+/*!***************************************************!*\
+  !*** ./src/weatherIcons/heavyrainshowers_day.svg ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrainshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrainshowers_night.svg":
+/*!*****************************************************!*\
+  !*** ./src/weatherIcons/heavyrainshowers_night.svg ***!
+  \*****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrainshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrainshowers_polartwilight.svg":
+/*!*************************************************************!*\
+  !*** ./src/weatherIcons/heavyrainshowers_polartwilight.svg ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrainshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrainshowersandthunder_day.svg":
+/*!*************************************************************!*\
+  !*** ./src/weatherIcons/heavyrainshowersandthunder_day.svg ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrainshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrainshowersandthunder_night.svg":
+/*!***************************************************************!*\
+  !*** ./src/weatherIcons/heavyrainshowersandthunder_night.svg ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrainshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavyrainshowersandthunder_polartwilight.svg":
+/*!***********************************************************************!*\
+  !*** ./src/weatherIcons/heavyrainshowersandthunder_polartwilight.svg ***!
+  \***********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavyrainshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleet.svg":
+/*!*****************************************!*\
+  !*** ./src/weatherIcons/heavysleet.svg ***!
+  \*****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleet.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleetandthunder.svg":
+/*!***************************************************!*\
+  !*** ./src/weatherIcons/heavysleetandthunder.svg ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleetandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleetshowers_day.svg":
+/*!****************************************************!*\
+  !*** ./src/weatherIcons/heavysleetshowers_day.svg ***!
+  \****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleetshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleetshowers_night.svg":
+/*!******************************************************!*\
+  !*** ./src/weatherIcons/heavysleetshowers_night.svg ***!
+  \******************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleetshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleetshowers_polartwilight.svg":
+/*!**************************************************************!*\
+  !*** ./src/weatherIcons/heavysleetshowers_polartwilight.svg ***!
+  \**************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleetshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleetshowersandthunder_day.svg":
+/*!**************************************************************!*\
+  !*** ./src/weatherIcons/heavysleetshowersandthunder_day.svg ***!
+  \**************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleetshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleetshowersandthunder_night.svg":
+/*!****************************************************************!*\
+  !*** ./src/weatherIcons/heavysleetshowersandthunder_night.svg ***!
+  \****************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleetshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysleetshowersandthunder_polartwilight.svg":
+/*!************************************************************************!*\
+  !*** ./src/weatherIcons/heavysleetshowersandthunder_polartwilight.svg ***!
+  \************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysleetshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnow.svg":
+/*!****************************************!*\
+  !*** ./src/weatherIcons/heavysnow.svg ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnow.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnowandthunder.svg":
+/*!**************************************************!*\
+  !*** ./src/weatherIcons/heavysnowandthunder.svg ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnowandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnowshowers_day.svg":
+/*!***************************************************!*\
+  !*** ./src/weatherIcons/heavysnowshowers_day.svg ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnowshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnowshowers_night.svg":
+/*!*****************************************************!*\
+  !*** ./src/weatherIcons/heavysnowshowers_night.svg ***!
+  \*****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnowshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnowshowers_polartwilight.svg":
+/*!*************************************************************!*\
+  !*** ./src/weatherIcons/heavysnowshowers_polartwilight.svg ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnowshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnowshowersandthunder_day.svg":
+/*!*************************************************************!*\
+  !*** ./src/weatherIcons/heavysnowshowersandthunder_day.svg ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnowshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnowshowersandthunder_night.svg":
+/*!***************************************************************!*\
+  !*** ./src/weatherIcons/heavysnowshowersandthunder_night.svg ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnowshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/heavysnowshowersandthunder_polartwilight.svg":
+/*!***********************************************************************!*\
+  !*** ./src/weatherIcons/heavysnowshowersandthunder_polartwilight.svg ***!
+  \***********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/heavysnowshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrain.svg":
+/*!****************************************!*\
+  !*** ./src/weatherIcons/lightrain.svg ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrain.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrainandthunder.svg":
+/*!**************************************************!*\
+  !*** ./src/weatherIcons/lightrainandthunder.svg ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrainandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrainshowers_day.svg":
+/*!***************************************************!*\
+  !*** ./src/weatherIcons/lightrainshowers_day.svg ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrainshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrainshowers_night.svg":
+/*!*****************************************************!*\
+  !*** ./src/weatherIcons/lightrainshowers_night.svg ***!
+  \*****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrainshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrainshowers_polartwilight.svg":
+/*!*************************************************************!*\
+  !*** ./src/weatherIcons/lightrainshowers_polartwilight.svg ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrainshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrainshowersandthunder_day.svg":
+/*!*************************************************************!*\
+  !*** ./src/weatherIcons/lightrainshowersandthunder_day.svg ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrainshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrainshowersandthunder_night.svg":
+/*!***************************************************************!*\
+  !*** ./src/weatherIcons/lightrainshowersandthunder_night.svg ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrainshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightrainshowersandthunder_polartwilight.svg":
+/*!***********************************************************************!*\
+  !*** ./src/weatherIcons/lightrainshowersandthunder_polartwilight.svg ***!
+  \***********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightrainshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsleet.svg":
+/*!*****************************************!*\
+  !*** ./src/weatherIcons/lightsleet.svg ***!
+  \*****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsleet.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsleetandthunder.svg":
+/*!***************************************************!*\
+  !*** ./src/weatherIcons/lightsleetandthunder.svg ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsleetandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsleetshowers_day.svg":
+/*!****************************************************!*\
+  !*** ./src/weatherIcons/lightsleetshowers_day.svg ***!
+  \****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsleetshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsleetshowers_night.svg":
+/*!******************************************************!*\
+  !*** ./src/weatherIcons/lightsleetshowers_night.svg ***!
+  \******************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsleetshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsleetshowers_polartwilight.svg":
+/*!**************************************************************!*\
+  !*** ./src/weatherIcons/lightsleetshowers_polartwilight.svg ***!
+  \**************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsleetshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsnow.svg":
+/*!****************************************!*\
+  !*** ./src/weatherIcons/lightsnow.svg ***!
+  \****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsnow.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsnowandthunder.svg":
+/*!**************************************************!*\
+  !*** ./src/weatherIcons/lightsnowandthunder.svg ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsnowandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsnowshowers_day.svg":
+/*!***************************************************!*\
+  !*** ./src/weatherIcons/lightsnowshowers_day.svg ***!
+  \***************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsnowshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsnowshowers_night.svg":
+/*!*****************************************************!*\
+  !*** ./src/weatherIcons/lightsnowshowers_night.svg ***!
+  \*****************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsnowshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightsnowshowers_polartwilight.svg":
+/*!*************************************************************!*\
+  !*** ./src/weatherIcons/lightsnowshowers_polartwilight.svg ***!
+  \*************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightsnowshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightssleetshowersandthunder_day.svg":
+/*!***************************************************************!*\
+  !*** ./src/weatherIcons/lightssleetshowersandthunder_day.svg ***!
+  \***************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightssleetshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightssleetshowersandthunder_night.svg":
+/*!*****************************************************************!*\
+  !*** ./src/weatherIcons/lightssleetshowersandthunder_night.svg ***!
+  \*****************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightssleetshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightssleetshowersandthunder_polartwilight.svg":
+/*!*************************************************************************!*\
+  !*** ./src/weatherIcons/lightssleetshowersandthunder_polartwilight.svg ***!
+  \*************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightssleetshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightssnowshowersandthunder_day.svg":
+/*!**************************************************************!*\
+  !*** ./src/weatherIcons/lightssnowshowersandthunder_day.svg ***!
+  \**************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightssnowshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightssnowshowersandthunder_night.svg":
+/*!****************************************************************!*\
+  !*** ./src/weatherIcons/lightssnowshowersandthunder_night.svg ***!
+  \****************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightssnowshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/lightssnowshowersandthunder_polartwilight.svg":
+/*!************************************************************************!*\
+  !*** ./src/weatherIcons/lightssnowshowersandthunder_polartwilight.svg ***!
+  \************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/lightssnowshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/partlycloudy_day.svg":
+/*!***********************************************!*\
+  !*** ./src/weatherIcons/partlycloudy_day.svg ***!
+  \***********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/partlycloudy_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/partlycloudy_night.svg":
+/*!*************************************************!*\
+  !*** ./src/weatherIcons/partlycloudy_night.svg ***!
+  \*************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/partlycloudy_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/partlycloudy_polartwilight.svg":
+/*!*********************************************************!*\
+  !*** ./src/weatherIcons/partlycloudy_polartwilight.svg ***!
+  \*********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/partlycloudy_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rain.svg":
+/*!***********************************!*\
+  !*** ./src/weatherIcons/rain.svg ***!
+  \***********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rain.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rainandthunder.svg":
+/*!*********************************************!*\
+  !*** ./src/weatherIcons/rainandthunder.svg ***!
+  \*********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rainandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rainshowers_day.svg":
+/*!**********************************************!*\
+  !*** ./src/weatherIcons/rainshowers_day.svg ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rainshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rainshowers_night.svg":
+/*!************************************************!*\
+  !*** ./src/weatherIcons/rainshowers_night.svg ***!
+  \************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rainshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rainshowers_polartwilight.svg":
+/*!********************************************************!*\
+  !*** ./src/weatherIcons/rainshowers_polartwilight.svg ***!
+  \********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rainshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rainshowersandthunder_day.svg":
+/*!********************************************************!*\
+  !*** ./src/weatherIcons/rainshowersandthunder_day.svg ***!
+  \********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rainshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rainshowersandthunder_night.svg":
+/*!**********************************************************!*\
+  !*** ./src/weatherIcons/rainshowersandthunder_night.svg ***!
+  \**********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rainshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/rainshowersandthunder_polartwilight.svg":
+/*!******************************************************************!*\
+  !*** ./src/weatherIcons/rainshowersandthunder_polartwilight.svg ***!
+  \******************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/rainshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleet.svg":
+/*!************************************!*\
+  !*** ./src/weatherIcons/sleet.svg ***!
+  \************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleet.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleetandthunder.svg":
+/*!**********************************************!*\
+  !*** ./src/weatherIcons/sleetandthunder.svg ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleetandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleetshowers_day.svg":
+/*!***********************************************!*\
+  !*** ./src/weatherIcons/sleetshowers_day.svg ***!
+  \***********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleetshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleetshowers_night.svg":
+/*!*************************************************!*\
+  !*** ./src/weatherIcons/sleetshowers_night.svg ***!
+  \*************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleetshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleetshowers_polartwilight.svg":
+/*!*********************************************************!*\
+  !*** ./src/weatherIcons/sleetshowers_polartwilight.svg ***!
+  \*********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleetshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleetshowersandthunder_day.svg":
+/*!*********************************************************!*\
+  !*** ./src/weatherIcons/sleetshowersandthunder_day.svg ***!
+  \*********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleetshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleetshowersandthunder_night.svg":
+/*!***********************************************************!*\
+  !*** ./src/weatherIcons/sleetshowersandthunder_night.svg ***!
+  \***********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleetshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/sleetshowersandthunder_polartwilight.svg":
+/*!*******************************************************************!*\
+  !*** ./src/weatherIcons/sleetshowersandthunder_polartwilight.svg ***!
+  \*******************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sleetshowersandthunder_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snow.svg":
+/*!***********************************!*\
+  !*** ./src/weatherIcons/snow.svg ***!
+  \***********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snow.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snowandthunder.svg":
+/*!*********************************************!*\
+  !*** ./src/weatherIcons/snowandthunder.svg ***!
+  \*********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snowandthunder.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snowshowers_day.svg":
+/*!**********************************************!*\
+  !*** ./src/weatherIcons/snowshowers_day.svg ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snowshowers_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snowshowers_night.svg":
+/*!************************************************!*\
+  !*** ./src/weatherIcons/snowshowers_night.svg ***!
+  \************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snowshowers_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snowshowers_polartwilight.svg":
+/*!********************************************************!*\
+  !*** ./src/weatherIcons/snowshowers_polartwilight.svg ***!
+  \********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snowshowers_polartwilight.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snowshowersandthunder_day.svg":
+/*!********************************************************!*\
+  !*** ./src/weatherIcons/snowshowersandthunder_day.svg ***!
+  \********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snowshowersandthunder_day.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snowshowersandthunder_night.svg":
+/*!**********************************************************!*\
+  !*** ./src/weatherIcons/snowshowersandthunder_night.svg ***!
+  \**********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snowshowersandthunder_night.svg";
+
+/***/ }),
+
+/***/ "./src/weatherIcons/snowshowersandthunder_polartwilight.svg":
+/*!******************************************************************!*\
+  !*** ./src/weatherIcons/snowshowersandthunder_polartwilight.svg ***!
+  \******************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/snowshowersandthunder_polartwilight.svg";
 
 /***/ })
 

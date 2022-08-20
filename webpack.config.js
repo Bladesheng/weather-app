@@ -14,8 +14,8 @@ module.exports = {
     })
   ],
   resolve: {
-    // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
+    // Add '.ts' as resolvable extensions.
+    extensions: [".ts", ".js", "..."]
   },
   module: {
     rules: [
@@ -43,11 +43,15 @@ module.exports = {
           // Compiles Sass to CSS
           "sass-loader"
         ]
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: "asset/resource",
+        generator: {
+          // put all generated assets into "dist/assets/"
+          filename: "assets/[name][ext]"
+        }
       }
-      // {
-      //   test: /\.(png|svg|jpg|jpeg|gif)$/i,
-      //   type: "asset/resource"
-      // }
     ]
   },
   output: {

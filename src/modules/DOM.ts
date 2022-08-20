@@ -1,4 +1,5 @@
 import { Weather } from "./Weather";
+import { Icons } from "./Icons";
 
 interface inputListenerInterface {
   (): void;
@@ -75,8 +76,9 @@ export const DOM = (() => {
     const minMaxText = document.querySelector(".now h2");
     minMaxText.textContent = `${maxTemp}˚/${minTemp}˚`;
 
-    const weatherImg = document.querySelector(".now img");
-    weatherImg.setAttribute("src", `../src/weatherIcons/${now.iconCode}.svg`);
+    const weatherImg: HTMLImageElement = document.querySelector(".now img");
+    const iconPath = Icons.get(now.iconCode);
+    weatherImg.src = iconPath;
   }
 
   // shows and hides loader modal with animated icon
