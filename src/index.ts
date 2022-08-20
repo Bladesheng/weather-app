@@ -17,7 +17,9 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
   await Promise.all([MET.getLocationforecast(coords), MET.getSunrise(coords)]);
 
   Weather.init();
-  Weather.logCurrentTemp();
+
+  const nowWeather = Weather.returnNow();
+  console.log("Weather now is: ", nowWeather);
 
   const todaysWeather = Weather.returnForDate(new Date().getDate());
   console.log("Today's weather: ", todaysWeather.weatherPoints);

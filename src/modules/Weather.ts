@@ -4,7 +4,7 @@ export const Weather = (() => {
   // module for extracting weather numbers from timeseries array
   return {
     init,
-    logCurrentTemp,
+    returnNow,
     returnForDate,
     returnForDateCompact
   };
@@ -17,12 +17,14 @@ export const Weather = (() => {
     _SunrisePoints = MET.returnSunrise();
   }
 
-  function logCurrentTemp() {
+  function returnNow() {
     const currentTimePoint = _LocationforecastPoints[0];
     const details = currentTimePoint.data.instant.details;
     const airTemp = details.air_temperature;
 
-    console.log(`Current temperature is ${airTemp} °C`);
+    const minMaxTemp = _minMaxTemp(new Date().getDate());
+
+    return { airTemp, minMaxTemp };
   }
 
   // returns weather points and sunrise point for given date
@@ -55,7 +57,8 @@ export const Weather = (() => {
     return { weatherPoints, sunrisePoint };
   }
 
-  // trimmed version (only 0h, 6h, 12h, 18h)
+  // trimmed weather points + sunrise point for given date
+  // (only 0h, 6h, 12h, 18h)
   function returnForDateCompact(wantedDate: number) {
     const fullData = returnForDate(wantedDate);
     const sunrisePoint = fullData.sunrisePoint;
@@ -128,5 +131,22 @@ export const Weather = (() => {
     }
 
     return { weatherPoints, sunrisePoint };
+  }
+
+  // returns minimum and maximum temperature for given date
+  function _minMaxTemp(wantedDate: number) {
+    const weatherPoints = returnForDate(wantedDate).weatherPoints;
+
+    const temperatures: number[] = [];
+
+    for (const timePoint of weatherPoints) {
+      const temperature = timePoint.data.instant.details.air_temperature;
+      temperatures.push(temperature);
+    }
+
+    const minTemp = Math.min(...temperatures);
+    const maxTemp = Math.max(...temperatures);
+
+    return { minTemp, maxTemp };
   }
 })();
