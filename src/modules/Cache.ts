@@ -1,6 +1,7 @@
 export const Cache = (() => {
-  // module for xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  // module for storing and retrieving responses from cache,
 
+  // retrieves response for given url from cache, if it is invalid, fetches a new one
   async function getResponse(url: string) {
     try {
       const isInvalid = await _isInvalid(url);
