@@ -2,30 +2,34 @@ export const Cache = (() => {
   // module for xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 
   async function getResponse(url: string) {
-    const isInvalid = await _isInvalid(url);
+    try {
+      const isInvalid = await _isInvalid(url);
 
-    // either force fetch new request and cache it or force use of cache, nothing else
-    function createRequest(cacheType: "reload" | "force-cache") {
-      return new Request(url, {
-        method: "GET",
-        cache: cacheType
-      });
+      // either force fetch new request and cache it or force use of cache, nothing else
+      function createRequest(cacheType: "reload" | "force-cache") {
+        return new Request(url, {
+          method: "GET",
+          cache: cacheType
+        });
+      }
+
+      let response: Response;
+
+      if (isInvalid) {
+        const request = createRequest("reload"); // request new response and cache it
+        response = await fetch(request);
+
+        // manually give the response expire time, cache it and return the the new response
+        response = await _saveWithExpire(url, response);
+      } else if (!isInvalid) {
+        const request = createRequest("force-cache"); // return response from cache
+        response = await fetch(request);
+      }
+
+      return response;
+    } catch (error) {
+      console.log(error);
     }
-
-    let response: Response;
-
-    if (isInvalid) {
-      const request = createRequest("reload"); // request new response and cache it
-      response = await fetch(request);
-
-      // manually give the response expire time, cache it and return the the new response
-      response = await _saveWithExpire(url, response);
-    } else if (!isInvalid) {
-      const request = createRequest("force-cache"); // return response from cache
-      response = await fetch(request);
-    }
-
-    return response;
   }
 
   // returns false if response for given url is expired or nothing is not cached at all
@@ -37,35 +41,23 @@ export const Cache = (() => {
     const urls = requests.map((request) => {
       return request.url;
     });
-    console.log("Cached urls:", urls);
 
     // manually check if there is cached response for given url
     // and if it is expired
     async function checkCacheExpired(url: string) {
       const cachedResponse = await cache.match(url);
-      console.log("Cached response: ", cachedResponse);
 
       // if no response for given url is cached
       if (cachedResponse === undefined) {
-        console.log("There is no cached response");
-
         const isInvalid = true;
         return isInvalid;
       }
 
       // If there is cached response, continue.
 
-      // logs all info from header
-      for (const pair of cachedResponse.headers.entries()) {
-        console.log(pair[0], ":", pair[1]);
-      }
-
-      const hasExpire = cachedResponse.headers.has("expires");
-      console.log("Does cached response have expire time?: ", hasExpire);
-
+      // date when response expires
       const expireDate = cachedResponse.headers.get("expires");
       const expireDateObj = new Date(expireDate);
-      console.log("Response expires on: " + expireDateObj);
 
       // time until the response expires
       const expiresTimer = expireDateObj.getTime() - new Date().getTime();
@@ -77,7 +69,6 @@ export const Cache = (() => {
     }
 
     const isInvalid = await checkCacheExpired(url);
-    console.log("Is response invalid?:", isInvalid);
 
     return isInvalid;
   }

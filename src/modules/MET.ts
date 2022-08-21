@@ -80,20 +80,14 @@ export const MET = (() => {
       });
 
       const response = await fetch(request);
-      console.log(response);
-
-      const expireDate = response.headers.get("expires");
-      console.log("Response expires on: " + expireDate);
 
       const responseData = await response.json();
-      console.log(responseData);
 
       const updatedDate = responseData.properties.meta.updated_at;
       console.log("Last model update: " + updatedDate);
 
       // store all the time points in array
       _StoreLocationforecast(responseData.properties.timeseries);
-      console.log(_LocationforecastData);
     } catch (error) {
       console.log(error);
     }
@@ -133,7 +127,6 @@ export const MET = (() => {
       // Locationforecast returns data for next ~10 days, so same number is used here
 
       const url = `https://api.met.no/weatherapi/sunrise/2.0/.json?lat=${coords[1]}&lon=${coords[0]}&date=${year}-${monthPadded}-${day}&offset=${offset}&days=${days}`;
-      console.log(url);
 
       const request = new Request(url, {
         method: "GET",
@@ -141,18 +134,12 @@ export const MET = (() => {
       });
 
       const response = await fetch(request);
-      console.log(response);
-
-      const expireDate = response.headers.get("expires");
-      console.log("Response expires on: " + expireDate);
 
       const responseData = await response.json();
-      console.log(responseData);
 
       const timePointsArray = responseData.location.time;
       // store all the time points in array
       _StoreSunrise(timePointsArray.slice(0, days)); // exclude any extra days that are returned
-      console.log(_SunriseData);
     } catch (error) {
       console.log(error);
     }
