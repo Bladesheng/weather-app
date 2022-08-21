@@ -85,10 +85,66 @@ export const DOM = (() => {
     loader.style.display = "none";
   }
 
+  // add listeners for sidebar
+  function sidebarInit() {
+    // show sidebar when button is clicked
+    const hamburgerBtn = document.querySelector("button.burger");
+    const sidebar = document.querySelector(".sidebar");
+
+    hamburgerBtn.addEventListener("click", () => {
+      sidebar.classList.remove("hidden");
+    });
+
+    //hide sidebar when you click somewhere else
+    const loader = document.querySelector(".loader");
+    const header = document.querySelector("header");
+    const main = document.querySelector("main");
+
+    for (const element of [loader, header, main]) {
+      element.addEventListener("click", (e) => {
+        sidebar.classList.add("hidden");
+      });
+    }
+
+    // swipe listener
+    _sidebarSwipeListener();
+  }
+
+  // hide sidebar when you swipe left
+  // show sidebar when you swipe right
+  function _sidebarSwipeListener() {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    function checkDirection() {
+      const sidebar = document.querySelector(".sidebar");
+
+      // swiped left
+      if (touchEndX < touchStartX) {
+        sidebar.classList.add("hidden");
+      }
+
+      // swiped right
+      if (touchEndX > touchStartX) {
+        sidebar.classList.remove("hidden");
+      }
+    }
+
+    document.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      checkDirection();
+    });
+  }
+
   return {
     dynamicInput,
     displayNow,
     showLoader,
-    hideLoader
+    hideLoader,
+    sidebarInit
   };
 })();

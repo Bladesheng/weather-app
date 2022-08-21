@@ -1,5 +1,6 @@
 export const Cache = (() => {
-  // module for storing and retrieving responses from cache,
+  // Module for storing and retrieving responses from cache.
+  // Specifically for geolocation and altitude APIs, because they don't have "expires" header
 
   // retrieves response for given url from cache, if it is invalid, fetches a new one
   async function getResponse(url: string) {

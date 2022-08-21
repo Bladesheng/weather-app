@@ -24,7 +24,12 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
   console.log("Weather now is: ", nowWeather);
 
   const todaysWeather = Weather.returnForDate(new Date().getDate());
-  console.log("Today's weather: ", todaysWeather.weatherPoints);
+  console.log(
+    "Today's weather: ",
+    todaysWeather.weatherPoints,
+    todaysWeather.sunrisePoint.sunrise,
+    todaysWeather.sunrisePoint.sunset
+  );
 
   const tomorowWeatherCompact = Weather.returnForDateCompact(
     new Date().getDate() + 1
@@ -40,3 +45,5 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
 
   DOM.hideLoader();
 });
+
+DOM.sidebarInit();

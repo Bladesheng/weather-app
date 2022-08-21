@@ -123,18 +123,49 @@
       </div>
     </div>
 
-    <div class="sidebar"></div>
+    <div class="sidebar hidden">
+      <p>Lokality (TBD)</p>
+
+      <div class="favorites">
+        <button>Český dub</button>
+      </div>
+
+      <div class="credits">
+        <p>
+          Weather and sunrise data provided by
+          <a href="https://api.met.no/">Met.no </a>
+          API
+        </p>
+
+        <p>
+          Geolocation data provided by
+          <a href="https://nominatim.org/">Nominatim</a>
+          API
+        </p>
+
+        <p>
+          Elevation data provided by
+          <a href="https://open-elevation.com/">Open-Elevation</a>
+          API
+        </p>
+
+        <p>
+          Website made by
+          <a href="https://github.com/Bladesheng">Bladesheng</a>
+        </p>
+      </div>
+    </div>
+
+    <button class="burger">
+      <svg viewBox="0 0 24 24">
+        <path
+          fill="currentColor"
+          d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"
+        />
+      </svg>
+    </button>
 
     <header>
-      <button class="burger">
-        <svg viewBox="0 0 24 24">
-          <path
-            fill="currentColor"
-            d="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"
-          />
-        </svg>
-      </button>
-
       <h1 class="city dynamicText">Český Dub</h1>
       <input
         type="search"
