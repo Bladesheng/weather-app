@@ -20,6 +20,9 @@ export interface ITimePointLocationforecast {
       };
     };
     next_1_hours: {
+      details: {
+        precipitation_amount: number;
+      };
       summary: {
         symbol_code: string;
       };
@@ -33,18 +36,18 @@ export interface ITimePointLocationforecast {
       };
     };
   };
-  time: string | Date;
+  time: Date;
 }
 
 export interface ITimePointSunrise {
   date: string | Date;
   sunrise: {
     desc?: string;
-    time: string | Date;
+    time: Date;
   };
   sunset: {
     desc?: string;
-    time: string | Date;
+    time: Date;
   };
   high_moon?: object;
   low_moon?: object;

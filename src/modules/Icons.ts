@@ -6,6 +6,7 @@ export const Icons = (() => {
   // Also saves the generated icon's paths to "_icons" object - doesn't actually work in prod
   const _initImportAll = (() => {
     const images = require.context("../weatherIcons/", false, /\.svg$/);
+    const iconsGeneral = require.context("../icons/", false, /\.svg$/);
 
     images.keys().forEach((filename) => {
       // slice off the extension and the "./" part

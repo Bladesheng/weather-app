@@ -4,14 +4,11 @@ import { DOM } from "./modules/DOM";
 import { Weather } from "./modules/Weather";
 import { Geocode } from "./modules/Geocode";
 
-const searchBtn = document.querySelector("button.search");
-const cityHeading = document.querySelector("h1.city");
-const searchInput: HTMLInputElement = document.querySelector("input.search");
-
-DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
+async function search(searchValue: string) {
   DOM.showLoader();
 
-  const searchValue = searchInput.value;
+  DOM.wipeTabs();
+
   cityHeading.textContent = searchValue;
 
   const coords = await Geocode.getCoords(searchValue);
@@ -41,9 +38,25 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
     tomorowWeatherCompact.sunrisePoint.sunset
   );
 
-  DOM.displayNow();
+  DOM.createTodayTab();
+
+  //DOM.createDayTab();
+  // not compact for tommorow
+  // compact for all other days
 
   DOM.hideLoader();
+}
+
+const searchBtn = document.querySelector("button.search");
+const cityHeading = document.querySelector("h1.city");
+const searchInput: HTMLInputElement = document.querySelector("input.search");
+
+DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
+  const searchValue = searchInput.value;
+  search(searchValue);
 });
 
 DOM.sidebarInit();
+
+// default city when page is loaded
+search("Český Dub");

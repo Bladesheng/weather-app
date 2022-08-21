@@ -26,45 +26,75 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
+
+function search(_x) {
+  return _search.apply(this, arguments);
+}
+
+function _search() {
+  _search = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(searchValue) {
+    var coords, nowWeather, todaysWeather, tomorowWeatherCompact;
+    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.showLoader();
+            _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.wipeTabs();
+            cityHeading.textContent = searchValue;
+            _context2.next = 5;
+            return _modules_Geocode__WEBPACK_IMPORTED_MODULE_4__.Geocode.getCoords(searchValue);
+
+          case 5:
+            coords = _context2.sent;
+            _context2.next = 8;
+            return Promise.all([_modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getLocationforecast(coords), _modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getSunrise(coords)]);
+
+          case 8:
+            _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
+            nowWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnNow();
+            console.log("Weather now is: ", nowWeather);
+            todaysWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
+            console.log("Today's weather: ", todaysWeather.weatherPoints, todaysWeather.sunrisePoint.sunrise, todaysWeather.sunrisePoint.sunset);
+            tomorowWeatherCompact = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDateCompact(new Date().getDate() + 1);
+            console.log("Tomorow's compact weather: ", tomorowWeatherCompact.weatherPoints, tomorowWeatherCompact.sunrisePoint.sunrise, tomorowWeatherCompact.sunrisePoint.sunset);
+            _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.createTodayTab(); //DOM.createDayTab();
+            // not compact for tommorow
+            // compact for all other days
+
+            _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.hideLoader();
+
+          case 17:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2);
+  }));
+  return _search.apply(this, arguments);
+}
+
 var searchBtn = document.querySelector("button.search");
 var cityHeading = document.querySelector("h1.city");
 var searchInput = document.querySelector("input.search");
 _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeading, searchInput, /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-  var searchValue, coords, nowWeather, todaysWeather, tomorowWeatherCompact;
+  var searchValue;
   return _regeneratorRuntime().wrap(function _callee$(_context) {
     while (1) {
       switch (_context.prev = _context.next) {
         case 0:
-          _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.showLoader();
           searchValue = searchInput.value;
-          cityHeading.textContent = searchValue;
-          _context.next = 5;
-          return _modules_Geocode__WEBPACK_IMPORTED_MODULE_4__.Geocode.getCoords(searchValue);
+          search(searchValue);
 
-        case 5:
-          coords = _context.sent;
-          _context.next = 8;
-          return Promise.all([_modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getLocationforecast(coords), _modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getSunrise(coords)]);
-
-        case 8:
-          _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
-          nowWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnNow();
-          console.log("Weather now is: ", nowWeather);
-          todaysWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
-          console.log("Today's weather: ", todaysWeather.weatherPoints, todaysWeather.sunrisePoint.sunrise, todaysWeather.sunrisePoint.sunset);
-          tomorowWeatherCompact = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDateCompact(new Date().getDate() + 1);
-          console.log("Tomorow's compact weather: ", tomorowWeatherCompact.weatherPoints, tomorowWeatherCompact.sunrisePoint.sunrise, tomorowWeatherCompact.sunrisePoint.sunset);
-          _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.displayNow();
-          _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.hideLoader();
-
-        case 17:
+        case 2:
         case "end":
           return _context.stop();
       }
     }
   }, _callee);
 })));
-_modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.sidebarInit();
+_modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.sidebarInit(); // default city when page is loaded
+
+search("Český Dub");
 
 /***/ }),
 
@@ -332,6 +362,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Weather__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Weather */ "./src/modules/Weather.ts");
 /* harmony import */ var _Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icons */ "./src/modules/Icons.ts");
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 
 
 var DOM = function () {
@@ -453,6 +489,256 @@ var DOM = function () {
       touchEndX = e.changedTouches[0].screenX;
       checkDirection();
     });
+  } // remove everything from main (all tabs)
+
+
+  function wipeTabs() {
+    var main = document.querySelector("main");
+    main.textContent = "";
+  } // create new tab for today
+  // also inlucdes big "now" section unlike normal tab
+
+
+  function createTodayTab() {
+    var dateObj = new Date();
+    var main = document.querySelector("main");
+    var dayTab = document.createElement("div");
+    dayTab.classList.add("dayTab", "today");
+
+    var dateElement = _returnDate(dateObj);
+
+    dayTab.appendChild(dateElement); // replace name of day with "today" (only for today)
+    // "Monday 14.08." -> "Today 14.08."
+
+    dateElement.textContent = "Dnes ".concat(dateElement.textContent.split(" ")[1]);
+
+    var nowElement = _returnNow();
+
+    dayTab.appendChild(nowElement);
+
+    var hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), false);
+
+    dayTab.appendChild(hourlyBreakdown);
+    main.appendChild(dayTab);
+  } // create new tab for any given date
+
+
+  function createDayTab(dateObj, compact) {
+    var main = document.querySelector("main");
+    var dayTab = document.createElement("div");
+    dayTab.classList.add("dayTab");
+
+    var dateElement = _returnDate(dateObj);
+
+    dayTab.appendChild(dateElement);
+
+    var hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), compact);
+
+    dayTab.appendChild(hourlyBreakdown);
+    main.appendChild(dayTab);
+  } // return new paragraph with given date and day name
+
+
+  function _returnDate(dateObj) {
+    var dateElement = document.createElement("p");
+    dateElement.classList.add("date");
+    var daysCZ = ["Neděle", "Pondělí", "Úterý", "Středa", "Čtvrtek", "Pátek", "Sobota"];
+    var day = dateObj.getDay();
+    var dayCZ = daysCZ[day];
+    var date = dateObj.getDate();
+    var datePadded = String(date).padStart(2, "0");
+    var month = dateObj.getMonth() + 1;
+    var monthPadded = String(month).padStart(2, "0");
+    dateElement.textContent = "".concat(dayCZ, " ").concat(datePadded, ".").concat(monthPadded, ".");
+    return dateElement;
+  } // return big "now" section with current hour weather info
+
+
+  function _returnNow() {
+    var nowElement = document.createElement("div");
+    nowElement.classList.add("now");
+    var nowData = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnNow();
+    var airTemp = String(Math.round(nowData.airTemp));
+    var minTemp = String(Math.round(nowData.minTemp));
+    var maxTemp = String(Math.round(nowData.maxTemp));
+    var iconCode = nowData.iconCode;
+
+    var icon = _returnIcon(iconCode);
+
+    nowElement.appendChild(icon);
+    var currentTemp = document.createElement("h1");
+    currentTemp.textContent = "".concat(airTemp, "\u02DA");
+    nowElement.appendChild(currentTemp);
+    var minMaxText = document.createElement("h2");
+    minMaxText.textContent = "".concat(maxTemp, "\u02DA/").concat(minTemp, "\u02DA");
+    nowElement.appendChild(minMaxText);
+    return nowElement;
+  } // return new hourly breakdown
+  // includes description, rows with weather data and sunrise/sunset row
+
+
+  function _returnHourlyBreakdown(date, compact) {
+    var hourlyBreakdown = document.createElement("div");
+    hourlyBreakdown.classList.add("hourlyBreakdown"); // header with descriptions for rows
+
+    var descriptions = _returnDescriptions();
+
+    hourlyBreakdown.appendChild(descriptions);
+
+    if (compact) {// append only 4 rows (0h, 6h, 12h, 18h)
+    } else {
+      // append row for every hour available and append sunrise/sunset row
+      var fullData = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnForDate(date);
+      console.log(fullData); // append new row for every timePoint
+
+      var _iterator = _createForOfIteratorHelper(fullData.weatherPoints),
+          _step;
+
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var timePoint = _step.value;
+          var details = timePoint.data.instant.details;
+          var rowData = {
+            time: String(timePoint.time.getHours()),
+            iconCode: timePoint.data.next_1_hours.summary.symbol_code,
+            temperature: String(Math.round(details.air_temperature)),
+            precipitation: String(timePoint.data.next_1_hours.details.precipitation_amount),
+            clouds: String(Math.round(details.cloud_area_fraction)),
+            humidity: String(Math.round(details.relative_humidity)),
+            wind_speed: String(Math.round(details.wind_speed)),
+            wind_from_direction: String(details.wind_from_direction)
+          };
+
+          var row = _returnRow(rowData);
+
+          hourlyBreakdown.appendChild(row);
+        } // convert date objects to "hh:mm" format
+
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
+      }
+
+      var sunriseHours = String(fullData.sunrisePoint.sunrise.time.getHours()).padStart(2, "0");
+      var sunriseMinutes = String(fullData.sunrisePoint.sunrise.time.getMinutes()).padStart(2, "0");
+      var sunrise = "".concat(sunriseHours, ":").concat(sunriseMinutes);
+      var sunsetHours = String(fullData.sunrisePoint.sunset.time.getHours()).padStart(2, "0");
+      var sunsetMinutes = String(fullData.sunrisePoint.sunset.time.getMinutes()).padStart(2, "0");
+      var sunset = "".concat(sunsetHours, ":").concat(sunsetMinutes);
+      var sunriseSunsetTimes = [sunrise, sunset];
+
+      var sunriseSunsetRow = _returnSunriseSunset(sunriseSunsetTimes);
+
+      hourlyBreakdown.appendChild(sunriseSunsetRow);
+    }
+
+    return hourlyBreakdown;
+  } // return new header row with descriptions for rows with weather data
+
+
+  function _returnDescriptions() {
+    var descriptionsElement = document.createElement("div");
+    descriptionsElement.classList.add("row", "descriptions");
+    var descriptions = {
+      time: "Čas",
+      temperature: "Teplota ˚C",
+      precipitation: "Srážky mm",
+      clouds: "Oblačnost %",
+      humidity: "Vlhkost %",
+      wind: "Vítr m/s"
+    };
+
+    for (var _i2 = 0, _Object$keys = Object.keys(descriptions); _i2 < _Object$keys.length; _i2++) {
+      var key = _Object$keys[_i2];
+      var span = document.createElement("span");
+      span.classList.add(key);
+      span.textContent = descriptions[key];
+      descriptionsElement.appendChild(span);
+    }
+
+    return descriptionsElement;
+  } // create new row from given strings
+
+
+  function _returnRow(rowData) {
+    var row = document.createElement("div");
+    row.classList.add("row", "data"); // append simple string element to the row
+
+    function appendData(className, text) {
+      var element = document.createElement("span");
+      element.classList.add(className);
+      element.textContent = text;
+      row.appendChild(element);
+    }
+
+    appendData("time", rowData.time);
+
+    var icon = _returnIcon(rowData.iconCode);
+
+    row.appendChild(icon);
+    appendData("temperature", "".concat(rowData.temperature, "\u02DA"));
+    var precipitation = rowData.precipitation;
+    var precipitationText;
+
+    if (precipitation === "0") {
+      precipitationText = " "; // don't show 0s
+    } else {
+      precipitationText = precipitation;
+    }
+
+    appendData("precipitation", precipitationText);
+    appendData("clouds", rowData.clouds);
+    appendData("humidity", rowData.humidity);
+    var wind = document.createElement("span");
+    wind.classList.add("wind");
+    row.appendChild(wind);
+    var windSpeed = document.createElement("span");
+    windSpeed.classList.add("windSpeed");
+    windSpeed.textContent = rowData.wind_speed;
+    wind.appendChild(windSpeed);
+    var windFrom = document.createElement("img");
+    windFrom.classList.add("windFrom");
+    windFrom.src = "assets/arrow.svg";
+    windFrom.style.transform = "rotate(".concat(rowData.wind_from_direction, "deg)");
+    wind.appendChild(windFrom);
+    return row;
+  } // return new row with sunrise and sunset descriptions, icons and times
+
+
+  function _returnSunriseSunset(sunriseSunsetTimes) {
+    console.log(sunriseSunsetTimes);
+    var row = document.createElement("div");
+    row.classList.add("row", "sun");
+    sunriseSunsetTimes.forEach(function (time, index) {
+      var container = document.createElement("div");
+      container.classList.add("sunriseSunset");
+      row.appendChild(container);
+      var description = document.createElement("p");
+      container.appendChild(description);
+      var icon = document.createElement("img");
+      container.appendChild(icon);
+      var timeElement = document.createElement("span");
+      container.appendChild(timeElement);
+      timeElement.textContent = time;
+
+      if (index === 0) {
+        description.textContent = "Východ";
+        icon.src = "assets/sunrise.svg";
+      } else {
+        description.textContent = "Západ";
+        icon.src = "assets/sunset.svg";
+      }
+    });
+    return row;
+  } // return new icon element for given icon code
+
+
+  function _returnIcon(iconCode) {
+    var img = document.createElement("img");
+    var iconPath = _Icons__WEBPACK_IMPORTED_MODULE_1__.Icons.get(iconCode);
+    img.src = iconPath;
+    return img;
   }
 
   return {
@@ -460,7 +746,10 @@ var DOM = function () {
     displayNow: displayNow,
     showLoader: showLoader,
     hideLoader: hideLoader,
-    sidebarInit: sidebarInit
+    sidebarInit: sidebarInit,
+    wipeTabs: wipeTabs,
+    createTodayTab: createTodayTab,
+    createDayTab: createDayTab
   };
 }();
 
@@ -633,6 +922,8 @@ var Icons = function () {
 
   var _initImportAll = function () {
     var images = __webpack_require__("./src/weatherIcons sync \\.svg$");
+
+    var iconsGeneral = __webpack_require__("./src/icons sync \\.svg$");
 
     images.keys().forEach(function (filename) {
       // slice off the extension and the "./" part
@@ -1111,7 +1402,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  width: 100vw;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  font-family: \"Roboto\", sans-serif;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n}\n\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active svg {\n  color: transparent;\n}\n\n.dynamicInput {\n  display: none;\n}\n\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.loader {\n  position: fixed;\n  z-index: 10;\n  width: 100vw;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: none;\n  align-items: center;\n  justify-content: center;\n}\n.loader .loaderIcon {\n  width: 15rem;\n}\n.loader .loaderIcon .sunny-body path {\n  fill: rgb(237, 201, 81);\n}\n.loader .loaderIcon .sunny-long-ray {\n  transform-origin: 50% 50%;\n  animation: spin 9s linear infinite;\n}\n.loader .loaderIcon .sunny-long-ray path {\n  fill: rgb(237, 201, 81);\n}\n.loader .loaderIcon .sunny-short-ray {\n  transform-origin: 50% 50%;\n  animation: spin 9s linear infinite;\n}\n.loader .loaderIcon .sunny-short-ray path {\n  fill: rgb(237, 201, 81);\n}\n@keyframes spin {\n  100% {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n\n.sidebar {\n  z-index: 5;\n  height: 100vh;\n  width: 40vw;\n  position: absolute;\n  left: 0;\n  transition: left 0.4s ease;\n  display: flex;\n  flex-direction: column;\n  background-color: rgb(23, 31, 40);\n}\n.sidebar .credits {\n  text-align: center;\n  padding: 0.6rem;\n  font-size: 0.6rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n.sidebar .credits a {\n  text-decoration: none;\n  color: rgb(0, 187, 245);\n}\n\n.sidebar.hidden {\n  left: -40vw;\n  transition: left 0.4s ease;\n}\n\nbutton.burger {\n  position: absolute;\n  left: calc(5vw - 0.9rem);\n  top: 0.6rem;\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nbutton.burger svg {\n  color: rgb(250, 250, 250);\n}\n\nheader {\n  flex: 0 0 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n  background-color: rgb(23, 31, 40);\n}\nheader .city {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  font-size: 1.4rem;\n  font-weight: 500;\n}\nheader input.search {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  width: 70vw;\n  display: none;\n  height: 2rem;\n  padding: 0 0.6em;\n  font-size: 1.4rem;\n  font-weight: 400;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n  outline: none;\n  border: 2px solid rgb(0, 187, 245);\n  border-radius: 1rem;\n}\nheader button.search {\n  grid-column: 3/4;\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nheader button.search svg {\n  color: rgb(250, 250, 250);\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  padding: 5vw;\n}\nmain .dayTab {\n  width: 100%;\n  padding: 1rem;\n  border-radius: 5px;\n  background-color: rgb(23, 31, 40);\n}\nmain .dayTab .now {\n  display: grid;\n  grid-template-columns: 1fr 2fr 1fr;\n  justify-items: center;\n  align-items: center;\n}\nmain .dayTab .now img {\n  height: 3rem;\n  width: 3rem;\n}\nmain .dayTab .now h1 {\n  font-size: 4rem;\n  font-weight: 700;\n}\nmain .dayTab .now h2 {\n  font-size: 1.3rem;\n  font-weight: 400;\n  color: rgb(211, 219, 221);\n}", "",{"version":3,"sources":["webpack://./src/style.scss"],"names":[],"mappings":"AAAA;EACE,UAAA;EACA,SAAA;EACA,sBAAA;AACF;;AAWA;EACE,8BAAA;AARF;;AAWA;EAKE,YAAA;EAEA,aAAA;EACA,sBAAA;EACA,mBAAA;EAEA,iCAxBW;EAyBX,yBAxBmB;EAyBnB,gCAnBgB;AAKlB;;AAkBA;;EAEE,QAAA;AAfF;;AAoBE;EACE,kBAAA;AAjBJ;;AAqBA;EACE,aAAA;AAlBF;;AAoBA;EACE,qBAAA;AAjBF;;AAoBA;EACE,eAAA;EACA,WAAA;EAEA,YAAA;EACA,aAAA;EAEA,oCAAA;EAEA,aAAA;EACA,mBAAA;EACA,uBAAA;AApBF;AAsBE;EACE,YAAA;AApBJ;AAuBI;EACE,uBAHU;AAlBhB;AAwBI;EACE,yBAAA;EACA,kCAAA;AAtBN;AAyBI;EACE,uBAZU;AAXhB;AA0BI;EACE,yBAAA;EACA,kCAAA;AAxBN;AA2BI;EACE,uBArBU;AAJhB;AA4BI;EACE;IACE,iCAAA;IACA,yBAAA;EA1BN;AACF;;AAgCA;EACE,UAAA;EACA,aAAA;EACA,WAAA;EAEA,kBAAA;EACA,OAAA;EACA,0BARkB;EAUlB,aAAA;EACA,sBAAA;EAEA,iCAxGc;AAwEhB;AAkCE;EACE,kBAAA;EACA,eAAA;EACA,iBAAA;EAEA,aAAA;EACA,sBAAA;EACA,WAAA;AAjCJ;AAmCI;EACE,qBAAA;EACA,uBAvHY;AAsFlB;;AAqCA;EACE,WAAA;EACA,0BAhCkB;AAFpB;;AAqCA;EACE,kBAAA;EACA,wBAAA;EACA,WAAA;EAEA,aAAA;EAKA,gBAAA;EACA,YAAA;AAvCF;AAmCE;EACE,yBA3IiB;AA0GrB;;AAuCA;EACE,cAAA;EAEA,WAAA;EAEA,aAAA;EACA,qCAAA;EACA,wBAAA;EACA,qBAAA;EACA,mBAAA;EAEA,iCAvJc;AAgHhB;AAyCE;EACE,gBAAA;EACA,aAAA;EAEA,iBAAA;EACA,gBAAA;AAxCJ;AA2CE;EACE,gBAAA;EACA,aAAA;EAEA,WAAA;EACA,aAAA;EACA,YAAA;EACA,gBAAA;EAEA,iBAAA;EACA,gBAAA;EACA,yBAjLiB;EAkLjB,gCA5Kc;EA8Kd,aAAA;EACA,kCAAA;EACA,mBAAA;AA5CJ;AA+CE;EACE,gBAAA;EACA,aAAA;EAKA,gBAAA;EACA,YAAA;AAjDJ;AA6CI;EACE,yBA9Le;AAmJrB;;AAkDA;EACE,cAAA;EACA,WAAA;EAEA,aAAA;EACA,0BAAA;EACA,qBAAA;EACA,YAAA;AAhDF;AAkDE;EACE,WAAA;EACA,aAAA;EAEA,kBAAA;EAyBA,iCAtOY;AA6JhB;AAkDI;EACE,aAAA;EACA,kCAAA;EACA,qBAAA;EACA,mBAAA;AAhDN;AAkDM;EACE,YAAA;EACA,WAAA;AAhDR;AAmDM;EACE,eAAA;EACA,gBAAA;AAjDR;AAoDM;EACE,iBAAA;EACA,gBAAA;EACA,yBAtOe;AAoLvB","sourcesContent":["* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\n$font-stack: \"Roboto\", sans-serif;\n$font-color-primary: rgb(250, 250, 250);\n$font-color-secondary: rgb(211, 219, 221);\n$font-color-red: rgb(255, 45, 64);\n$font-color-blue: rgb(0, 187, 245);\n\n$color-primary: rgb(23, 31, 40);\n$color-secondary: rgb(2, 10, 20);\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  // height: 100vh;\n  // min-height: 100vh;\n  // min-height: -webkit-fill-available;\n\n  width: 100vw;\n\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  font-family: $font-stack;\n  color: $font-color-primary;\n  background-color: $color-secondary;\n}\n\n// stuff for hiding / showing dynamic input field\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active {\n  //display: none;\n  svg {\n    color: transparent;\n  }\n}\n\n.dynamicInput {\n  display: none;\n}\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.loader {\n  position: fixed;\n  z-index: 10;\n\n  width: 100vw;\n  height: 100vh;\n\n  background-color: rgba(0, 0, 0, 0.7);\n\n  display: none; // hidden by default, \"flex\" to show\n  align-items: center;\n  justify-content: center;\n\n  .loaderIcon {\n    width: 15rem;\n    $color-sun: rgb(237, 201, 81);\n\n    .sunny-body path {\n      fill: $color-sun;\n    }\n\n    .sunny-long-ray {\n      transform-origin: 50% 50%;\n      animation: spin 9s linear infinite;\n    }\n\n    .sunny-long-ray path {\n      fill: $color-sun;\n    }\n\n    .sunny-short-ray {\n      transform-origin: 50% 50%;\n      animation: spin 9s linear infinite;\n    }\n\n    .sunny-short-ray path {\n      fill: $color-sun;\n    }\n\n    @keyframes spin {\n      100% {\n        -webkit-transform: rotate(360deg);\n        transform: rotate(360deg);\n      }\n    }\n  }\n}\n\n$sidebarTransition: left 0.4s ease;\n.sidebar {\n  z-index: 5;\n  height: 100vh;\n  width: 40vw;\n\n  position: absolute;\n  left: 0;\n  transition: $sidebarTransition;\n\n  display: flex;\n  flex-direction: column;\n\n  background-color: $color-primary;\n\n  .credits {\n    text-align: center;\n    padding: 0.6rem;\n    font-size: 0.6rem;\n\n    display: flex;\n    flex-direction: column;\n    gap: 0.3rem;\n\n    a {\n      text-decoration: none;\n      color: $font-color-blue;\n    }\n  }\n}\n.sidebar.hidden {\n  left: -40vw;\n  transition: $sidebarTransition;\n}\n\nbutton.burger {\n  position: absolute;\n  left: calc(5vw - 0.9rem);\n  top: 0.6rem;\n\n  width: 1.8rem;\n\n  svg {\n    color: $font-color-primary;\n  }\n  background: none;\n  border: none;\n}\n\nheader {\n  flex: 0 0 auto;\n\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n\n  background-color: $color-primary;\n\n  .city {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    font-size: 1.4rem;\n    font-weight: 500;\n  }\n\n  input.search {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    width: 70vw;\n    display: none; // hidden by default\n    height: 2rem;\n    padding: 0 0.6em;\n\n    font-size: 1.4rem;\n    font-weight: 400;\n    color: $font-color-primary;\n    background-color: $color-secondary;\n\n    outline: none;\n    border: 2px solid $font-color-blue;\n    border-radius: 1rem;\n  }\n\n  button.search {\n    grid-column: 3 / 4;\n    width: 1.8rem;\n\n    svg {\n      color: $font-color-primary;\n    }\n    background: none;\n    border: none;\n  }\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  padding: 5vw;\n\n  .dayTab {\n    width: 100%;\n    padding: 1rem;\n\n    border-radius: 5px;\n\n    .now {\n      display: grid;\n      grid-template-columns: 1fr 2fr 1fr;\n      justify-items: center;\n      align-items: center;\n\n      img {\n        height: 3rem;\n        width: 3rem;\n      }\n\n      h1 {\n        font-size: 4rem;\n        font-weight: 700;\n      }\n\n      h2 {\n        font-size: 1.3rem;\n        font-weight: 400;\n        color: $font-color-secondary;\n      }\n    }\n\n    background-color: $color-primary;\n  }\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  width: 100vw;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  font-family: \"Roboto\", sans-serif;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n}\n\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active svg {\n  color: transparent;\n}\n\n.dynamicInput {\n  display: none;\n}\n\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.loader {\n  position: fixed;\n  z-index: 10;\n  width: 100vw;\n  height: 100vh;\n  background-color: rgba(0, 0, 0, 0.7);\n  display: none;\n  align-items: center;\n  justify-content: center;\n}\n.loader .loaderIcon {\n  width: 15rem;\n}\n.loader .loaderIcon .sunny-body path {\n  fill: rgb(237, 201, 81);\n}\n.loader .loaderIcon .sunny-long-ray {\n  transform-origin: 50% 50%;\n  animation: spin 9s linear infinite;\n}\n.loader .loaderIcon .sunny-long-ray path {\n  fill: rgb(237, 201, 81);\n}\n.loader .loaderIcon .sunny-short-ray {\n  transform-origin: 50% 50%;\n  animation: spin 9s linear infinite;\n}\n.loader .loaderIcon .sunny-short-ray path {\n  fill: rgb(237, 201, 81);\n}\n@keyframes spin {\n  100% {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n\n.sidebar {\n  z-index: 5;\n  height: 100vh;\n  width: 40vw;\n  position: absolute;\n  left: 0;\n  transition: left 0.4s ease;\n  display: flex;\n  flex-direction: column;\n  background-color: rgb(23, 31, 40);\n}\n.sidebar .credits {\n  text-align: center;\n  padding: 0.6rem;\n  font-size: 0.6rem;\n  display: flex;\n  flex-direction: column;\n  gap: 0.3rem;\n}\n.sidebar .credits a {\n  text-decoration: none;\n  color: rgb(0, 187, 245);\n}\n\n.sidebar.hidden {\n  left: -40vw;\n  transition: left 0.4s ease;\n}\n\nbutton.burger {\n  position: absolute;\n  left: calc(5vw - 0.9rem);\n  top: 0.6rem;\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nbutton.burger svg {\n  color: rgb(250, 250, 250);\n}\n\nheader {\n  flex: 0 0 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n  background-color: rgb(23, 31, 40);\n}\nheader .city {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  font-size: 1.4rem;\n  font-weight: 500;\n}\nheader input.search {\n  grid-column: 2/3;\n  grid-row: 1/2;\n  width: 70vw;\n  display: none;\n  height: 2rem;\n  padding: 0 0.6em;\n  font-size: 1.4rem;\n  font-weight: 400;\n  color: rgb(250, 250, 250);\n  background-color: rgb(2, 10, 20);\n  outline: none;\n  border: 2px solid rgb(0, 187, 245);\n  border-radius: 1rem;\n}\nheader button.search {\n  grid-column: 3/4;\n  width: 1.8rem;\n  background: none;\n  border: none;\n}\nheader button.search svg {\n  color: rgb(250, 250, 250);\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  gap: 5vw;\n  padding: 5vw;\n}\nmain .dayTab {\n  width: 100%;\n  padding: 1rem;\n  border-radius: 5px;\n  background-color: rgb(23, 31, 40);\n}\nmain .dayTab .now {\n  display: grid;\n  grid-template-columns: 1fr 2fr 1fr;\n  justify-items: center;\n  align-items: center;\n}\nmain .dayTab .now img {\n  height: 3rem;\n  width: 3rem;\n}\nmain .dayTab .now h1 {\n  font-size: 4rem;\n  font-weight: 700;\n}\nmain .dayTab .now h2 {\n  font-size: 1.3rem;\n  font-weight: 400;\n  color: rgb(211, 219, 221);\n}\nmain .hourlyBreakdown {\n  display: grid;\n}\nmain .hourlyBreakdown .descriptions {\n  display: grid;\n  grid-template-columns: 1fr 2fr 1fr;\n  grid-auto-columns: 1fr;\n  grid-auto-flow: column;\n  align-items: center;\n  font-size: 0.7rem;\n  color: rgb(211, 219, 221);\n}\nmain .hourlyBreakdown .descriptions .temperature {\n  justify-self: center;\n}\nmain .hourlyBreakdown .data {\n  display: grid;\n  grid-template-columns: 1fr 1fr 1fr 1fr;\n  grid-auto-columns: 1fr;\n  grid-auto-flow: column;\n  align-items: center;\n  border-bottom: 1px solid rgb(57, 74, 92);\n}\nmain .hourlyBreakdown .data .time {\n  color: rgb(211, 219, 221);\n}\nmain .hourlyBreakdown .data img {\n  justify-self: center;\n  width: 1.5rem;\n}\nmain .hourlyBreakdown .data .temperature {\n  justify-self: center;\n  color: rgb(255, 45, 64);\n}\nmain .hourlyBreakdown .data .precipitation {\n  color: rgb(0, 187, 245);\n}\nmain .hourlyBreakdown .data .wind img {\n  width: 1.5rem;\n  filter: invert(99%) sepia(1%) saturate(2248%) hue-rotate(162deg) brightness(96%) contrast(80%);\n}\nmain .hourlyBreakdown .sun {\n  display: grid;\n  justify-items: center;\n  grid-template-columns: 1fr 1fr;\n}\nmain .hourlyBreakdown .sun .sunriseSunset {\n  display: grid;\n  justify-items: center;\n  align-items: center;\n}\nmain .hourlyBreakdown .sun .sunriseSunset p {\n  justify-self: center;\n  grid-column: 1/3;\n}\nmain .hourlyBreakdown .sun .sunriseSunset img {\n  grid-column: 1/2;\n  width: 2rem;\n  filter: invert(99%) sepia(1%) saturate(2248%) hue-rotate(162deg) brightness(96%) contrast(80%);\n}\nmain .hourlyBreakdown .sun .sunriseSunset span {\n  grid-column: 2/3;\n}", "",{"version":3,"sources":["webpack://./src/style.scss"],"names":[],"mappings":"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","sourcesContent":["* {\n  padding: 0;\n  margin: 0;\n  box-sizing: border-box;\n}\n\n$font-stack: \"Roboto\", sans-serif;\n$font-color-primary: rgb(250, 250, 250);\n$font-color-secondary: rgb(211, 219, 221);\n$font-color-red: rgb(255, 45, 64);\n$font-color-blue: rgb(0, 187, 245);\n\n$color-primary: rgb(23, 31, 40);\n$color-secondary: rgb(2, 10, 20);\n$color-blue: rgb(57, 74, 92);\n\nhtml {\n  height: -webkit-fill-available;\n}\n\nbody {\n  // height: 100vh;\n  // min-height: 100vh;\n  // min-height: -webkit-fill-available;\n\n  width: 100vw;\n\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n\n  font-family: $font-stack;\n  color: $font-color-primary;\n  background-color: $color-secondary;\n}\n\n// stuff for hiding / showing dynamic input field\n.dynamicText,\n.dynamicInput {\n  order: 1;\n}\n\n.dynamicText.active {\n  //display: none;\n  svg {\n    color: transparent;\n  }\n}\n\n.dynamicInput {\n  display: none;\n}\n.dynamicInput.active {\n  display: inline-block;\n}\n\n.loader {\n  position: fixed;\n  z-index: 10;\n\n  width: 100vw;\n  height: 100vh;\n\n  background-color: rgba(0, 0, 0, 0.7);\n\n  display: none; // hidden by default, \"flex\" to show\n  align-items: center;\n  justify-content: center;\n\n  .loaderIcon {\n    width: 15rem;\n    $color-sun: rgb(237, 201, 81);\n\n    .sunny-body path {\n      fill: $color-sun;\n    }\n\n    .sunny-long-ray {\n      transform-origin: 50% 50%;\n      animation: spin 9s linear infinite;\n    }\n\n    .sunny-long-ray path {\n      fill: $color-sun;\n    }\n\n    .sunny-short-ray {\n      transform-origin: 50% 50%;\n      animation: spin 9s linear infinite;\n    }\n\n    .sunny-short-ray path {\n      fill: $color-sun;\n    }\n\n    @keyframes spin {\n      100% {\n        -webkit-transform: rotate(360deg);\n        transform: rotate(360deg);\n      }\n    }\n  }\n}\n\n$sidebarTransition: left 0.4s ease;\n.sidebar {\n  z-index: 5;\n  height: 100vh;\n  width: 40vw;\n\n  position: absolute;\n  left: 0;\n  transition: $sidebarTransition;\n\n  display: flex;\n  flex-direction: column;\n\n  background-color: $color-primary;\n\n  .credits {\n    text-align: center;\n    padding: 0.6rem;\n    font-size: 0.6rem;\n\n    display: flex;\n    flex-direction: column;\n    gap: 0.3rem;\n\n    a {\n      text-decoration: none;\n      color: $font-color-blue;\n    }\n  }\n}\n.sidebar.hidden {\n  left: -40vw;\n  transition: $sidebarTransition;\n}\n\nbutton.burger {\n  position: absolute;\n  left: calc(5vw - 0.9rem);\n  top: 0.6rem;\n\n  width: 1.8rem;\n\n  svg {\n    color: $font-color-primary;\n  }\n  background: none;\n  border: none;\n}\n\nheader {\n  flex: 0 0 auto;\n\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 10vw auto 10vw;\n  grid-template-rows: 3rem;\n  justify-items: center;\n  align-items: center;\n\n  background-color: $color-primary;\n\n  .city {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    font-size: 1.4rem;\n    font-weight: 500;\n  }\n\n  input.search {\n    grid-column: 2 / 3;\n    grid-row: 1 / 2;\n\n    width: 70vw;\n    display: none; // hidden by default\n    height: 2rem;\n    padding: 0 0.6em;\n\n    font-size: 1.4rem;\n    font-weight: 400;\n    color: $font-color-primary;\n    background-color: $color-secondary;\n\n    outline: none;\n    border: 2px solid $font-color-blue;\n    border-radius: 1rem;\n  }\n\n  button.search {\n    grid-column: 3 / 4;\n    width: 1.8rem;\n\n    svg {\n      color: $font-color-primary;\n    }\n    background: none;\n    border: none;\n  }\n}\n\nmain {\n  flex: 1 1 auto;\n  width: 100%;\n\n  display: grid;\n  grid-template-columns: 1fr;\n  justify-items: center;\n  gap: 5vw;\n  padding: 5vw;\n\n  .dayTab {\n    width: 100%;\n    padding: 1rem;\n\n    border-radius: 5px;\n\n    .now {\n      display: grid;\n      grid-template-columns: 1fr 2fr 1fr;\n      justify-items: center;\n      align-items: center;\n\n      img {\n        height: 3rem;\n        width: 3rem;\n      }\n\n      h1 {\n        font-size: 4rem;\n        font-weight: 700;\n      }\n\n      h2 {\n        font-size: 1.3rem;\n        font-weight: 400;\n        color: $font-color-secondary;\n      }\n    }\n\n    background-color: $color-primary;\n  }\n\n  .hourlyBreakdown {\n    display: grid;\n\n    .descriptions {\n      display: grid;\n      grid-template-columns: 1fr 2fr 1fr;\n      grid-auto-columns: 1fr;\n      grid-auto-flow: column;\n      align-items: center;\n\n      font-size: 0.7rem;\n      color: $font-color-secondary;\n\n      .temperature {\n        justify-self: center;\n      }\n    }\n\n    .data {\n      display: grid;\n      grid-template-columns: 1fr 1fr 1fr 1fr;\n      grid-auto-columns: 1fr;\n      grid-auto-flow: column;\n      align-items: center;\n\n      border-bottom: 1px solid $color-blue;\n\n      .time {\n        color: $font-color-secondary;\n      }\n\n      img {\n        justify-self: center;\n        width: 1.5rem;\n      }\n\n      .temperature {\n        justify-self: center;\n        color: $font-color-red;\n      }\n\n      .precipitation {\n        color: $font-color-blue;\n      }\n\n      .wind {\n        img {\n          width: 1.5rem;\n\n          // https://codepen.io/sosuke/pen/Pjoqqp\n          filter: invert(99%) sepia(1%) saturate(2248%) hue-rotate(162deg)\n            brightness(96%) contrast(80%);\n        }\n      }\n    }\n\n    .sun {\n      display: grid;\n      justify-items: center;\n      grid-template-columns: 1fr 1fr;\n\n      .sunriseSunset {\n        display: grid;\n        justify-items: center;\n        align-items: center;\n\n        p {\n          justify-self: center;\n          grid-column: 1 / 3;\n        }\n\n        img {\n          grid-column: 1 / 2;\n          width: 2rem;\n\n          // https://codepen.io/sosuke/pen/Pjoqqp\n          filter: invert(99%) sepia(1%) saturate(2248%) hue-rotate(162deg)\n            brightness(96%) contrast(80%);\n        }\n\n        span {\n          grid-column: 2 / 3;\n        }\n      }\n    }\n  }\n}\n"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -1629,6 +1920,40 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 /***/ }),
 
+/***/ "./src/icons sync \\.svg$":
+/*!*********************************************!*\
+  !*** ./src/icons/ sync nonrecursive \.svg$ ***!
+  \*********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var map = {
+	"./arrow.svg": "./src/icons/arrow.svg",
+	"./sunrise.svg": "./src/icons/sunrise.svg",
+	"./sunset.svg": "./src/icons/sunset.svg"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./src/icons sync \\.svg$";
+
+/***/ }),
+
 /***/ "./src/weatherIcons sync \\.svg$":
 /*!****************************************************!*\
   !*** ./src/weatherIcons/ sync nonrecursive \.svg$ ***!
@@ -1740,6 +2065,39 @@ webpackContext.keys = function webpackContextKeys() {
 webpackContext.resolve = webpackContextResolve;
 module.exports = webpackContext;
 webpackContext.id = "./src/weatherIcons sync \\.svg$";
+
+/***/ }),
+
+/***/ "./src/icons/arrow.svg":
+/*!*****************************!*\
+  !*** ./src/icons/arrow.svg ***!
+  \*****************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/arrow.svg";
+
+/***/ }),
+
+/***/ "./src/icons/sunrise.svg":
+/*!*******************************!*\
+  !*** ./src/icons/sunrise.svg ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sunrise.svg";
+
+/***/ }),
+
+/***/ "./src/icons/sunset.svg":
+/*!******************************!*\
+  !*** ./src/icons/sunset.svg ***!
+  \******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+module.exports = __webpack_require__.p + "assets/sunset.svg";
 
 /***/ }),
 

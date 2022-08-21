@@ -70,6 +70,7 @@ export const Weather = (() => {
       fullData.weatherPoints.slice(12, 18),
       fullData.weatherPoints.slice(18)
     ];
+    // fix this for end of array where only 4 timepoints are returned
 
     // custom time point interface for data extracted from each slice
     interface InewTimePoint {

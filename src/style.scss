@@ -12,6 +12,7 @@ $font-color-blue: rgb(0, 187, 245);
 
 $color-primary: rgb(23, 31, 40);
 $color-secondary: rgb(2, 10, 20);
+$color-blue: rgb(57, 74, 92);
 
 html {
   height: -webkit-fill-available;
@@ -209,6 +210,7 @@ main {
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
+  gap: 5vw;
   padding: 5vw;
 
   .dayTab {
@@ -241,5 +243,92 @@ main {
     }
 
     background-color: $color-primary;
+  }
+
+  .hourlyBreakdown {
+    display: grid;
+
+    .descriptions {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr;
+      grid-auto-columns: 1fr;
+      grid-auto-flow: column;
+      align-items: center;
+
+      font-size: 0.7rem;
+      color: $font-color-secondary;
+
+      .temperature {
+        justify-self: center;
+      }
+    }
+
+    .data {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      grid-auto-columns: 1fr;
+      grid-auto-flow: column;
+      align-items: center;
+
+      border-bottom: 1px solid $color-blue;
+
+      .time {
+        color: $font-color-secondary;
+      }
+
+      img {
+        justify-self: center;
+        width: 1.5rem;
+      }
+
+      .temperature {
+        justify-self: center;
+        color: $font-color-red;
+      }
+
+      .precipitation {
+        color: $font-color-blue;
+      }
+
+      .wind {
+        img {
+          width: 1.5rem;
+
+          // https://codepen.io/sosuke/pen/Pjoqqp
+          filter: invert(99%) sepia(1%) saturate(2248%) hue-rotate(162deg)
+            brightness(96%) contrast(80%);
+        }
+      }
+    }
+
+    .sun {
+      display: grid;
+      justify-items: center;
+      grid-template-columns: 1fr 1fr;
+
+      .sunriseSunset {
+        display: grid;
+        justify-items: center;
+        align-items: center;
+
+        p {
+          justify-self: center;
+          grid-column: 1 / 3;
+        }
+
+        img {
+          grid-column: 1 / 2;
+          width: 2rem;
+
+          // https://codepen.io/sosuke/pen/Pjoqqp
+          filter: invert(99%) sepia(1%) saturate(2248%) hue-rotate(162deg)
+            brightness(96%) contrast(80%);
+        }
+
+        span {
+          grid-column: 2 / 3;
+        }
+      }
+    }
   }
 }
