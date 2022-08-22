@@ -33,7 +33,7 @@ function search(_x) {
 
 function _search() {
   _search = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(searchValue) {
-    var coords, nowWeather, todaysWeather, tomorowWeatherCompact;
+    var coords, daysPast, date;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -51,19 +51,17 @@ function _search() {
 
           case 8:
             _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
-            nowWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnNow();
-            console.log("Weather now is: ", nowWeather);
-            todaysWeather = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDate(new Date().getDate());
-            console.log("Today's weather: ", todaysWeather.weatherPoints, todaysWeather.sunrisePoint.sunrise, todaysWeather.sunrisePoint.sunset);
-            tomorowWeatherCompact = _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.returnForDateCompact(new Date().getDate() + 1);
-            console.log("Tomorow's compact weather: ", tomorowWeatherCompact.weatherPoints, tomorowWeatherCompact.sunrisePoint.sunrise, tomorowWeatherCompact.sunrisePoint.sunset);
-            _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.createTodayTab(); //DOM.createDayTab();
-            // not compact for tommorow
-            // compact for all other days
+            _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.createTodayTab(); // show next 9 days
+
+            for (daysPast = 1; daysPast < 10; daysPast++) {
+              date = new Date();
+              date.setDate(date.getDate() + daysPast);
+              _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.createDayTab(date);
+            }
 
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.hideLoader();
 
-          case 17:
+          case 12:
           case "end":
             return _context2.stop();
         }
@@ -516,14 +514,14 @@ var DOM = function () {
 
     dayTab.appendChild(nowElement);
 
-    var hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), false);
+    var hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), true);
 
     dayTab.appendChild(hourlyBreakdown);
     main.appendChild(dayTab);
   } // create new tab for any given date
 
 
-  function createDayTab(dateObj, compact) {
+  function createDayTab(dateObj) {
     var main = document.querySelector("main");
     var dayTab = document.createElement("div");
     dayTab.classList.add("dayTab");
@@ -532,7 +530,7 @@ var DOM = function () {
 
     dayTab.appendChild(dateElement);
 
-    var hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), compact);
+    var hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), false);
 
     dayTab.appendChild(hourlyBreakdown);
     main.appendChild(dayTab);
@@ -577,49 +575,53 @@ var DOM = function () {
   // includes description, rows with weather data and sunrise/sunset row
 
 
-  function _returnHourlyBreakdown(date, compact) {
+  function _returnHourlyBreakdown(date, showSunriseSunset) {
     var hourlyBreakdown = document.createElement("div");
     hourlyBreakdown.classList.add("hourlyBreakdown"); // header with descriptions for rows
 
     var descriptions = _returnDescriptions();
 
-    hourlyBreakdown.appendChild(descriptions);
+    hourlyBreakdown.appendChild(descriptions); // append row for every hour available and append sunrise/sunset row
 
-    if (compact) {// append only 4 rows (0h, 6h, 12h, 18h)
-    } else {
-      // append row for every hour available and append sunrise/sunset row
-      var fullData = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnForDate(date);
-      console.log(fullData); // append new row for every timePoint
+    var fullData = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnForDate(date); // append new row for every timePoint
 
-      var _iterator = _createForOfIteratorHelper(fullData.weatherPoints),
-          _step;
+    var _iterator = _createForOfIteratorHelper(fullData.weatherPoints),
+        _step;
 
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var timePoint = _step.value;
-          var details = timePoint.data.instant.details;
-          var rowData = {
-            time: String(timePoint.time.getHours()),
-            iconCode: timePoint.data.next_1_hours.summary.symbol_code,
-            temperature: String(Math.round(details.air_temperature)),
-            precipitation: String(timePoint.data.next_1_hours.details.precipitation_amount),
-            clouds: String(Math.round(details.cloud_area_fraction)),
-            humidity: String(Math.round(details.relative_humidity)),
-            wind_speed: String(Math.round(details.wind_speed)),
-            wind_from_direction: String(details.wind_from_direction)
-          };
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var timePoint = _step.value;
+        var details = timePoint.data.instant.details;
+        var rowData = {
+          time: String(timePoint.time.getHours()),
+          temperature: String(Math.round(details.air_temperature)),
+          clouds: String(Math.round(details.cloud_area_fraction)),
+          humidity: String(Math.round(details.relative_humidity)),
+          wind_speed: String(Math.round(details.wind_speed)),
+          wind_from_direction: String(details.wind_from_direction)
+        }; // Only fine (1 hour apart) timepoints have "next_1_hours".
+        // Rough timepoints (6 hours apart) have "next_6_hours" instead
 
-          var row = _returnRow(rowData);
+        if (timePoint.data.hasOwnProperty("next_1_hours")) {
+          rowData.iconCode = timePoint.data.next_1_hours.summary.symbol_code;
+          rowData.precipitation = String(timePoint.data.next_1_hours.details.precipitation_amount);
+        } else if (timePoint.data.hasOwnProperty("next_6_hours")) {
+          rowData.iconCode = timePoint.data.next_6_hours.summary.symbol_code;
+          rowData.precipitation = String(timePoint.data.next_6_hours.details.precipitation_amount);
+        }
 
-          hourlyBreakdown.appendChild(row);
-        } // convert date objects to "hh:mm" format
+        var row = _returnRow(rowData);
 
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
+        hourlyBreakdown.appendChild(row);
       }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
 
+    if (showSunriseSunset) {
+      // convert date objects to "hh:mm" format
       var sunriseHours = String(fullData.sunrisePoint.sunrise.time.getHours()).padStart(2, "0");
       var sunriseMinutes = String(fullData.sunrisePoint.sunrise.time.getMinutes()).padStart(2, "0");
       var sunrise = "".concat(sunriseHours, ":").concat(sunriseMinutes);
@@ -707,7 +709,6 @@ var DOM = function () {
 
 
   function _returnSunriseSunset(sunriseSunsetTimes) {
-    console.log(sunriseSunsetTimes);
     var row = document.createElement("div");
     row.classList.add("row", "sun");
     sunriseSunsetTimes.forEach(function (time, index) {
@@ -1274,74 +1275,6 @@ var Weather = function () {
       weatherPoints: weatherPoints,
       sunrisePoint: sunrisePoint
     };
-  } // trimmed weather points + sunrise point for given date
-  // (only 0h, 6h, 12h, 18h)
-
-
-  function returnForDateCompact(wantedDate) {
-    var fullData = returnForDate(wantedDate);
-    var sunrisePoint = fullData.sunrisePoint;
-    var weatherPoints = []; // divide the full data into 4 slices
-
-    var slices = [fullData.weatherPoints.slice(0, 6), fullData.weatherPoints.slice(6, 12), fullData.weatherPoints.slice(12, 18), fullData.weatherPoints.slice(18)];
-
-    var _loop = function _loop() {
-      var slice = _slices[_i];
-
-      // returns average from all 6 time points for given key
-      function averageValue(key) {
-        // for storing all values
-        var summationArr = []; // store all values
-
-        var _iterator3 = _createForOfIteratorHelper(slice),
-            _step3;
-
-        try {
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-            var timePoint = _step3.value;
-            // @ts-expect-error
-            var value = timePoint.data.instant.details["".concat(key)];
-            summationArr.push(value);
-          } // get sum of the whole array
-
-        } catch (err) {
-          _iterator3.e(err);
-        } finally {
-          _iterator3.f();
-        }
-
-        var sum = summationArr.reduce(function (previousValue, currentValue) {
-          return previousValue + currentValue;
-        });
-        var avgValue = Math.round(sum / 6);
-        return avgValue;
-      } // create new custom time point for each slice
-
-
-      var newTimePoint = {
-        startTime: slice[0].time,
-        endTime: slice[5].time,
-        summary: slice[0].data.next_6_hours.summary.symbol_code,
-        precipitation: slice[0].data.next_6_hours.details.precipitation_amount,
-        // average values of other properties
-        air_pressure_at_sea_level: averageValue("air_pressure_at_sea_level"),
-        air_temperature: averageValue("air_temperature"),
-        cloud_area_fraction: averageValue("cloud_area_fraction"),
-        relative_humidity: averageValue("relative_humidity"),
-        wind_from_direction: averageValue("wind_from_direction"),
-        wind_speed: averageValue("wind_speed")
-      };
-      weatherPoints.push(newTimePoint);
-    };
-
-    for (var _i = 0, _slices = slices; _i < _slices.length; _i++) {
-      _loop();
-    }
-
-    return {
-      weatherPoints: weatherPoints,
-      sunrisePoint: sunrisePoint
-    };
   } // returns minimum and maximum temperature for given date
 
 
@@ -1349,19 +1282,19 @@ var Weather = function () {
     var weatherPoints = returnForDate(wantedDate).weatherPoints;
     var temperatures = [];
 
-    var _iterator4 = _createForOfIteratorHelper(weatherPoints),
-        _step4;
+    var _iterator3 = _createForOfIteratorHelper(weatherPoints),
+        _step3;
 
     try {
-      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-        var timePoint = _step4.value;
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var timePoint = _step3.value;
         var temperature = timePoint.data.instant.details.air_temperature;
         temperatures.push(temperature);
       }
     } catch (err) {
-      _iterator4.e(err);
+      _iterator3.e(err);
     } finally {
-      _iterator4.f();
+      _iterator3.f();
     }
 
     var minTemp = Math.min.apply(Math, temperatures);
@@ -1375,8 +1308,7 @@ var Weather = function () {
   return {
     init: init,
     returnNow: returnNow,
-    returnForDate: returnForDate,
-    returnForDateCompact: returnForDateCompact
+    returnForDate: returnForDate
   };
 }();
 

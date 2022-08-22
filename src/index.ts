@@ -17,32 +17,14 @@ async function search(searchValue: string) {
 
   Weather.init();
 
-  const nowWeather = Weather.returnNow();
-  console.log("Weather now is: ", nowWeather);
-
-  const todaysWeather = Weather.returnForDate(new Date().getDate());
-  console.log(
-    "Today's weather: ",
-    todaysWeather.weatherPoints,
-    todaysWeather.sunrisePoint.sunrise,
-    todaysWeather.sunrisePoint.sunset
-  );
-
-  const tomorowWeatherCompact = Weather.returnForDateCompact(
-    new Date().getDate() + 1
-  );
-  console.log(
-    "Tomorow's compact weather: ",
-    tomorowWeatherCompact.weatherPoints,
-    tomorowWeatherCompact.sunrisePoint.sunrise,
-    tomorowWeatherCompact.sunrisePoint.sunset
-  );
-
   DOM.createTodayTab();
 
-  //DOM.createDayTab();
-  // not compact for tommorow
-  // compact for all other days
+  // show next 9 days
+  for (let daysPast = 1; daysPast < 10; daysPast++) {
+    const date = new Date();
+    date.setDate(date.getDate() + daysPast);
+    DOM.createDayTab(date);
+  }
 
   DOM.hideLoader();
 }

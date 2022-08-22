@@ -165,14 +165,14 @@ export const DOM = (() => {
     const nowElement = _returnNow();
     dayTab.appendChild(nowElement);
 
-    const hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), false);
+    const hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), true);
     dayTab.appendChild(hourlyBreakdown);
 
     main.appendChild(dayTab);
   }
 
   // create new tab for any given date
-  function createDayTab(dateObj: Date, compact: boolean) {
+  function createDayTab(dateObj: Date) {
     const main = document.querySelector("main");
 
     const dayTab = document.createElement("div");
@@ -181,7 +181,7 @@ export const DOM = (() => {
     const dateElement = _returnDate(dateObj);
     dayTab.appendChild(dateElement);
 
-    const hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), compact);
+    const hourlyBreakdown = _returnHourlyBreakdown(dateObj.getDate(), false);
     dayTab.appendChild(hourlyBreakdown);
 
     main.appendChild(dayTab);
@@ -244,7 +244,7 @@ export const DOM = (() => {
 
   // return new hourly breakdown
   // includes description, rows with weather data and sunrise/sunset row
-  function _returnHourlyBreakdown(date: number, compact: boolean) {
+  function _returnHourlyBreakdown(date: number, showSunriseSunset: boolean) {
     const hourlyBreakdown = document.createElement("div");
     hourlyBreakdown.classList.add("hourlyBreakdown");
 
@@ -252,36 +252,43 @@ export const DOM = (() => {
     const descriptions = _returnDescriptions();
     hourlyBreakdown.appendChild(descriptions);
 
-    if (compact) {
-      // append only 4 rows (0h, 6h, 12h, 18h)
-    } else {
-      // append row for every hour available and append sunrise/sunset row
+    // append row for every hour available and append sunrise/sunset row
 
-      const fullData = Weather.returnForDate(date);
-      console.log(fullData);
+    const fullData = Weather.returnForDate(date);
 
-      // append new row for every timePoint
-      for (const timePoint of fullData.weatherPoints) {
-        const details = timePoint.data.instant.details;
+    // append new row for every timePoint
+    for (const timePoint of fullData.weatherPoints) {
+      const details = timePoint.data.instant.details;
 
-        const rowData: IRowInput = {
-          time: String(timePoint.time.getHours()),
-          iconCode: timePoint.data.next_1_hours.summary.symbol_code,
-          temperature: String(Math.round(details.air_temperature)),
-          precipitation: String(
-            timePoint.data.next_1_hours.details.precipitation_amount
-          ),
-          clouds: String(Math.round(details.cloud_area_fraction)),
-          humidity: String(Math.round(details.relative_humidity)),
-          wind_speed: String(Math.round(details.wind_speed)),
-          wind_from_direction: String(details.wind_from_direction)
-        };
+      const rowData: IRowInput = {
+        time: String(timePoint.time.getHours()),
+        temperature: String(Math.round(details.air_temperature)),
+        clouds: String(Math.round(details.cloud_area_fraction)),
+        humidity: String(Math.round(details.relative_humidity)),
+        wind_speed: String(Math.round(details.wind_speed)),
+        wind_from_direction: String(details.wind_from_direction)
+      };
 
-        const row = _returnRow(rowData);
-
-        hourlyBreakdown.appendChild(row);
+      // Only fine (1 hour apart) timepoints have "next_1_hours".
+      // Rough timepoints (6 hours apart) have "next_6_hours" instead
+      if (timePoint.data.hasOwnProperty("next_1_hours")) {
+        rowData.iconCode = timePoint.data.next_1_hours.summary.symbol_code;
+        rowData.precipitation = String(
+          timePoint.data.next_1_hours.details.precipitation_amount
+        );
+      } else if (timePoint.data.hasOwnProperty("next_6_hours")) {
+        rowData.iconCode = timePoint.data.next_6_hours.summary.symbol_code;
+        rowData.precipitation = String(
+          timePoint.data.next_6_hours.details.precipitation_amount
+        );
       }
 
+      const row = _returnRow(rowData);
+
+      hourlyBreakdown.appendChild(row);
+    }
+
+    if (showSunriseSunset) {
       // convert date objects to "hh:mm" format
       const sunriseHours = String(
         fullData.sunrisePoint.sunrise.time.getHours()
@@ -310,9 +317,9 @@ export const DOM = (() => {
 
   interface IRowInput {
     time: string;
-    iconCode: string;
+    iconCode?: string;
     temperature: string;
-    precipitation: string;
+    precipitation?: string;
     clouds: string;
     humidity: string;
     wind_speed: string;
@@ -397,8 +404,6 @@ export const DOM = (() => {
 
   // return new row with sunrise and sunset descriptions, icons and times
   function _returnSunriseSunset(sunriseSunsetTimes: string[]) {
-    console.log(sunriseSunsetTimes);
-
     const row = document.createElement("div");
     row.classList.add("row", "sun");
 
