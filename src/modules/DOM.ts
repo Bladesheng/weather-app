@@ -265,6 +265,7 @@ export const DOM = (() => {
         temperature: String(Math.round(details.air_temperature)),
         clouds: String(Math.round(details.cloud_area_fraction)),
         humidity: String(Math.round(details.relative_humidity)),
+        pressure: String(Math.round(details.air_pressure_at_sea_level)),
         wind_speed: String(Math.round(details.wind_speed)),
         wind_from_direction: String(details.wind_from_direction)
       };
@@ -322,6 +323,7 @@ export const DOM = (() => {
     precipitation?: string;
     clouds: string;
     humidity: string;
+    pressure: string;
     wind_speed: string;
     wind_from_direction: string;
   }
@@ -337,6 +339,7 @@ export const DOM = (() => {
       precipitation: "Srážky mm",
       clouds: "Oblačnost %",
       humidity: "Vlhkost %",
+      pressure: "Tlak hPa",
       wind: "Vítr m/s"
     };
 
@@ -383,6 +386,8 @@ export const DOM = (() => {
     appendData("clouds", rowData.clouds);
 
     appendData("humidity", rowData.humidity);
+
+    appendData("pressure", rowData.pressure);
 
     const wind = document.createElement("span");
     wind.classList.add("wind");
