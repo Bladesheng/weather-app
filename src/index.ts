@@ -3,6 +3,7 @@ import { MET } from "./modules/MET";
 import { DOM } from "./modules/DOM";
 import { Weather } from "./modules/Weather";
 import { Geocode } from "./modules/Geocode";
+import { Storage } from "./modules/Storage";
 
 async function search(searchValue: string) {
   DOM.showLoader();
@@ -40,5 +41,10 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
 
 DOM.sidebarInit();
 
-// default city when page is loaded
-search("Český Dub");
+Storage.retrieve();
+
+search(Storage.lastCity);
+
+//Storage.lastCity = "Český Dub";
+//Storage.addFavoriteCity("brno");
+//Storage.removeFavoriteCity("brno");
