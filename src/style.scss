@@ -19,11 +19,8 @@ html {
 }
 
 body {
-  // height: 100vh;
-  // min-height: 100vh;
-  // min-height: -webkit-fill-available;
-
   width: 100vw;
+  max-width: 100vw;
 
   display: flex;
   flex-direction: column;
@@ -154,7 +151,7 @@ button.burger {
 header {
   flex: 0 0 auto;
 
-  width: 100%;
+  width: 100vw;
 
   display: grid;
   grid-template-columns: 10vw auto 10vw;
@@ -205,16 +202,14 @@ header {
 
 main {
   flex: 1 1 auto;
-  width: 100%;
 
   display: grid;
   grid-template-columns: 1fr;
   justify-items: center;
   gap: 5vw;
-  padding: 5vw;
+  padding: 3vw;
 
   .dayTab {
-    width: 100%;
     padding: 1rem;
 
     border-radius: 5px;
@@ -250,7 +245,8 @@ main {
 
     .descriptions {
       display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
+      grid-template-columns: 1fr 2fr;
+      grid-template-rows: 2rem;
       grid-auto-columns: 1fr;
       grid-auto-flow: column;
       align-items: center;
@@ -267,6 +263,7 @@ main {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr 1fr;
       grid-auto-columns: 1fr;
+      grid-auto-rows: 2rem;
       grid-auto-flow: column;
       align-items: center;
 
@@ -291,6 +288,9 @@ main {
       }
 
       .wind {
+        display: flex;
+        align-items: center;
+
         img {
           width: 1.5rem;
 
