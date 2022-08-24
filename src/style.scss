@@ -154,10 +154,11 @@ header {
   width: 100vw;
 
   display: grid;
-  grid-template-columns: 10vw auto 10vw;
+  grid-template-columns: 10vw auto 10vw 10vw;
   grid-template-rows: 3rem;
   justify-items: center;
   align-items: center;
+  gap: 1rem;
 
   background-color: $color-primary;
 
@@ -188,8 +189,20 @@ header {
     border-radius: 1rem;
   }
 
-  button.search {
+  button.favorite {
     grid-column: 3 / 4;
+    width: 1.8rem;
+
+    // https://codepen.io/sosuke/pen/Pjoqqp
+    filter: invert(99%) sepia(1%) saturate(165%) hue-rotate(72deg)
+      brightness(117%) contrast(96%);
+
+    background: none;
+    border: none;
+  }
+
+  button.search {
+    grid-column: 4 / 5;
     width: 1.8rem;
 
     svg {
