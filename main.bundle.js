@@ -42,6 +42,7 @@ function _search() {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
+            _context2.prev = 0;
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.showLoader();
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.wipeTabs();
             cityHeading.textContent = searchValue; // turn on / off favorite button if city is favorite
@@ -52,15 +53,15 @@ function _search() {
               _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.favoriteOff();
             }
 
-            _context2.next = 6;
+            _context2.next = 7;
             return _modules_Geocode__WEBPACK_IMPORTED_MODULE_4__.Geocode.getCoords(searchValue);
 
-          case 6:
+          case 7:
             coords = _context2.sent;
-            _context2.next = 9;
+            _context2.next = 10;
             return Promise.all([_modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getLocationforecast(coords), _modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getSunrise(coords)]);
 
-          case 9:
+          case 10:
             _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.createTodayTab(); // show next 9 days
 
@@ -73,13 +74,21 @@ function _search() {
 
             _modules_Storage__WEBPACK_IMPORTED_MODULE_5__.Storage.lastCity = searchValue;
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.hideLoader();
+            _context2.next = 21;
+            break;
 
-          case 14:
+          case 17:
+            _context2.prev = 17;
+            _context2.t0 = _context2["catch"](0);
+            console.log(_context2.t0);
+            _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.hideLoader();
+
+          case 21:
           case "end":
             return _context2.stop();
         }
       }
-    }, _callee2);
+    }, _callee2, null, [[0, 17]]);
   }));
   return _search.apply(this, arguments);
 }
