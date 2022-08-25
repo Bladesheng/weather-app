@@ -18,13 +18,9 @@ export const Storage = (() => {
     if (localStorage.getItem("lastCity") !== null) {
       lastCity = JSON.parse(localStorage.getItem("lastCity"));
     }
-
     if (localStorage.getItem("favoriteCities") !== null) {
       _favoriteCities = JSON.parse(localStorage.getItem("favoriteCities"));
     }
-
-    console.log("Last city: ", lastCity);
-    console.log("Favorite cities", _favoriteCities);
   }
 
   function addFavoriteCity(city: string) {
@@ -42,10 +38,21 @@ export const Storage = (() => {
     _save();
   }
 
+  // returns true if city is in favorites
+  function isFavorite(city: string) {
+    return _favoriteCities.includes(city);
+  }
+
+  function returnFavorites() {
+    return _favoriteCities;
+  }
+
   return {
     retrieve,
     addFavoriteCity,
     removeFavoriteCity,
+    isFavorite,
+    returnFavorites,
 
     set lastCity(value: string) {
       lastCity = value;

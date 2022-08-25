@@ -5,12 +5,19 @@ import { Weather } from "./modules/Weather";
 import { Geocode } from "./modules/Geocode";
 import { Storage } from "./modules/Storage";
 
-async function search(searchValue: string) {
+export async function search(searchValue: string) {
   DOM.showLoader();
 
   DOM.wipeTabs();
 
   cityHeading.textContent = searchValue;
+
+  // turn on / off favorite button if city is favorite
+  if (Storage.isFavorite(searchValue)) {
+    DOM.favoriteOn();
+  } else {
+    DOM.favoriteOff();
+  }
 
   const coords = await Geocode.getCoords(searchValue);
 
@@ -27,6 +34,9 @@ async function search(searchValue: string) {
     DOM.createDayTab(date);
   }
 
+  // cache searched city
+  Storage.lastCity = searchValue;
+
   DOM.hideLoader();
 }
 
@@ -39,12 +49,10 @@ DOM.dynamicInput(searchBtn, cityHeading, searchInput, async () => {
   search(searchValue);
 });
 
-DOM.sidebarInit();
-
 Storage.retrieve();
+
+DOM.sidebarInit();
 
 search(Storage.lastCity);
 
-//Storage.lastCity = "Český Dub";
-//Storage.addFavoriteCity("brno");
-//Storage.removeFavoriteCity("brno");
+DOM.favoriteListener();

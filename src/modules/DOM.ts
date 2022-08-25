@@ -1,5 +1,7 @@
 import { Weather } from "./Weather";
 import { Icons } from "./Icons";
+import { Storage } from "./Storage";
+import { search } from "../index";
 
 interface inputListenerInterface {
   (): void;
@@ -87,12 +89,17 @@ export const DOM = (() => {
 
   // add listeners for sidebar
   function sidebarInit() {
+    // receate all favorite cities
+    const favoriteCities = Storage.returnFavorites();
+    for (const city of favoriteCities) {
+      _createCityBtn(city);
+    }
+
     // show sidebar when button is clicked
     const hamburgerBtn = document.querySelector("button.burger");
-    const sidebar = document.querySelector(".sidebar");
 
     hamburgerBtn.addEventListener("click", () => {
-      sidebar.classList.remove("hidden");
+      _showSidebar();
     });
 
     //hide sidebar when you click somewhere else
@@ -102,7 +109,7 @@ export const DOM = (() => {
 
     for (const element of [loader, header, main]) {
       element.addEventListener("click", (e) => {
-        sidebar.classList.add("hidden");
+        _hideSidebar();
       });
     }
 
@@ -117,16 +124,14 @@ export const DOM = (() => {
     let touchEndX = 0;
 
     function checkDirection() {
-      const sidebar = document.querySelector(".sidebar");
-
       // swiped left
       if (touchEndX < touchStartX) {
-        sidebar.classList.add("hidden");
+        _hideSidebar();
       }
 
       // swiped right
       if (touchEndX > touchStartX) {
-        sidebar.classList.remove("hidden");
+        _showSidebar();
       }
     }
 
@@ -140,7 +145,16 @@ export const DOM = (() => {
     });
   }
 
-  // remove everything from main (all tabs)
+  function _showSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.remove("hidden");
+  }
+  function _hideSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    sidebar.classList.add("hidden");
+  }
+
+  // remove everything from main (all day tabs)
   function wipeTabs() {
     const main = document.querySelector("main");
     main.textContent = "";
@@ -449,6 +463,61 @@ export const DOM = (() => {
     return img;
   }
 
+  // favorite (star) button
+  function favoriteListener() {
+    const favoriteBtn = document.querySelector("button.favorite");
+    favoriteBtn.addEventListener("click", () => {
+      const city = document.querySelector("h1.city").textContent;
+
+      if (favoriteBtn.classList.contains("on")) {
+        favoriteOff();
+        _removeCityBtn(city);
+        Storage.removeFavoriteCity(city);
+      } else {
+        favoriteOn();
+        _createCityBtn(city);
+        Storage.addFavoriteCity(city);
+      }
+    });
+  }
+
+  // toggle favorite button (star) visual state
+  function favoriteOn() {
+    const favoriteBtn: HTMLImageElement =
+      document.querySelector("img.favorite");
+
+    favoriteBtn.src = "./assets/star.svg";
+    favoriteBtn.parentElement.classList.add("on");
+  }
+  function favoriteOff() {
+    const favoriteBtn: HTMLImageElement =
+      document.querySelector("img.favorite");
+
+    favoriteBtn.src = "./assets/star-outline.svg";
+    favoriteBtn.parentElement.classList.remove("on");
+  }
+
+  function _createCityBtn(cityName: string) {
+    const favorites = document.querySelector(".favorites");
+
+    const cityBtn = document.createElement("button");
+    cityBtn.textContent = cityName;
+    // replace spaces with dashes because html doesn't like spaces
+    cityBtn.dataset.city = cityName.replace(/\s/g, "-");
+    cityBtn.addEventListener("click", () => {
+      _hideSidebar();
+      search(cityName); // trigger new search
+    });
+
+    favorites.appendChild(cityBtn);
+  }
+  function _removeCityBtn(cityName: string) {
+    const cityBtn = document.querySelector(
+      `[data-city=${cityName.replace(/\s/g, "-")}]`
+    );
+    cityBtn.remove();
+  }
+
   return {
     dynamicInput,
     displayNow,
@@ -457,6 +526,9 @@ export const DOM = (() => {
     sidebarInit,
     wipeTabs,
     createTodayTab,
-    createDayTab
+    createDayTab,
+    favoriteOn,
+    favoriteOff,
+    favoriteListener
   };
 })();

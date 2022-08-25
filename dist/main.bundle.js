@@ -8,6 +8,9 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "search": () => (/* binding */ search)
+/* harmony export */ });
 /* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/style.scss");
 /* harmony import */ var _modules_MET__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/MET */ "./src/modules/MET.ts");
 /* harmony import */ var _modules_DOM__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/DOM */ "./src/modules/DOM.ts");
@@ -28,7 +31,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 
 
-
 function search(_x) {
   return _search.apply(this, arguments);
 }
@@ -42,16 +44,23 @@ function _search() {
           case 0:
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.showLoader();
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.wipeTabs();
-            cityHeading.textContent = searchValue;
-            _context2.next = 5;
+            cityHeading.textContent = searchValue; // turn on / off favorite button if city is favorite
+
+            if (_modules_Storage__WEBPACK_IMPORTED_MODULE_5__.Storage.isFavorite(searchValue)) {
+              _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.favoriteOn();
+            } else {
+              _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.favoriteOff();
+            }
+
+            _context2.next = 6;
             return _modules_Geocode__WEBPACK_IMPORTED_MODULE_4__.Geocode.getCoords(searchValue);
 
-          case 5:
+          case 6:
             coords = _context2.sent;
-            _context2.next = 8;
+            _context2.next = 9;
             return Promise.all([_modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getLocationforecast(coords), _modules_MET__WEBPACK_IMPORTED_MODULE_1__.MET.getSunrise(coords)]);
 
-          case 8:
+          case 9:
             _modules_Weather__WEBPACK_IMPORTED_MODULE_3__.Weather.init();
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.createTodayTab(); // show next 9 days
 
@@ -59,11 +68,13 @@ function _search() {
               date = new Date();
               date.setDate(date.getDate() + daysPast);
               _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.createDayTab(date);
-            }
+            } // cache searched city
 
+
+            _modules_Storage__WEBPACK_IMPORTED_MODULE_5__.Storage.lastCity = searchValue;
             _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.hideLoader();
 
-          case 12:
+          case 14:
           case "end":
             return _context2.stop();
         }
@@ -92,11 +103,10 @@ _modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.dynamicInput(searchBtn, cityHeadin
     }
   }, _callee);
 })));
-_modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.sidebarInit();
 _modules_Storage__WEBPACK_IMPORTED_MODULE_5__.Storage.retrieve();
-search(_modules_Storage__WEBPACK_IMPORTED_MODULE_5__.Storage.lastCity); //Storage.lastCity = "Český Dub";
-//Storage.addFavoriteCity("brno");
-//Storage.removeFavoriteCity("brno");
+_modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.sidebarInit();
+search(_modules_Storage__WEBPACK_IMPORTED_MODULE_5__.Storage.lastCity);
+_modules_DOM__WEBPACK_IMPORTED_MODULE_2__.DOM.favoriteListener();
 
 /***/ }),
 
@@ -364,11 +374,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Weather__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Weather */ "./src/modules/Weather.ts");
 /* harmony import */ var _Icons__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Icons */ "./src/modules/Icons.ts");
+/* harmony import */ var _Storage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Storage */ "./src/modules/Storage.ts");
+/* harmony import */ var _index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../index */ "./src/index.ts");
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+
 
 
 
@@ -443,11 +457,28 @@ var DOM = function () {
 
 
   function sidebarInit() {
-    // show sidebar when button is clicked
+    // receate all favorite cities
+    var favoriteCities = _Storage__WEBPACK_IMPORTED_MODULE_2__.Storage.returnFavorites();
+
+    var _iterator = _createForOfIteratorHelper(favoriteCities),
+        _step;
+
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var city = _step.value;
+
+        _createCityBtn(city);
+      } // show sidebar when button is clicked
+
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+
     var hamburgerBtn = document.querySelector("button.burger");
-    var sidebar = document.querySelector(".sidebar");
     hamburgerBtn.addEventListener("click", function () {
-      sidebar.classList.remove("hidden");
+      _showSidebar();
     }); //hide sidebar when you click somewhere else
 
     var loader = document.querySelector(".loader");
@@ -457,7 +488,7 @@ var DOM = function () {
     for (var _i = 0, _arr = [loader, header, main]; _i < _arr.length; _i++) {
       var element = _arr[_i];
       element.addEventListener("click", function (e) {
-        sidebar.classList.add("hidden");
+        _hideSidebar();
       });
     } // swipe listener
 
@@ -472,15 +503,14 @@ var DOM = function () {
     var touchEndX = 0;
 
     function checkDirection() {
-      var sidebar = document.querySelector(".sidebar"); // swiped left
-
+      // swiped left
       if (touchEndX < touchStartX) {
-        sidebar.classList.add("hidden");
+        _hideSidebar();
       } // swiped right
 
 
       if (touchEndX > touchStartX) {
-        sidebar.classList.remove("hidden");
+        _showSidebar();
       }
     }
 
@@ -491,7 +521,17 @@ var DOM = function () {
       touchEndX = e.changedTouches[0].screenX;
       checkDirection();
     });
-  } // remove everything from main (all tabs)
+  }
+
+  function _showSidebar() {
+    var sidebar = document.querySelector(".sidebar");
+    sidebar.classList.remove("hidden");
+  }
+
+  function _hideSidebar() {
+    var sidebar = document.querySelector(".sidebar");
+    sidebar.classList.add("hidden");
+  } // remove everything from main (all day tabs)
 
 
   function wipeTabs() {
@@ -589,12 +629,12 @@ var DOM = function () {
 
     var fullData = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnForDate(date); // append new row for every timePoint
 
-    var _iterator = _createForOfIteratorHelper(fullData.weatherPoints),
-        _step;
+    var _iterator2 = _createForOfIteratorHelper(fullData.weatherPoints),
+        _step2;
 
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var timePoint = _step.value;
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var timePoint = _step2.value;
         var details = timePoint.data.instant.details;
         var rowData = {
           time: String(timePoint.time.getHours()),
@@ -620,9 +660,9 @@ var DOM = function () {
         hourlyBreakdown.appendChild(row);
       }
     } catch (err) {
-      _iterator.e(err);
+      _iterator2.e(err);
     } finally {
-      _iterator.f();
+      _iterator2.f();
     }
 
     if (showSunriseSunset) {
@@ -747,6 +787,60 @@ var DOM = function () {
     var iconPath = _Icons__WEBPACK_IMPORTED_MODULE_1__.Icons.get(iconCode);
     img.src = iconPath;
     return img;
+  } // favorite (star) button
+
+
+  function favoriteListener() {
+    var favoriteBtn = document.querySelector("button.favorite");
+    favoriteBtn.addEventListener("click", function () {
+      var city = document.querySelector("h1.city").textContent;
+
+      if (favoriteBtn.classList.contains("on")) {
+        favoriteOff();
+
+        _removeCityBtn(city);
+
+        _Storage__WEBPACK_IMPORTED_MODULE_2__.Storage.removeFavoriteCity(city);
+      } else {
+        favoriteOn();
+
+        _createCityBtn(city);
+
+        _Storage__WEBPACK_IMPORTED_MODULE_2__.Storage.addFavoriteCity(city);
+      }
+    });
+  } // toggle favorite button (star) visual state
+
+
+  function favoriteOn() {
+    var favoriteBtn = document.querySelector("img.favorite");
+    favoriteBtn.src = "./assets/star.svg";
+    favoriteBtn.parentElement.classList.add("on");
+  }
+
+  function favoriteOff() {
+    var favoriteBtn = document.querySelector("img.favorite");
+    favoriteBtn.src = "./assets/star-outline.svg";
+    favoriteBtn.parentElement.classList.remove("on");
+  }
+
+  function _createCityBtn(cityName) {
+    var favorites = document.querySelector(".favorites");
+    var cityBtn = document.createElement("button");
+    cityBtn.textContent = cityName; // replace spaces with dashes because html doesn't like spaces
+
+    cityBtn.dataset.city = cityName.replace(/\s/g, "-");
+    cityBtn.addEventListener("click", function () {
+      _hideSidebar();
+
+      (0,_index__WEBPACK_IMPORTED_MODULE_3__.search)(cityName); // trigger new search
+    });
+    favorites.appendChild(cityBtn);
+  }
+
+  function _removeCityBtn(cityName) {
+    var cityBtn = document.querySelector("[data-city=".concat(cityName.replace(/\s/g, "-"), "]"));
+    cityBtn.remove();
   }
 
   return {
@@ -757,7 +851,10 @@ var DOM = function () {
     sidebarInit: sidebarInit,
     wipeTabs: wipeTabs,
     createTodayTab: createTodayTab,
-    createDayTab: createDayTab
+    createDayTab: createDayTab,
+    favoriteOn: favoriteOn,
+    favoriteOff: favoriteOff,
+    favoriteListener: favoriteListener
   };
 }();
 
@@ -1215,9 +1312,6 @@ var Storage = function () {
     if (localStorage.getItem("favoriteCities") !== null) {
       _favoriteCities = JSON.parse(localStorage.getItem("favoriteCities"));
     }
-
-    console.log("Last city: ", lastCity);
-    console.log("Favorite cities", _favoriteCities);
   }
 
   function addFavoriteCity(city) {
@@ -1234,12 +1328,23 @@ var Storage = function () {
     _favoriteCities = newFavoriteCities;
 
     _save();
+  } // returns true if city is in favorites
+
+
+  function isFavorite(city) {
+    return _favoriteCities.includes(city);
+  }
+
+  function returnFavorites() {
+    return _favoriteCities;
   }
 
   return {
     retrieve: retrieve,
     addFavoriteCity: addFavoriteCity,
     removeFavoriteCity: removeFavoriteCity,
+    isFavorite: isFavorite,
+    returnFavorites: returnFavorites,
 
     set lastCity(value) {
       lastCity = value;
