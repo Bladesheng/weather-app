@@ -89,6 +89,10 @@ export const MET = (() => {
       const updatedDate = responseData.properties.meta.updated_at;
       console.log("Last model update: " + updatedDate);
 
+      // remove the last time point because it doesn't have icon
+      // and it is weird
+      responseData.properties.timeseries.pop();
+
       // store all the time points in array
       _StoreLocationforecast(responseData.properties.timeseries);
     } catch (error) {

@@ -1125,24 +1125,27 @@ var MET = function () {
             case 8:
               responseData = _context.sent;
               updatedDate = responseData.properties.meta.updated_at;
-              console.log("Last model update: " + updatedDate); // store all the time points in array
+              console.log("Last model update: " + updatedDate); // remove the last time point because it doesn't have icon
+              // and it is weird
+
+              responseData.properties.timeseries.pop(); // store all the time points in array
 
               _StoreLocationforecast(responseData.properties.timeseries);
 
-              _context.next = 17;
+              _context.next = 18;
               break;
 
-            case 14:
-              _context.prev = 14;
+            case 15:
+              _context.prev = 15;
               _context.t0 = _context["catch"](0);
               console.log(_context.t0);
 
-            case 17:
+            case 18:
             case "end":
               return _context.stop();
           }
         }
-      }, _callee, null, [[0, 14]]);
+      }, _callee, null, [[0, 15]]);
     }));
     return _getLocationforecast.apply(this, arguments);
   }
