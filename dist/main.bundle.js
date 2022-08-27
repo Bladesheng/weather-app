@@ -850,6 +850,42 @@ var DOM = function () {
   function _removeCityBtn(cityName) {
     var cityBtn = document.querySelector("[data-city=".concat(cityName.replace(/\s/g, "-"), "]"));
     cityBtn.remove();
+  } // creates new css rule to hide column
+
+
+  function _hideColumn(columnName) {
+    document.styleSheets[1].insertRule(".".concat(columnName, " { display: none !important; }"));
+  } // removes previously created rule
+
+
+  function _restoreColumn(columnName) {
+    var styleSheet = document.styleSheets[1];
+    var rules = styleSheet.cssRules; // Custom loop incrementing because we are gonna loop over all
+    // rules and we need their indexes. Sadly CSSRuleList doesn't
+    // have any usual array methods
+
+    var ruleIndex = 0;
+
+    var _iterator3 = _createForOfIteratorHelper(rules),
+        _step3;
+
+    try {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var rule = _step3.value;
+        var ruleText = rule.cssText; // if the rule matches the unwanted rule, remove it and return
+
+        if (ruleText === ".".concat(columnName, " { display: none !important; }")) {
+          styleSheet.deleteRule(ruleIndex);
+          return;
+        }
+
+        ruleIndex++;
+      }
+    } catch (err) {
+      _iterator3.e(err);
+    } finally {
+      _iterator3.f();
+    }
   }
 
   return {

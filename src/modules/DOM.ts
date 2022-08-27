@@ -518,6 +518,39 @@ export const DOM = (() => {
     cityBtn.remove();
   }
 
+  // creates new css rule to hide column
+  function _hideColumn(
+    columnName: "clouds" | "humidity" | "pressure" | "wind"
+  ) {
+    document.styleSheets[1].insertRule(
+      `.${columnName} { display: none !important; }`
+    );
+  }
+  // removes previously created rule
+  function _restoreColumn(
+    columnName: "clouds" | "humidity" | "pressure" | "wind"
+  ) {
+    const styleSheet = document.styleSheets[1];
+    const rules = styleSheet.cssRules;
+
+    // Custom loop incrementing because we are gonna loop over all
+    // rules and we need their indexes. Sadly CSSRuleList doesn't
+    // have any usual array methods
+    let ruleIndex = 0;
+
+    for (const rule of rules) {
+      const ruleText = rule.cssText;
+
+      // if the rule matches the unwanted rule, remove it and return
+      if (ruleText === `.${columnName} { display: none !important; }`) {
+        styleSheet.deleteRule(ruleIndex);
+        return;
+      }
+
+      ruleIndex++;
+    }
+  }
+
   return {
     dynamicInput,
     displayNow,
