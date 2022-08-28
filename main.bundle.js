@@ -502,10 +502,15 @@ var DOM = function () {
     } // swipe listener
 
 
-    _sidebarSwipeListener(); // checkboxes
+    _sidebarSwipeListener(); // Column control checkboxes:
+    // the listeners have to be loaded first,
+    // everything is shown and checked at the begining
 
 
-    _controlsListeners();
+    _controlsListeners(); // then all checkboxes are parsed, and based on what was stored
+    // in local storage, some checkboxes will be unchecked and
+    // their belonging columns will be hidden
+
 
     _controlsInit();
   } // hide sidebar when you swipe left
@@ -1438,7 +1443,7 @@ var Storage = function () {
       humidity: false,
       pressure: false,
       wind: true
-    }; // if there is something saved
+    }; // if there is something saved,
     // retrieve it instead of using the default value
 
     if (localStorage.getItem("lastCity") !== null) {
