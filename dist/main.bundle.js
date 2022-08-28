@@ -510,6 +510,8 @@ var DOM = function () {
   function _sidebarSwipeListener() {
     var touchStartX = 0;
     var touchEndX = 0;
+    var touchStartY = 0;
+    var touchEndY = 0;
 
     function checkDirection() {
       // swiped left
@@ -518,16 +520,20 @@ var DOM = function () {
       } // swiped right
 
 
-      if (touchEndX > touchStartX) {
+      if (touchEndX > touchStartX && // distance traveled in X axis has to be bigger than in Y axis
+      // to prevent accidental "swipe right" when scrolling up / down
+      Math.abs(touchStartX - touchEndX) > Math.abs(touchStartY - touchEndY)) {
         _showSidebar();
       }
     }
 
     document.addEventListener("touchstart", function (e) {
       touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
     });
     document.addEventListener("touchend", function (e) {
       touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
       checkDirection();
     });
   }

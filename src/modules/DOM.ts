@@ -122,6 +122,8 @@ export const DOM = (() => {
   function _sidebarSwipeListener() {
     let touchStartX = 0;
     let touchEndX = 0;
+    let touchStartY = 0;
+    let touchEndY = 0;
 
     function checkDirection() {
       // swiped left
@@ -130,17 +132,24 @@ export const DOM = (() => {
       }
 
       // swiped right
-      if (touchEndX > touchStartX) {
+      if (
+        touchEndX > touchStartX &&
+        // distance traveled in X axis has to be bigger than in Y axis
+        // to prevent accidental "swipe right" when scrolling up / down
+        Math.abs(touchStartX - touchEndX) > Math.abs(touchStartY - touchEndY)
+      ) {
         _showSidebar();
       }
     }
 
     document.addEventListener("touchstart", (e) => {
       touchStartX = e.changedTouches[0].screenX;
+      touchStartY = e.changedTouches[0].screenY;
     });
 
     document.addEventListener("touchend", (e) => {
       touchEndX = e.changedTouches[0].screenX;
+      touchEndY = e.changedTouches[0].screenY;
       checkDirection();
     });
   }
