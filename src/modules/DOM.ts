@@ -59,24 +59,6 @@ export const DOM = (() => {
     });
   }
 
-  function displayNow() {
-    const now = Weather.returnNow();
-
-    const airTemp = String(Math.round(now.airTemp));
-    const minTemp = String(Math.round(now.minTemp));
-    const maxTemp = String(Math.round(now.maxTemp));
-
-    const currentTempText = document.querySelector(".now h1");
-    currentTempText.textContent = `${airTemp}˚`;
-
-    const minMaxText = document.querySelector(".now h2");
-    minMaxText.textContent = `${maxTemp}˚/${minTemp}˚`;
-
-    const weatherImg: HTMLImageElement = document.querySelector(".now img");
-    const iconPath = Icons.get(now.iconCode);
-    weatherImg.src = iconPath;
-  }
-
   // shows and hides loader modal with animated icon
   function showLoader() {
     const loader: HTMLElement = document.querySelector(".loader");
@@ -303,6 +285,10 @@ export const DOM = (() => {
     const minTemp = String(Math.round(nowData.minTemp));
     const maxTemp = String(Math.round(nowData.maxTemp));
     const iconCode = nowData.iconCode;
+
+    // set browser tab icon to current weather
+    const tabIconLink = document.querySelector("link");
+    tabIconLink.href = `./assets/${iconCode}.svg`;
 
     const icon = _returnIcon(iconCode);
     nowElement.appendChild(icon);
@@ -615,7 +601,6 @@ export const DOM = (() => {
 
   return {
     dynamicInput,
-    displayNow,
     showLoader,
     hideLoader,
     sidebarInit,

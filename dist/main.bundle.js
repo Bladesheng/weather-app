@@ -437,20 +437,6 @@ var DOM = function () {
         }
       };
     });
-  }
-
-  function displayNow() {
-    var now = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnNow();
-    var airTemp = String(Math.round(now.airTemp));
-    var minTemp = String(Math.round(now.minTemp));
-    var maxTemp = String(Math.round(now.maxTemp));
-    var currentTempText = document.querySelector(".now h1");
-    currentTempText.textContent = "".concat(airTemp, "\u02DA");
-    var minMaxText = document.querySelector(".now h2");
-    minMaxText.textContent = "".concat(maxTemp, "\u02DA/").concat(minTemp, "\u02DA");
-    var weatherImg = document.querySelector(".now img");
-    var iconPath = _Icons__WEBPACK_IMPORTED_MODULE_1__.Icons.get(now.iconCode);
-    weatherImg.src = iconPath;
   } // shows and hides loader modal with animated icon
 
 
@@ -694,7 +680,10 @@ var DOM = function () {
     var airTemp = String(Math.round(nowData.airTemp));
     var minTemp = String(Math.round(nowData.minTemp));
     var maxTemp = String(Math.round(nowData.maxTemp));
-    var iconCode = nowData.iconCode;
+    var iconCode = nowData.iconCode; // set browser tab icon to current weather
+
+    var tabIconLink = document.querySelector("link");
+    tabIconLink.href = "./assets/".concat(iconCode, ".svg");
 
     var icon = _returnIcon(iconCode);
 
@@ -972,7 +961,6 @@ var DOM = function () {
 
   return {
     dynamicInput: dynamicInput,
-    displayNow: displayNow,
     showLoader: showLoader,
     hideLoader: hideLoader,
     sidebarInit: sidebarInit,
