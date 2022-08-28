@@ -397,12 +397,12 @@ export const DOM = (() => {
 
     const descriptions: any = {
       time: "Čas",
-      temperature: "Teplota ˚C",
-      precipitation: "Srážky mm",
-      clouds: "Oblačnost %",
-      humidity: "Vlhkost %",
-      pressure: "Tlak hPa",
-      wind: "Vítr m/s"
+      temperature: "Teplota [˚C]",
+      precipitation: "Srážky [mm]",
+      clouds: "Oblačnost [%]",
+      humidity: "Vlhkost [%]",
+      pressure: "Tlak [hPa]",
+      wind: "Vítr [m/s]"
     };
 
     for (const key of Object.keys(descriptions)) {
@@ -431,10 +431,17 @@ export const DOM = (() => {
 
     appendData("time", rowData.time);
 
-    const icon = _returnIcon(rowData.iconCode);
-    row.appendChild(icon);
+    const iconTempWrapper = document.createElement("span");
+    iconTempWrapper.classList.add("iconTemperature");
+    row.appendChild(iconTempWrapper);
 
-    appendData("temperature", `${rowData.temperature}˚`);
+    const icon = _returnIcon(rowData.iconCode);
+    iconTempWrapper.appendChild(icon);
+
+    const temperature = document.createElement("span");
+    temperature.classList.add("temperature");
+    temperature.textContent = `${rowData.temperature}˚`;
+    iconTempWrapper.appendChild(temperature);
 
     const precipitation = rowData.precipitation;
     let precipitationText: string;
