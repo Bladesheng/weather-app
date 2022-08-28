@@ -2,7 +2,7 @@ export const Storage = (() => {
   let lastCity: string;
   let _favoriteCities: string[];
   let _controls: {
-    // true == checked, false == unchecked
+    // true == checked + column shown, false == unchecked + column hidden
     clouds: boolean;
     humidity: boolean;
     pressure: boolean;
@@ -30,7 +30,7 @@ export const Storage = (() => {
       wind: true
     };
 
-    // if there is something saved
+    // if there is something saved,
     // retrieve it instead of using the default value
     if (localStorage.getItem("lastCity") !== null) {
       lastCity = JSON.parse(localStorage.getItem("lastCity"));

@@ -116,9 +116,13 @@ export const DOM = (() => {
     // swipe listener
     _sidebarSwipeListener();
 
-    // checkboxes
+    // Column control checkboxes:
+    // the listeners have to be loaded first,
+    // everything is shown and checked at the begining
     _controlsListeners();
-
+    // then all checkboxes are parsed, and based on what was stored
+    // in local storage, some checkboxes will be unchecked and
+    // their belonging columns will be hidden
     _controlsInit();
   }
 
