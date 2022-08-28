@@ -35,6 +35,10 @@ body {
   align-items: center;
 }
 
+button {
+  cursor: pointer;
+}
+
 // stuff for hiding / showing dynamic input field
 .dynamicText,
 .dynamicInput {
@@ -133,6 +137,14 @@ $sidebarTransition: left 0.4s ease;
 
     input {
       accent-color: $font-color-blue;
+      cursor: pointer;
+    }
+    label {
+      cursor: pointer;
+      color: $font-color-secondary;
+    }
+    label:hover {
+      filter: brightness(1.2);
     }
   }
 
@@ -156,7 +168,7 @@ $sidebarTransition: left 0.4s ease;
     }
 
     button:hover {
-      color: rgb(231, 243, 245);
+      filter: brightness(1.2);
     }
   }
 
