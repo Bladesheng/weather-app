@@ -502,7 +502,12 @@ var DOM = function () {
     } // swipe listener
 
 
-    _sidebarSwipeListener();
+    _sidebarSwipeListener(); // checkboxes
+
+
+    _controlsListeners();
+
+    _controlsInit();
   } // hide sidebar when you swipe left
   // show sidebar when you swipe right
 
@@ -546,6 +551,72 @@ var DOM = function () {
   function _hideSidebar() {
     var sidebar = document.querySelector(".sidebar");
     sidebar.classList.add("hidden");
+  } // listens for checking / unchecking of the controls checkboxes
+
+
+  function _controlsListeners() {
+    var checkboxes = document.querySelectorAll("input[type=\"checkbox\"]");
+
+    var _iterator2 = _createForOfIteratorHelper(checkboxes),
+        _step2;
+
+    try {
+      var _loop = function _loop() {
+        var checkbox = _step2.value;
+        checkbox.addEventListener("change", function () {
+          var key = checkbox.id; // name of the options
+          // if checkbox was just checked
+
+          if (checkbox.checked) {
+            _restoreColumn(key);
+
+            _Storage__WEBPACK_IMPORTED_MODULE_2__.Storage.setControls(key, true);
+          } // if checkbox was just unchecked
+          else {
+            _hideColumn(key);
+
+            _Storage__WEBPACK_IMPORTED_MODULE_2__.Storage.setControls(key, false);
+          }
+        });
+      };
+
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        _loop();
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+  } // uncheck all controls that were saved as unchecked in local storage
+
+
+  function _controlsInit() {
+    var checkboxes = document.querySelectorAll("input[type=\"checkbox\"]");
+
+    var _iterator3 = _createForOfIteratorHelper(checkboxes),
+        _step3;
+
+    try {
+      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+        var checkbox = _step3.value;
+        var key = checkbox.id; // name of the option
+
+        var savedValue = _Storage__WEBPACK_IMPORTED_MODULE_2__.Storage.returnControlsValue(key); // if the option was saved as unchecked, uncheck it and
+        // manually fire appropriate event for unchecking the checkbox
+        // which the listener will catch
+
+        if (savedValue === false) {
+          checkbox.checked = false;
+          var event = new Event("change");
+          checkbox.dispatchEvent(event);
+        }
+      }
+    } catch (err) {
+      _iterator3.e(err);
+    } finally {
+      _iterator3.f();
+    }
   } // remove everything from main (all day tabs)
 
 
@@ -644,12 +715,12 @@ var DOM = function () {
 
     var fullData = _Weather__WEBPACK_IMPORTED_MODULE_0__.Weather.returnForDate(date); // append new row for every timePoint
 
-    var _iterator2 = _createForOfIteratorHelper(fullData.weatherPoints),
-        _step2;
+    var _iterator4 = _createForOfIteratorHelper(fullData.weatherPoints),
+        _step4;
 
     try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var timePoint = _step2.value;
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        var timePoint = _step4.value;
         var details = timePoint.data.instant.details;
         var rowData = {
           time: String(timePoint.time.getHours()),
@@ -675,9 +746,9 @@ var DOM = function () {
         hourlyBreakdown.appendChild(row);
       }
     } catch (err) {
-      _iterator2.e(err);
+      _iterator4.e(err);
     } finally {
-      _iterator2.f();
+      _iterator4.f();
     }
 
     if (showSunriseSunset) {
@@ -872,12 +943,12 @@ var DOM = function () {
 
     var ruleIndex = 0;
 
-    var _iterator3 = _createForOfIteratorHelper(rules),
-        _step3;
+    var _iterator5 = _createForOfIteratorHelper(rules),
+        _step5;
 
     try {
-      for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-        var rule = _step3.value;
+      for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+        var rule = _step5.value;
         var ruleText = rule.cssText; // if the rule matches the unwanted rule, remove it and return
 
         if (ruleText === ".".concat(columnName, " { display: none !important; }")) {
@@ -888,9 +959,9 @@ var DOM = function () {
         ruleIndex++;
       }
     } catch (err) {
-      _iterator3.e(err);
+      _iterator5.e(err);
     } finally {
-      _iterator3.f();
+      _iterator5.f();
     }
   }
 
@@ -1345,19 +1416,30 @@ __webpack_require__.r(__webpack_exports__);
 var Storage = function () {
   var lastCity;
 
-  var _favoriteCities; // save everything to local storage
+  var _favoriteCities;
+
+  var _controls; // save everything to local storage
 
 
   function _save() {
     localStorage.setItem("lastCity", JSON.stringify(lastCity));
     localStorage.setItem("favoriteCities", JSON.stringify(_favoriteCities));
+    localStorage.setItem("columnControls", JSON.stringify(_controls));
   } // retrieve everything from local storage
 
 
   function retrieve() {
     // default city
     lastCity = "Český Dub";
-    _favoriteCities = ["Český Dub"]; // if there is something saved, retrieve it
+    _favoriteCities = ["Český Dub"]; // default colums options
+
+    _controls = {
+      clouds: false,
+      humidity: false,
+      pressure: false,
+      wind: true
+    }; // if there is something saved
+    // retrieve it instead of using the default value
 
     if (localStorage.getItem("lastCity") !== null) {
       lastCity = JSON.parse(localStorage.getItem("lastCity"));
@@ -1365,6 +1447,10 @@ var Storage = function () {
 
     if (localStorage.getItem("favoriteCities") !== null) {
       _favoriteCities = JSON.parse(localStorage.getItem("favoriteCities"));
+    }
+
+    if (localStorage.getItem("columnControls") !== null) {
+      _controls = JSON.parse(localStorage.getItem("columnControls"));
     }
   }
 
@@ -1393,12 +1479,25 @@ var Storage = function () {
     return _favoriteCities;
   }
 
+  function returnControlsValue(key) {
+    return _controls[key];
+  } // change value of column control option and save it
+
+
+  function setControls(key, value) {
+    _controls[key] = value;
+
+    _save();
+  }
+
   return {
     retrieve: retrieve,
     addFavoriteCity: addFavoriteCity,
     removeFavoriteCity: removeFavoriteCity,
     isFavorite: isFavorite,
     returnFavorites: returnFavorites,
+    returnControlsValue: returnControlsValue,
+    setControls: setControls,
 
     set lastCity(value) {
       lastCity = value;

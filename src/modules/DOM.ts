@@ -115,6 +115,11 @@ export const DOM = (() => {
 
     // swipe listener
     _sidebarSwipeListener();
+
+    // checkboxes
+    _controlsListeners();
+
+    _controlsInit();
   }
 
   // hide sidebar when you swipe left
@@ -161,6 +166,50 @@ export const DOM = (() => {
   function _hideSidebar() {
     const sidebar = document.querySelector(".sidebar");
     sidebar.classList.add("hidden");
+  }
+
+  // listens for checking / unchecking of the controls checkboxes
+  function _controlsListeners() {
+    const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+      `input[type="checkbox"]`
+    );
+
+    for (const checkbox of checkboxes) {
+      checkbox.addEventListener("change", () => {
+        const key: any = checkbox.id; // name of the options
+        // if checkbox was just checked
+        if (checkbox.checked) {
+          _restoreColumn(key);
+          Storage.setControls(key, true);
+        }
+        // if checkbox was just unchecked
+        else {
+          _hideColumn(key);
+          Storage.setControls(key, false);
+        }
+      });
+    }
+  }
+
+  // uncheck all controls that were saved as unchecked in local storage
+  function _controlsInit() {
+    const checkboxes: NodeListOf<HTMLInputElement> = document.querySelectorAll(
+      `input[type="checkbox"]`
+    );
+
+    for (const checkbox of checkboxes) {
+      const key: any = checkbox.id; // name of the option
+      const savedValue = Storage.returnControlsValue(key);
+
+      // if the option was saved as unchecked, uncheck it and
+      // manually fire appropriate event for unchecking the checkbox
+      // which the listener will catch
+      if (savedValue === false) {
+        checkbox.checked = false;
+        const event = new Event("change");
+        checkbox.dispatchEvent(event);
+      }
+    }
   }
 
   // remove everything from main (all day tabs)
