@@ -2,9 +2,9 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  mode: "development",
+  mode: "production",
   entry: "./src/index.ts",
-  devtool: "source-map",
+  // devtool: "source-map",
   devServer: {
     static: "./dist"
   },
@@ -26,11 +26,11 @@ module.exports = {
         // but babel doesn't typecheck, so ts-loader is still usefull
         use: ["babel-loader", "ts-loader"]
       },
-      {
-        test: /\.js$/,
-        loader: "source-map-loader",
-        enforce: "pre"
-      },
+      // {
+      //   test: /\.js$/,
+      //   loader: "source-map-loader",
+      //   enforce: "pre"
+      // },
       {
         test: /\.s[ac]ss$/i,
         use: [
