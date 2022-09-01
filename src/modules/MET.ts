@@ -127,13 +127,14 @@ export const MET = (() => {
       const month = dateObj.getUTCMonth() + 1;
       const monthPadded = String(month).padStart(2, "0");
       const day = dateObj.getUTCDate();
+      const dayPadded = String(day).padStart(2, "0");
 
       const offset = _dateToOffset(dateObj);
 
       const days = 10; // number of days forward to include in response
       // Locationforecast returns data for next ~10 days, so same number is used here
 
-      const url = `https://api.met.no/weatherapi/sunrise/2.0/.json?lat=${coords[1]}&lon=${coords[0]}&date=${year}-${monthPadded}-${day}&offset=${offset}&days=${days}`;
+      const url = `https://api.met.no/weatherapi/sunrise/2.0/.json?lat=${coords[1]}&lon=${coords[0]}&date=${year}-${monthPadded}-${dayPadded}&offset=${offset}&days=${days}`;
 
       const request = new Request(url, {
         method: "GET",
